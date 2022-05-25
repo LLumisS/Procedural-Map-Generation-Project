@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        body {
+          background-color: black;
+        }
+    
+        canvas {
+          border: 2px gray solid;
+        }
+      </style>
     <meta charset="UTF-8">
     <title>MapGen</title>
-    <link rel="stylesheet" href="style.css">
- 
+    <script src="./main.js" defer></script>
 </head>
-<body>
-    <canvas id="map" width="1024" height="1024"></canvas>
-    <script src="main.js"></script>
+<body style="background-color: black;">
+    <div><button>Refresh</button></div>
+    <canvas id="map"></canvas>
 </body>
 </html>
