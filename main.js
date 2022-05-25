@@ -21,6 +21,9 @@ const averageValue = (...argArray) => {
   return sum / count;
 };
 
+const getColor = (percentage, lightness, saturation) =>
+  `hsl(${percentage * 360}, ${lightness}%, ${saturation}%)`;
+
 const N = 8;
 const MATRIX_LENGTH = powerInt(2, N) + 1;
 
@@ -35,18 +38,14 @@ canvas.width = CANVAS_WIDTH;
 const RANDOM_CORNERS = 50;
 const RANDOM_RANGE = 50;
 
-
-const lightness = 100;
-const saturation = 50;
-const getColor = (percentage, lightness, saturation) =>
-  `hsl(${percentage * 360}, ${lightness}%, ${saturation}%)`;
+const LIGHTNESS = 100;
+const SATURATION = 50;
 
 function draw(matrix) {
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, CANVAS_HEIGHT, CANVAS_WIDTH);
 
   ctx.beginPath();
-
   let y;
   let x;
 
@@ -54,7 +53,7 @@ function draw(matrix) {
   for (const row of matrix) {
     x = 0;
     for (const pixel of row) {
-      ctx.fillStyle = getColor(pixel, lightness, saturation);
+      ctx.fillStyle = getColor(pixel, LIGHTNESS, SATURATION);
       ctx.fillRect(
         x * PIXEL_SIZE,
         y * PIXEL_SIZE,
@@ -65,26 +64,26 @@ function draw(matrix) {
     }
     y++;
   }
+  ctx.closePath();
 }
 
-function generateMatrix(length, randomRange) {
+function generateMatrix(length, randomCorners) {
   const matrix = Array(length).fill(0).map(() => Array(length).fill(null));
 
-  matrix[0][length - 1] = randomValue(0, randomRange);
-  matrix[length - 1][0] = randomValue(0, randomRange);
-  matrix[0][0] = randomValue(0, randomRange);
-  matrix[length - 1][length - 1] = randomValue(0, randomRange);
+  matrix[0][length - 1] = randomValue(0, randomCorners);
+  matrix[length - 1][0] = randomValue(0, randomCorners);
+  matrix[0][0] = randomValue(0, randomCorners);
+  matrix[length - 1][length - 1] = randomValue(0, randomCorners);
 
   return matrix;
 }
 
 function diamondSquare(matrix, randomRange) {
   let chunkSize = matrix.length - 1;
-  let randomFactor = randomRange;
 
-  for (; chunkSize > 1; chunkSize /= 2, randomFactor /= 2) {
-    stageDiamond(matrix, chunkSize, randomFactor);
-    stageSquare(matrix, chunkSize, randomFactor);
+  for (; chunkSize > 1; chunkSize /= 2, randomRange /= 2) {
+    stageDiamond(matrix, chunkSize, randomRange);
+    stageSquare(matrix, chunkSize, randomRange);
   }
 
   return matrix;
