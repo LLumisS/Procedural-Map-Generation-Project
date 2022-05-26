@@ -26,23 +26,23 @@ const getColor = percentage => {
   let lightness;
   let saturation;
 
-  if (percentage < 0.0000001) {
+  if (percentage < 0.01) {
     color = 220;
     saturation = 100;
-    lightness = 15;
-  } else if (percentage < 0.05) {
+    lightness = 20;
+  } else if (percentage < 0.1) {
     color = 220;
     saturation = 100;
-    lightness = 25;
+    lightness = 30;
   } else if (percentage < 0.2) {
     color = 200;
     saturation = 100;
     lightness = 40;
-  } else if (percentage < 0.35) {
+  } else if (percentage < 0.3) {
     color = 200;
     saturation = 100;
     lightness = 60;
-  } else if (percentage < 0.43) {
+  } else if (percentage < 0.4) {
     color = 200;
     saturation = 100;
     lightness = 80;
@@ -62,15 +62,18 @@ const getColor = percentage => {
     color = 40;
     saturation = 50;
     lightness = 60;
-  } else {
+  } else if (percentage < 0.9) {
     color = 30;
     saturation = 50;
     lightness = 40;
+  } else {
+    color = 30;
+    saturation = 50;
+    lightness = 20;
   }
 
   return `hsl(${color}, ${saturation}%, ${lightness}%)`;
 };
-
 
 const N = 8;
 const MATRIX_LENGTH = powerInt(2, N) + 1;
@@ -83,8 +86,24 @@ const canvas = document.getElementById('map');
 canvas.height = CANVAS_HEIGHT;
 canvas.width = CANVAS_WIDTH;
 
-const RANDOM_CORNERS = 50;
-const RANDOM_RANGE = 50;
+const RANDOM_CORNERS = 100;
+const RANDOM_RANGE = 100;
+
+const SETTINGS = {
+  mapSize: N,
+  filter: 'none',
+
+  cornersRandom: RANDOM_CORNERS,
+  noiseRandom: RANDOM_RANGE,
+};
+
+const FILTERS = [
+  'none',
+  'physic',
+  'moisture',
+  'temperature',
+  'bioms',
+];
 
 function draw(matrix) {
   const ctx = canvas.getContext('2d');
@@ -201,7 +220,6 @@ function normalizeMatrix(matrix) {
 
   return matrix.map(row => row.map(value => value / max));
 }
-
 
 function start() {
   const MAP = normalizeMatrix(

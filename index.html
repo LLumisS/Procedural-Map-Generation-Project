@@ -1,21 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
-        body {
-          background-color: black;
-        }
-    
-        canvas {
-          border: 2px gray solid;
-        }
-      </style>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
     <title>MapGen</title>
     <script src="./main.js" defer></script>
 </head>
-<body style="background-color: black;">
-    <div><button>Refresh</button></div>
-    <canvas id="map"></canvas>
+<body>
+  <header>
+    <h3>Procedural Map Generation</h3>
+  </header>
+  <main class="transition">
+    <div>
+      <canvas id="map"></canvas>
+    </div>
+    <div id="ui">
+      <a style="font-weight: bold; text-align:center; font-size: larger; margin-top: 5px;">Settings</a>
+      <div id="group-filter" class="row clickable-labels">
+        <span id="filter">Map Filter:</span>
+        <div class="form_radio"><label>
+          <input type="radio" id="none-filter" name="filter" value="none">
+          None
+        </label></div>
+        <div class="form_radio"><label>
+          <input type="radio" id="physics-filter" name="filter" value="physic">
+          Physic
+        </label></div>
+        <div class="form_radio"><label>
+          <input type="radio" id="moisture-filter" name="filter" value="moisture">
+          Moisture
+        </label></div>
+        <div class="form_radio"><label>
+          <input type="radio" id="temperature-filter" name="filter" value="temperature">
+          Temperature
+        </label></div>
+        <div class="form_radio"><label>
+          <input type="radio" id="bioms-filter" name="filter" value="bioms">
+          Bioms
+        </label></div>
+      </div>
+    </div>
+  </main>
+  <div><button id="refresh">Refresh</button></div>
 </body>
 </html>
