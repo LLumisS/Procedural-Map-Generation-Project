@@ -21,8 +21,56 @@ const averageValue = (...argArray) => {
   return sum / count;
 };
 
-const getColor = (percentage, lightness, saturation) =>
-  `hsl(${percentage * 360}, ${lightness}%, ${saturation}%)`;
+const getColor = percentage => {
+  let color;
+  let lightness;
+  let saturation;
+
+  if (percentage < 0.0000001) {
+    color = 220;
+    saturation = 100;
+    lightness = 15;
+  } else if (percentage < 0.05) {
+    color = 220;
+    saturation = 100;
+    lightness = 25;
+  } else if (percentage < 0.2) {
+    color = 200;
+    saturation = 100;
+    lightness = 40;
+  } else if (percentage < 0.35) {
+    color = 200;
+    saturation = 100;
+    lightness = 60;
+  } else if (percentage < 0.43) {
+    color = 200;
+    saturation = 100;
+    lightness = 80;
+  } else if (percentage < 0.5) {
+    color = 100;
+    saturation = 50;
+    lightness = 60;
+  } else if (percentage < 0.6) {
+    color = 75;
+    saturation = 50;
+    lightness = 60;
+  } else if (percentage < 0.7) {
+    color = 60;
+    saturation = 50;
+    lightness = 70;
+  } else if (percentage < 0.8) {
+    color = 40;
+    saturation = 50;
+    lightness = 60;
+  } else {
+    color = 30;
+    saturation = 50;
+    lightness = 40;
+  }
+
+  return `hsl(${color}, ${saturation}%, ${lightness}%)`;
+};
+
 
 const N = 8;
 const MATRIX_LENGTH = powerInt(2, N) + 1;
@@ -38,9 +86,6 @@ canvas.width = CANVAS_WIDTH;
 const RANDOM_CORNERS = 50;
 const RANDOM_RANGE = 50;
 
-const LIGHTNESS = 100;
-const SATURATION = 50;
-
 function draw(matrix) {
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, CANVAS_HEIGHT, CANVAS_WIDTH);
@@ -53,7 +98,7 @@ function draw(matrix) {
   for (const row of matrix) {
     x = 0;
     for (const pixel of row) {
-      ctx.fillStyle = getColor(pixel, LIGHTNESS, SATURATION);
+      ctx.fillStyle = getColor(pixel);
       ctx.fillRect(
         x * PIXEL_SIZE,
         y * PIXEL_SIZE,
@@ -156,6 +201,7 @@ function normalizeMatrix(matrix) {
 
   return matrix.map(row => row.map(value => value / max));
 }
+
 
 function start() {
   const MAP = normalizeMatrix(
