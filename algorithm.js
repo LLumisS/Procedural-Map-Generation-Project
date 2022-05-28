@@ -1,12 +1,12 @@
 'use strict';
 
 function generateMatrix(length, randomCorners) {
-  const matrix = Array(length).fill(0).map(() => Array(length).fill(null));
+  const matrix = Array(length).fill(null).map(() => Array(length).fill(0));
 
-  matrix[0][length - 1] = randomValue(0, randomCorners);
-  matrix[length - 1][0] = randomValue(0, randomCorners);
-  matrix[0][0] = randomValue(0, randomCorners);
-  matrix[length - 1][length - 1] = randomValue(0, randomCorners);
+  matrix[0][length - 1] = randomValue(-randomCorners, randomCorners);
+  matrix[length - 1][0] = randomValue(-randomCorners, randomCorners);
+  matrix[0][0] = randomValue(-randomCorners, randomCorners);
+  matrix[length - 1][length - 1] = randomValue(-randomCorners, randomCorners);
 
   return matrix;
 }
@@ -79,13 +79,4 @@ function stageSquare(matrix, chunkSize, randomFactor) {
     }
   }
   return matrix;
-}
-
-function normalizeMatrix(matrix) {
-  let max = -Infinity;
-  for (const row of matrix)
-    for (const value of row)
-      max = Math.max(Math.abs(value), max);
-
-  return matrix.map(row => row.map(value => value / max));
 }

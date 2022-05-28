@@ -25,6 +25,15 @@ header {
   border-radius: 10px;
 }
 
+#apply {
+  margin: 0 auto;
+  display: block;
+  font-weight: bold;
+  height: 40px;
+  width: 100px;
+  border-radius: 10px;
+}
+
 .transition {
   display:flex;
   max-width: 100%;

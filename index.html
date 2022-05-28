@@ -6,9 +6,8 @@
     <title>MapGen</title>
     <script src="filters.js"></script>
     <script src="common.js"></script>
-    <script src="draw.js"></script>
-    <script src="diamondSquare.js"></script>
-    <script src="main.js" defer></script>
+    <script src="algorithm.js"></script>
+    <script src="draw.js" defer></script>
 </head>
 <body>
   <header>
@@ -22,27 +21,32 @@
       <a style="font-weight: bold; text-align:center; font-size: larger; margin-top: 5px;">Settings</a>
       <div id="group-filter" class="row clickable-labels">
         <span id="filter">Map Filter:</span>
-        <div class="form_radio"><label>
-          <input type="radio" id="none-filter" name="filter" value="none">
-          None
-        </label></div>
-        <div class="form_radio"><label>
-          <input type="radio" id="physical-filter" name="filter" value="physical">
-          Physical
-        </label></div>
-        <div class="form_radio"><label>
-          <input type="radio" id="moisture-filter" name="filter" value="moisture">
-          Moisture
-        </label></div>
-        <div class="form_radio"><label>
-          <input type="radio" id="temperature-filter" name="filter" value="temperature">
-          Temperature
-        </label></div>
-        <div class="form_radio"><label>
-          <input type="radio" id="bioms-filter" name="filter" value="bioms">
-          Bioms
-        </label></div>
+        <div class="form_radio">
+          <label>
+            <input class="class_filter" type="radio" id="none-filter" name="filter" value="none">
+            None
+          </label>
+        </div>
+        <div class="form_radio">
+          <label>
+            <input class="class_filter" type="radio" id="physical-filter" name="filter" value="PHYSICAL_COLORS" checked="checked">
+            Physical
+          </label>
+        </div>
+        <div class="form_radio">
+          <label>
+            <input class="class_filter" type="radio" id="moisture-filter" name="filter" value="MOISTURE_COLORS">
+            Moisture
+          </label>
+        </div>
+        <div class="form_radio">
+          <label>
+            <input class="class_filter" type="radio" id="temperature-filter" name="filter" value="TEMPERATURE_COLORS">
+            Temperature
+          </label>
+        </div>
       </div>
+      <div><button id="apply">Apply</button></div>
     </div>
   </main>
   <div><button id="refresh">Refresh</button></div>
