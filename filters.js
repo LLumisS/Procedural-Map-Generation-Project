@@ -1,7 +1,7 @@
 'use strict';
 
 const FILTERS = {
-  'PHYSICAL_COLORS': [
+  'PHYSICAL': [
     {
       level: -0.9,
       color: 220,
@@ -76,7 +76,7 @@ const FILTERS = {
     },
   ],
 
-  'MOISTURE_COLORS': [
+  'MOISTURE': [
     { //Extra Dry
       level: -0.8,
       color: 240,
@@ -121,7 +121,7 @@ const FILTERS = {
     },
   ],
 
-  'TEMPERATURE_COLORS': [
+  'TEMPERATURE': [
     {
       level: -0.75,
       color: 240,

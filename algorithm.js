@@ -41,8 +41,7 @@ function stageDiamond(matrix, chunkSize, randomFactor) {
         BOTTOM_LEFT,
         TOP_LEFT,
         TOP_RIGHT
-      ) +
-        randomValue(-randomFactor, randomFactor);
+      ) + randomValue(-randomFactor, randomFactor);
 
       const CHANGED_ROW = y + chunkSize / 2;
       const CHANGED_COLUMN = x + chunkSize / 2;
@@ -50,7 +49,6 @@ function stageDiamond(matrix, chunkSize, randomFactor) {
       matrix[CHANGED_ROW][CHANGED_COLUMN] = result;
     }
   }
-  return matrix;
 }
 
 function stageSquare(matrix, chunkSize, randomFactor) {
@@ -69,8 +67,7 @@ function stageSquare(matrix, chunkSize, randomFactor) {
         TOP,
         LEFT,
         RIGHT
-      ) +
-        randomValue(-randomFactor, randomFactor);
+      ) + randomValue(-randomFactor, randomFactor);
 
       const CHANGED_ROW = y;
       const CHANGED_COLUMN = x;
@@ -78,5 +75,4 @@ function stageSquare(matrix, chunkSize, randomFactor) {
       matrix[CHANGED_ROW][CHANGED_COLUMN] = result;
     }
   }
-  return matrix;
 }

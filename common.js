@@ -21,7 +21,7 @@ const averageValue = (...argArray) => {
   return sum / count;
 };
 
-const averageValueMatrix = (matrix) => {
+const averageValueMatrix = matrix => {
   let sum = 0;
   const count = powerInt(matrix.length, 2);
   for (const row of matrix)
@@ -43,7 +43,7 @@ const getColor = (percentage, filter) => {
   }
 };
 
-function normalizeMatrix(matrix) {
+const normalizeMatrix = matrix => {
   let max = -Infinity;
   for (const row of matrix)
     for (const value of row)
@@ -60,9 +60,8 @@ const randomNormalizedMatrix = (length, cornersRandom, noiseRandom) =>
     )
   );
 
-const filterDefinition = (array) => {
+const filterDefinition = array => {
   for(let i = 0; i < 4; i++)
-  if (array[i].checked) {
-    return FILTERS[array[i].value];
-  }
+  if (array[i].checked)
+    return array[i].value;
 }

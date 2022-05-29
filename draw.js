@@ -3,30 +3,28 @@
 const radio = document.getElementsByClassName('class_filter');
 const canvas = document.getElementById('map');
 
-const SETTINGS = {
-  power: 8,
-  pixelSize: 2,
-  filter: FILTERS.PHYSICAL_COLORS,
-  cornersRandom: 6,
-  noiseRandom: 24,
-};
-
-const N = SETTINGS.power;
+const N = 8;
 const MATRIX_LENGTH = powerInt(2, N) + 1;
 
-const PIXEL_SIZE = SETTINGS.pixelSize;
+const PIXEL_SIZE = 2;
 canvas.height = MATRIX_LENGTH * PIXEL_SIZE;
 canvas.width = MATRIX_LENGTH * PIXEL_SIZE;
 
-const RANDOM_CORNERS = SETTINGS.cornersRandom;
-const RANDOM_RANGE = SETTINGS.noiseRandom;
+const RANDOM_CORNERS = 6;
+const RANDOM_RANGE = 24;
 
-function draw(matrix) {
+const MAP = {
+  'DEFAULT': null,
+  'PHYSICAL': null,
+  'MOISTURE': null,
+  'TEMPERATURE': null,
+};
+
+function draw(matrix = MAP['PHYSICAL'], filter = FILTERS['PHYSICAL']) {
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.height, canvas.width);
 
   ctx.beginPath();
-  const filter = filterDefinition(radio);
   const length = matrix.length;
   for (let y = 0; y < length; y++)
     for (let x = 0; x < length; x++) {
@@ -42,7 +40,7 @@ function draw(matrix) {
   ctx.closePath();
 }
 
-function start () {
+function start() {
   const MAP_HEIGHT = randomNormalizedMatrix(
     MATRIX_LENGTH, 
     RANDOM_CORNERS, 
@@ -62,12 +60,26 @@ function start () {
   );
   for(let y = 0; y < MATRIX_LENGTH; y++)
     for (let x = 0; x < MATRIX_LENGTH; x++)
-      MAP_TEMPERATURE[y][x] = MAP_TEMPERATURE[y][x] - MAP_HEIGHT[y][x] / 2;
+      MAP_TEMPERATURE[y][x] = MAP_TEMPERATURE[y][x] - MAP_HEIGHT[y][x] / 3;
+  normalizeMatrix(MAP_TEMPERATURE);
 
-  draw(MAP_HEIGHT);
+  MAP['PHYSICAL'] = MAP_HEIGHT;
+  MAP['MOISTURE'] = MAP_MOISTURE;
+  MAP['TEMPERATURE'] = MAP_TEMPERATURE;
+
+  draw();
+}
+
+function optional() {
+  const selected = filterDefinition(radio);
+
+  const filter = FILTERS[selected];
+  const map = MAP[selected];
+
+  draw(map, filter);
 }
 
 start();
 
 document.getElementById('refresh').addEventListener('click', start);
-document.getElementById('apply').addEventListener('click', start);
+document.getElementById('apply').addEventListener('click', optional);
