@@ -32,14 +32,8 @@ const averageValueMatrix = matrix => {
 
 const getColor = (percentage, filter) => {
   for (const layer of filter) {
-    if (percentage <= layer.level) {
-      const color = layer.color;
-      const lightness = layer.lightness;
-      const saturation = layer.saturation;
-
-      const result = `hsl(${color}, ${saturation}%, ${lightness}%)`;
-      return result;
-    }
+    if (percentage <= layer.level)
+      return `hsl(${layer.color}, ${layer.saturation}%, ${layer.lightness}%)`;
   }
 };
 
@@ -62,6 +56,20 @@ const randomNormalizedMatrix = (length, cornersRandom, noiseRandom) =>
 
 const filterDefinition = array => {
   for(let i = 0; i < 4; i++)
-  if (array[i].checked)
-    return array[i].value;
+    if (array[i].checked)
+      return array[i].value;
+}
+
+function temperatureMapGenerator(heightMap) {
+  const tempratureRandom = randomNormalizedMatrix(
+    MATRIX_LENGTH, 
+    RANDOM_CORNERS, 
+    RANDOM_RANGE
+  );
+
+  for(let y = 0; y < MATRIX_LENGTH; y++)
+    for (let x = 0; x < MATRIX_LENGTH; x++)
+      tempratureRandom[y][x] -= (heightMap[y][x] > 0) ? (heightMap[y][x] / 4) : 0;
+
+  return normalizeMatrix(tempratureRandom);
 }

@@ -53,15 +53,7 @@ function start() {
     RANDOM_RANGE
   );
 
-  const MAP_TEMPERATURE = randomNormalizedMatrix(
-    MATRIX_LENGTH, 
-    RANDOM_CORNERS, 
-    RANDOM_RANGE
-  );
-  for(let y = 0; y < MATRIX_LENGTH; y++)
-    for (let x = 0; x < MATRIX_LENGTH; x++)
-      MAP_TEMPERATURE[y][x] = MAP_TEMPERATURE[y][x] - MAP_HEIGHT[y][x] / 3;
-  normalizeMatrix(MAP_TEMPERATURE);
+  const MAP_TEMPERATURE = temperatureMapGenerator(MAP_HEIGHT);
 
   MAP['PHYSICAL'] = MAP_HEIGHT;
   MAP['MOISTURE'] = MAP_MOISTURE;

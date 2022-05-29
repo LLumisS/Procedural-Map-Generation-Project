@@ -32,7 +32,7 @@ const FILTERS = {
       saturation: 100,
       lightness: 60,
     },
-    {
+    { //Water Level
       level: 0,
       color: 200,
       saturation: 100,
@@ -44,7 +44,7 @@ const FILTERS = {
       saturation: 50,
       lightness: 60,
     },
-    { //Water Level
+    {
       level: 0.4,
       color: 75,
       saturation: 50,
