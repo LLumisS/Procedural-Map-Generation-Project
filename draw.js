@@ -54,7 +54,8 @@ function start() {
   );
 
   const MAP_TEMPERATURE = temperatureMapGenerator(MAP_HEIGHT);
-
+  riversGeneration(MAP_HEIGHT, 10);
+  
   MAP['PHYSICAL'] = MAP_HEIGHT;
   MAP['MOISTURE'] = MAP_MOISTURE;
   MAP['TEMPERATURE'] = MAP_TEMPERATURE;

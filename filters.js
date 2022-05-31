@@ -77,38 +77,44 @@ const FILTERS = {
   ],
 
   'MOISTURE': [
+    {
+      level: -0.75,
+      color: 240,
+      saturation: 100,
+      lightness: 100,
+    },
     { //Extra Dry
-      level: -0.8,
+      level: -0.5,
       color: 240,
       saturation: 100,
       lightness: 100,
     },
     { 
-      level: -0.5,
+      level: -0.25,
       color: 240,
       saturation: 100,
       lightness: 85,
     },
     { //Dry
-      level: -0.2,
+      level: 0,
       color: 240,
       saturation: 100,
       lightness: 70,
     },
     { 
-      level: 0.1,
+      level: 0.25,
       color: 240,
       saturation: 100,
       lightness: 55,
     },
     { // Wet
-      level: 0.4,
+      level: 0.5,
       color: 240,
       saturation: 100,
       lightness: 40,
     },
     { 
-      level: 0.7,
+      level: 0.75,
       color: 240,
       saturation: 100,
       lightness: 25,

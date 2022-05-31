@@ -44,7 +44,7 @@ const normalizeMatrix = matrix => {
       max = Math.max(Math.abs(value), max);
 
   return matrix.map(row => row.map(value => value / max));
-}
+};
 
 const randomNormalizedMatrix = (length, cornersRandom, noiseRandom) => 
   normalizeMatrix(
@@ -58,7 +58,7 @@ const filterDefinition = array => {
   for(let i = 0; i < 4; i++)
     if (array[i].checked)
       return array[i].value;
-}
+};
 
 function temperatureMapGenerator(heightMap) {
   const tempratureRandom = randomNormalizedMatrix(
@@ -72,4 +72,68 @@ function temperatureMapGenerator(heightMap) {
       tempratureRandom[y][x] -= (heightMap[y][x] > 0) ? (heightMap[y][x] / 4) : 0;
 
   return normalizeMatrix(tempratureRandom);
+}
+
+const minValue = (...argArray) => {
+  let min = Infinity;
+  for (const arg of argArray)
+    if (isFinite(arg) && arg !== null)
+      min = min > arg ? arg : min;
+  return min;
+};
+
+function riversGeneration(matrix, riverCount) {
+  const length = matrix.length
+  const riverArray = Array(riverCount).fill(null).map(() => Array());
+  for(let i = 0; i < riverCount; i++) {
+    let y = randomValue(0, length - 1);
+    let x = randomValue(0, length - 1);
+
+    if(matrix[y][x] < 0.2) {
+      i--;
+      continue;
+    }
+
+    riverGeneration(matrix, y, x, riverArray[i]);
+  }
+}
+
+const includesPixel = (array, object) => {
+  let result = false;
+  for (const pixel of array)
+    if(pixel.y === object.y && pixel.x === object.x)
+      return true;
+  return result;
+}
+
+function riverGeneration(matrix, y, x , river) {
+  let noWater = true;
+  river.push({ y: y, x: x });
+  
+  while(noWater) {
+    const top = matrix[y - 1] && !includesPixel(river, { y: y - 1, x: x }) ? matrix[y - 1][x] : null;
+    const bottom = matrix[y + 1] && !includesPixel(river, { y: y + 1, x: x }) ? matrix[y + 1][x] : null;
+    const left = !includesPixel(river, { y: y, x: x - 1 }) ? matrix[y][x - 1] : null;
+    const right = !includesPixel(river, { y: y, x: x + 1 }) ? matrix[y][x + 1] : null;
+
+    const min = minValue(top, bottom, left, right);
+
+    if(min <= 0 || min === Infinity)
+      noWater = false;
+
+    if(top === min)
+      y += -1;
+    else if (bottom === min)
+      y += 1;
+    else if (left === min)
+      x += -1;
+    else if (right === min)
+      x += 1;
+
+    river.push({ y: y, x: x });
+  }
+
+  for(const pixel of river) {
+    matrix[pixel.y][pixel.x] = 0;
+  }
 }
