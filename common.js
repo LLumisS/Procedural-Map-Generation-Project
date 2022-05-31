@@ -82,19 +82,19 @@ const minValue = (...argArray) => {
   return min;
 };
 
-function riversGeneration(matrix, riverCount) {
-  const length = matrix.length
+function riversGeneration(heightMap, riverCount) {
+  const length = heightMap.length
   const riverArray = Array(riverCount).fill(null).map(() => Array());
   for(let i = 0; i < riverCount; i++) {
     let y = randomValue(0, length - 1);
     let x = randomValue(0, length - 1);
 
-    if(matrix[y][x] < 0.2) {
+    if(heightMap[y][x] < 0.2) {
       i--;
       continue;
     }
 
-    riverGeneration(matrix, y, x, riverArray[i]);
+    riverGeneration(heightMap, y, x, riverArray[i]);
   }
 }
 
@@ -106,20 +106,20 @@ const includesPixel = (array, object) => {
   return result;
 }
 
-function riverGeneration(matrix, y, x , river) {
-  let noWater = true;
+function riverGeneration(heightMap, y, x , river) {
+  let End = false;
   river.push({ y: y, x: x });
-  
-  while(noWater) {
-    const top = matrix[y - 1] && !includesPixel(river, { y: y - 1, x: x }) ? matrix[y - 1][x] : null;
-    const bottom = matrix[y + 1] && !includesPixel(river, { y: y + 1, x: x }) ? matrix[y + 1][x] : null;
-    const left = !includesPixel(river, { y: y, x: x - 1 }) ? matrix[y][x - 1] : null;
-    const right = !includesPixel(river, { y: y, x: x + 1 }) ? matrix[y][x + 1] : null;
+
+  while(!End) {
+    const top = heightMap[y - 1] && !includesPixel(river, { y: y - 1, x: x }) ? heightMap[y - 1][x] : null;
+    const bottom = heightMap[y + 1] && !includesPixel(river, { y: y + 1, x: x }) ? heightMap[y + 1][x] : null;
+    const left = !includesPixel(river, { y: y, x: x - 1 }) ? heightMap[y][x - 1] : null;
+    const right = !includesPixel(river, { y: y, x: x + 1 }) ? heightMap[y][x + 1] : null;
 
     const min = minValue(top, bottom, left, right);
 
-    if(min <= 0 || min === Infinity)
-      noWater = false;
+    if(min <= 0)
+      End = true;
 
     if(top === min)
       y += -1;
@@ -129,11 +129,19 @@ function riverGeneration(matrix, y, x , river) {
       x += -1;
     else if (right === min)
       x += 1;
-
+    else if (min === Infinity) {
+      river = [];
+      End = true;
+      break;
+    }
+    
     river.push({ y: y, x: x });
   }
 
-  for(const pixel of river) {
-    matrix[pixel.y][pixel.x] = 0;
-  }
+  for(const pixel of river)
+    heightMap[pixel.y][pixel.x] = 0;
+}
+
+function extraMoistureByRivers(heightMap, moistureMap) {
+  return null;
 }
