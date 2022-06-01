@@ -82,28 +82,36 @@ const minValue = (...argArray) => {
   return min;
 };
 
-function riversGeneration(heightMap, riverCount) {
-  const length = heightMap.length
-  const riverArray = Array(riverCount).fill(null).map(() => Array());
-  for(let i = 0; i < riverCount; i++) {
-    let y = randomValue(0, length - 1);
-    let x = randomValue(0, length - 1);
-
-    if(heightMap[y][x] < 0.2) {
-      i--;
-      continue;
-    }
-
-    riverGeneration(heightMap, y, x, riverArray[i]);
-  }
-}
-
 const includesPixel = (array, object) => {
   let result = false;
   for (const pixel of array)
     if(pixel.y === object.y && pixel.x === object.x)
       return true;
   return result;
+}
+
+function riversGeneration(heightMap, riverCount) {
+  let k = 0;
+  for(const row of heightMap)
+    for(const height of row)
+      if (height > 0.4)
+        k++;
+
+  if(k > riverCount) {
+    const length = heightMap.length
+    const riverArray = Array(riverCount).fill(null).map(() => Array());
+    for(let i = 0; i < riverCount; i++) {
+      let y = randomValue(0, length - 1);
+      let x = randomValue(0, length - 1);
+
+      if(heightMap[y][x] < 0.2) {
+        i--;
+        continue;
+      }
+
+      riverGeneration(heightMap, y, x, riverArray[i]);
+    }
+  }
 }
 
 function riverGeneration(heightMap, y, x , river) {
