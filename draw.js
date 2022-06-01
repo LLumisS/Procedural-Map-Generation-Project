@@ -5,13 +5,14 @@ const canvas = document.getElementById('map');
 
 const N = 8;
 const MATRIX_LENGTH = powerInt(2, N) + 1;
+const RIVERS_COUNT = 10;
 
 const PIXEL_SIZE = 2;
 canvas.height = MATRIX_LENGTH * PIXEL_SIZE;
 canvas.width = MATRIX_LENGTH * PIXEL_SIZE;
 
-const RANDOM_CORNERS = 60;
-const RANDOM_RANGE = 240;
+const RANDOM_CORNERS = 70;
+const RANDOM_RANGE = 280;
 
 const MAP = {
   'DEFAULT': null,
@@ -54,7 +55,7 @@ function start() {
   );
 
   const MAP_TEMPERATURE = temperatureMapGenerator(MAP_HEIGHT);
-  riversGeneration(MAP_HEIGHT, 10);
+  riversGeneration(MAP_HEIGHT, RIVERS_COUNT);
   
   MAP['PHYSICAL'] = MAP_HEIGHT;
   MAP['MOISTURE'] = MAP_MOISTURE;
