@@ -42,21 +42,16 @@ function draw(matrix = MAP['PHYSICAL'], filter = FILTERS['PHYSICAL']) {
 }
 
 function start() {
-  const MAP_HEIGHT = randomNormalizedMatrix(
-    MATRIX_LENGTH, 
-    RANDOM_CORNERS, 
-    RANDOM_RANGE
-  );
+  const MAP_HEIGHT = randomNormalizedMatrix();
 
-  const MAP_MOISTURE = randomNormalizedMatrix(
-    MATRIX_LENGTH, 
-    RANDOM_CORNERS, 
-    RANDOM_RANGE
-  );
+  const MAP_MOISTURE = randomNormalizedMatrix();
 
   const MAP_TEMPERATURE = temperatureMapGenerator(MAP_HEIGHT);
   riversGeneration(MAP_HEIGHT, RIVERS_COUNT);
   
+  const MAP_BIOMS = biomMapGenerator(MAP_MOISTURE, MAP_TEMPERATURE);
+
+  MAP['DEFAULT'] = MAP_BIOMS;
   MAP['PHYSICAL'] = MAP_HEIGHT;
   MAP['MOISTURE'] = MAP_MOISTURE;
   MAP['TEMPERATURE'] = MAP_TEMPERATURE;

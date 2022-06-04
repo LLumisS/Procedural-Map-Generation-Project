@@ -21,19 +21,10 @@ const averageValue = (...argArray) => {
   return sum / count;
 };
 
-const averageValueMatrix = matrix => {
-  let sum = 0;
-  const count = powerInt(matrix.length, 2);
-  for (const row of matrix)
-    for (const value of row)
-      sum += value;
-  return sum / count;
-};
-
 const getColor = (percentage, filter) => {
   for (const layer of filter) {
     if (percentage <= layer.level)
-      return `hsl(${layer.color}, ${layer.saturation}%, ${layer.lightness}%)`;
+      return `hsl(${layer.hue}, ${layer.saturation}%, ${layer.lightness}%)`;
   }
 };
 
@@ -46,11 +37,11 @@ const normalizeMatrix = matrix => {
   return matrix.map(row => row.map(value => value / max));
 };
 
-const randomNormalizedMatrix = (length, cornersRandom, noiseRandom) => 
+const randomNormalizedMatrix = () => 
   normalizeMatrix(
     diamondSquare(
-      generateMatrix(length, cornersRandom),
-      noiseRandom
+      generateMatrix(MATRIX_LENGTH, RANDOM_CORNERS),
+      RANDOM_RANGE
     )
   );
 
@@ -61,11 +52,7 @@ const filterDefinition = array => {
 };
 
 function temperatureMapGenerator(heightMap) {
-  const tempratureRandom = randomNormalizedMatrix(
-    MATRIX_LENGTH, 
-    RANDOM_CORNERS, 
-    RANDOM_RANGE
-  );
+  const tempratureRandom = randomNormalizedMatrix();
 
   for(let y = 0; y < MATRIX_LENGTH; y++)
     for (let x = 0; x < MATRIX_LENGTH; x++)
@@ -73,6 +60,19 @@ function temperatureMapGenerator(heightMap) {
 
   return normalizeMatrix(tempratureRandom);
 }
+
+const biomMapGenerator = (moistureMap, temperatureMap, bioms = BIOMS) => {
+  const length = moistureMap.length;
+  const biomMap = Array(length).fill(null).map(() => Array(length).fill(0));
+
+  for(let y = 0; y < length; y++)
+    for(let x = 0; x < length; x++)
+      for(const biom of bioms)
+        if(moistureMap[y][x] <= biom.moisture && temperatureMap[y][x] <= biom.temperature)
+          biomMap[y][x] = biom.level;
+
+  return biomMap;
+};
 
 const minValue = (...argArray) => {
   let min = Infinity;
@@ -82,17 +82,17 @@ const minValue = (...argArray) => {
   return min;
 };
 
-const includesPixel = (array, object) => {
+const includesTile = (array, tile) => {
   let result = false;
   for (const pixel of array)
-    if(pixel.y === object.y && pixel.x === object.x)
+    if(pixel.y === tile.y && pixel.x === tile.x)
       return true;
   return result;
 }
 
 function riversGeneration(heightMap, riverCount) {
-    const length = heightMap.length
-    const riverArray = Array(riverCount).fill(null).map(() => Array());
+  const length = heightMap.length
+  const riverArray = Array(riverCount).fill(null).map(() => Array());
 
   for(let i = 0; i < riverCount; i++) {
     let y = randomValue(0, length - 1);
@@ -112,35 +112,34 @@ function riverGeneration(heightMap, y, x , river) {
   river.push({ y: y, x: x });
 
   while(!End) {
-    const top = heightMap[y - 1] && !includesPixel(river, { y: y - 1, x: x }) ? heightMap[y - 1][x] : null;
-    const bottom = heightMap[y + 1] && !includesPixel(river, { y: y + 1, x: x }) ? heightMap[y + 1][x] : null;
-    const left = !includesPixel(river, { y: y, x: x - 1 }) ? heightMap[y][x - 1] : null;
-    const right = !includesPixel(river, { y: y, x: x + 1 }) ? heightMap[y][x + 1] : null;
+    const top = heightMap[y - 1] && !includesTile(river, { y: y - 1, x: x }) ? heightMap[y - 1][x] : null;
+    const bottom = heightMap[y + 1] && !includesTile(river, { y: y + 1, x: x }) ? heightMap[y + 1][x] : null;
+    const left = !includesTile(river, { y: y, x: x - 1 }) ? heightMap[y][x - 1] : null;
+    const right = !includesTile(river, { y: y, x: x + 1 }) ? heightMap[y][x + 1] : null;
 
     const min = minValue(top, bottom, left, right);
 
     if(min <= 0)
       End = true;
-
-    if(top === min)
+    else if(min === top)
       y += -1;
-    else if (bottom === min)
+    else if (min === bottom)
       y += 1;
-    else if (left === min)
+    else if (min === left)
       x += -1;
-    else if (right === min)
+    else if (min === right)
       x += 1;
     else if (min === Infinity) {
       river = [];
       End = true;
       break;
-    }
-    
+    } 
+
     river.push({ y: y, x: x });
   }
 
-  for(const pixel of river)
-    heightMap[pixel.y][pixel.x] = 0;
+  for(const tile of river)
+    heightMap[tile.y][tile.x] = 0;
 }
 
 function extraMoistureByRivers(heightMap, moistureMap) {
