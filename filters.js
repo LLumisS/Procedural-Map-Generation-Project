@@ -1,52 +1,52 @@
 'use strict';
 
 const BIOMS = [
-  { //Tundra
+  {
     level: 1,
     moisture: 0,
     temperature: -0.5, 
   },
-  { //Taiga
+  {
     level: 2,
     moisture: 1,
     temperature: -0.5,
   },
-  { //Step`
+  {
     level: 3,
     moisture: -0.5,
     temperature: 0.5,
   },
-  { //Lyg
+  {
     level: 4,
     moisture: 0,
     temperature: 0.5,
   },
-  { //Sosna
+  {
     level: 5,
     moisture: 1,
     temperature: 0,
   },
-  { //Forest
+  {
     level: 6,
     moisture: 1,
     temperature: 0.5,
   },
-  { //Desert
+  {
     level: 7,
     moisture: -0.5,
     temperature: 1,
   },
-  { //Pustosh
+  {
     level: 8,
     moisture: 0,
     temperature: 1,
   },
-  { //Savanna
+  {
     level: 9,
     moisture: 1,
     temperature: 0.5,
   },
-  { //Jungle
+  {
     level: 10,
     moisture: 1,
     temperature: 1,
@@ -58,62 +58,62 @@ const FILTERS = {
     {
       level: 1,
       hue: 0,
-      saturation: 0,
-      lightness: 0,
+      saturation: 100,
+      lightness: 50,
     },
     {
       level: 2,
-      hue: 0,
-      saturation: 0,
-      lightness: 0,
+      hue: 30,
+      saturation: 100,
+      lightness: 50,
     },
     {
       level: 3,
-      hue: 0,
-      saturation: 0,
-      lightness: 0,
+      hue: 60,
+      saturation: 100,
+      lightness: 50,
     },
     {
       level: 4,
-      hue: 0,
-      saturation: 0,
-      lightness: 0,
+      hue: 90,
+      saturation: 100,
+      lightness: 50,
     },
     {
       level: 5,
-      hue: 0,
-      saturation: 0,
-      lightness: 0,
+      hue: 120,
+      saturation: 100,
+      lightness: 50,
     },
     {
       level: 6,
-      hue: 0,
-      saturation: 0,
-      lightness: 0,
+      hue: 150,
+      saturation: 100,
+      lightness: 50,
     },
     {
       level: 7,
-      hue: 0,
-      saturation: 0,
-      lightness: 0,
+      hue: 180,
+      saturation: 100,
+      lightness: 50,
     },
     {
       level: 8,
-      hue: 0,
-      saturation: 0,
-      lightness: 0,
+      hue: 210,
+      saturation: 100,
+      lightness: 50,
     },
     {
       level: 9,
-      hue: 0,
-      saturation: 0,
-      lightness: 0,
+      hue: 240,
+      saturation: 100,
+      lightness: 50,
     },
     {
       level: 10,
-      hue: 0,
-      saturation: 0,
-      lightness: 0,
+      hue: 270,
+      saturation: 100,
+      lightness: 50,
     },
   ],
 

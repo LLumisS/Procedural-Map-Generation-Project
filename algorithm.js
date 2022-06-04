@@ -76,3 +76,89 @@ function stageSquare(matrix, chunkSize, randomFactor) {
     }
   }
 }
+
+const normalizeMatrix = matrix => {
+  let max = -Infinity;
+  for (const row of matrix)
+    for (const value of row)
+      max = Math.max(Math.abs(value), max);
+
+  return matrix.map(row => row.map(value => value / max));
+};
+
+const randomNormalizedMatrix = () => 
+  normalizeMatrix(
+    diamondSquare(
+      generateMatrix(MATRIX_LENGTH, RANDOM_CORNERS),
+      RANDOM_RANGE
+    )
+  );
+
+function riversGeneration(heightMap, riverCount) {
+  const length = heightMap.length
+  const riverArray = Array(riverCount).fill(null).map(() => Array());
+  
+  for(let i = 0; i < riverCount; i++) {
+    const y = randomValue(0, length - 1);
+    const x = randomValue(0, length - 1);
+  
+    if(heightMap[y][x] <= 0) {
+      i--;
+      continue;
+    }
+  
+    riverGeneration(heightMap, y, x, riverArray[i]);
+  }
+}
+  
+function riverGeneration(heightMap, y, x , river) {
+  let End = false;
+  river.push({ y: y, x: x });
+  
+  while(!End) {
+    const top = heightMap[y - 1] && 
+      !includesTile(river, { y: y - 1, x: x }) ?
+        heightMap[y - 1][x] : 
+        null;
+
+    const bottom = heightMap[y + 1] && 
+      !includesTile(river, { y: y + 1, x: x }) ?
+        heightMap[y + 1][x] : 
+        null;
+
+    const left = !includesTile(river, { y: y, x: x - 1 }) ? 
+      heightMap[y][x - 1] : 
+      null;
+
+    const right = !includesTile(river, { y: y, x: x + 1 }) ? 
+      heightMap[y][x + 1] : 
+      null;
+  
+    const min = minValue(top, bottom, left, right);
+  
+    if(min <= 0)
+      End = true;
+    else if(min === top)
+      y += -1;
+    else if (min === bottom)
+      y += 1;
+    else if (min === left)
+      x += -1;
+    else if (min === right)
+      x += 1;
+    else if (min === Infinity) {
+      river = [];
+      End = true;
+      break;
+    } 
+  
+    river.push({ y: y, x: x });
+  }
+  
+  for(const tile of river)
+    heightMap[tile.y][tile.x] = 0;
+}
+
+function extraMoistureByRivers(moistureMap, heightMap) {
+  return null;
+}
