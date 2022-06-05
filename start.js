@@ -30,7 +30,8 @@ function start() {
   const defaultMap = new BiomMap(
     FILTERS.DEFAULT, 
     moistureMap.matrix, 
-    temperatureMap.matrix);
+    temperatureMap.matrix,
+    heightMap.matrix);
 
   MAP['PHYSICAL'] = heightMap;
   MAP['MOISTURE'] = moistureMap;

@@ -49,3 +49,18 @@ const includesTile = (array, tile) => {
       return true;
   return result;
 }
+
+const getBiomColor = (biomPercentage, heightPercentage, biomFilter, lightnessTable) => {
+  let coeff = 0;
+  for (const layer of biomFilter) {
+    if (biomPercentage <= layer.level) {
+      for (const level of lightnessTable)
+        if (heightPercentage <= level.height) {
+          coeff = level.coefficient;
+          break;
+        }
+      const lightness = layer.lightness * (1 - 1 / 6 * coeff);
+      return `hsl(${layer.hue}, ${layer.saturation}%, ${lightness}%)`;
+    }
+  }
+};

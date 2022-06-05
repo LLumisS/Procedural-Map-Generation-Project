@@ -1,119 +1,218 @@
 'use strict';
 
 const BIOMS = [
-  {
+  { //Icy Wasteland
     level: 1,
-    moisture: 0,
+    moisture: -0.5,
     temperature: -0.5, 
   },
-  {
+  { //Snowy Tundra
     level: 2,
+    moisture: 0,
+    temperature: -0.5,
+  },
+  { //Snowy Forest-Tundra
+    level: 3,
+    moisture: 0.5,
+    temperature: -0.5,
+  },
+  { //Snowy Taiga
+    level: 4,
     moisture: 1,
     temperature: -0.5,
   },
-  {
-    level: 3,
-    moisture: -0.5,
-    temperature: 0.5,
-  },
-  {
-    level: 4,
-    moisture: 0,
-    temperature: 0.5,
-  },
-  {
+  { //Tundra
     level: 5,
+    moisture: -0.5,
+    temperature: 0,
+  },
+  { //Forest-Steppe
+    level: 6,
+    moisture: 0,
+    temperature: 0,
+  },
+  { //Forest
+    level: 7,
+    moisture: 0.5,
+    temperature: 0,
+  },
+  { //Taiga
+    level: 8,
     moisture: 1,
     temperature: 0,
   },
-  {
-    level: 6,
+  { //Plains
+    level: 9,
+    moisture: -0.5,
+    temperature: 0.5,
+  },
+  { //Savanna
+    level: 10,
+    moisture: 0,
+    temperature: 0.5,
+  },
+  { //Forest-Savanna
+    level: 11,
+    moisture: 0.5,
+    temperature: 0.5,
+  },
+  { //Swamp
+    level: 12,
     moisture: 1,
     temperature: 0.5,
   },
-  {
-    level: 7,
+  { //Desert
+    level: 13,
     moisture: -0.5,
     temperature: 1,
   },
-  {
-    level: 8,
+  { //Badlands
+    level: 14,
     moisture: 0,
     temperature: 1,
   },
-  {
-    level: 9,
-    moisture: 1,
-    temperature: 0.5,
+  { //Tropical Forest
+    level: 15,
+    moisture: 0.5,
+    temperature: 1,
   },
-  {
-    level: 10,
+  { //Jungle
+    level: 16,
     moisture: 1,
     temperature: 1,
   },
 ];
 
+const LIGHTNESS_TABLE = [
+  {
+    height: 0.2,
+    coefficient: 0,
+  },
+  {
+    height: 0.4,
+    coefficient: 1,
+  },
+  {
+    height: 0.6,
+    coefficient: 2,
+  },
+  {
+    height: 0.8,
+    coefficient: 3,
+  },
+  {
+    height: 0.9,
+    coefficient: 4,
+  },
+  {
+    height: 1,
+    coefficient: 5,
+  },
+];
+
 const FILTERS = {
   'DEFAULT': [
-    {
+    { //Icy Wasteland
       level: 1,
-      hue: 0,
-      saturation: 100,
-      lightness: 50,
+      hue: 180,
+      saturation: 80,
+      lightness: 90,
     },
-    {
+    { //Snowy Tundra
       level: 2,
-      hue: 30,
-      saturation: 100,
-      lightness: 50,
+      hue: 35,
+      saturation: 15,
+      lightness: 70,
     },
-    {
+    { //Snowy Forest-Tundra
       level: 3,
-      hue: 60,
-      saturation: 100,
-      lightness: 50,
+      hue: 70,
+      saturation: 15,
+      lightness: 70,
     },
-    {
+    { //Snowy Taiga
       level: 4,
+      hue: 140,
+      saturation: 60,
+      lightness: 100,
+    },
+    { //Tundra
+      level: 5,
+      hue: 35,
+      saturation: 25,
+      lightness: 30,
+    },
+    { //Forest-Steppe
+      level: 6,
+      hue: 80,
+      saturation: 60,
+      lightness: 45,
+    },
+    { //Forest
+      level: 7,
+      hue: 120,
+      saturation: 60,
+      lightness: 45,
+    },
+    { //Taiga
+      level: 8,
+      hue: 140,
+      saturation: 60,
+      lightness: 25,
+    },
+    { //Plains
+      level: 9,
+      hue: 50,
+      saturation: 80,
+      lightness: 70,
+    },
+    { //Savanna
+      level: 10,
+      hue: 65,
+      saturation: 70,
+      lightness: 60,
+    },
+    { //Forest-Savanna
+      level: 11,
+      hue: 75,
+      saturation: 70,
+      lightness: 60,
+    },
+    { //Swamp
+      level: 12,
+      hue: 100,
+      saturation: 40,
+      lightness: 20,
+    },
+    { //Desert
+      level: 13,
+      hue: 45,
+      saturation: 80,
+      lightness: 60,
+    },
+    { //Badlands
+      level: 14,
+      hue: 30,
+      saturation: 80,
+      lightness: 60,
+    },
+    { //Tropical Forest
+      level: 15,
       hue: 90,
       saturation: 100,
-      lightness: 50,
+      lightness: 45,
     },
-    {
-      level: 5,
-      hue: 120,
+    { //Jungle
+      level: 16,
+      hue: 90,
       saturation: 100,
-      lightness: 50,
+      lightness: 35,
     },
-    {
-      level: 6,
-      hue: 150,
-      saturation: 100,
-      lightness: 50,
-    },
-    {
-      level: 7,
-      hue: 180,
-      saturation: 100,
-      lightness: 50,
-    },
-    {
-      level: 8,
-      hue: 210,
-      saturation: 100,
-      lightness: 50,
-    },
-    {
-      level: 9,
-      hue: 240,
-      saturation: 100,
-      lightness: 50,
-    },
-    {
-      level: 10,
-      hue: 270,
-      saturation: 100,
-      lightness: 50,
+    { //Beach
+      level: 17,
+      hue: 60,
+      saturation: 90,
+      lightness: 60,
     },
   ],
 
