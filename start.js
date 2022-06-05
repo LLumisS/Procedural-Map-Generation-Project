@@ -24,22 +24,30 @@ const MAP = {
 function start() {
   const heightMap = new HeightMap(FILTERS.PHYSICAL);
   const moistureMap = new MoistureMap(FILTERS.MOISTURE, heightMap.matrix);
-  const temperatureMap = new TemperatureMap(FILTERS.TEMPERATURE, heightMap.matrix);
-  const defaultMap = new BiomMap(FILTERS.DEFAULT, moistureMap.matrix, temperatureMap.matrix);
+  const temperatureMap = new TemperatureMap(
+    FILTERS.TEMPERATURE, 
+    heightMap.matrix);
+  const defaultMap = new BiomMap(
+    FILTERS.DEFAULT, 
+    moistureMap.matrix, 
+    temperatureMap.matrix);
 
   MAP['PHYSICAL'] = heightMap;
   MAP['MOISTURE'] = moistureMap;
   MAP['TEMPERATURE'] = temperatureMap;
   MAP['DEFAULT'] = defaultMap;
 
-  heightMap.draw();
+  defaultMap.draw();
 }
 
 function applyNewSettings() {
-  const setting = filterDefinition(radio);
+  const setting = settingDefinition(radio);
   const map = MAP[setting];
 
-  map.draw();
+  if (!map.isCash)
+    map.draw();
+  else
+    map.drawFromCash();
 }
 
 start();

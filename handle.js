@@ -28,10 +28,10 @@ const getColor = (percentage, filter) => {
   }
 };
 
-const filterDefinition = array => {
-  for(let i = 0; i < 4; i++)
-    if (array[i].checked)
-      return array[i].value;
+const settingDefinition = array => {
+  for(const part of array)
+    if (part.checked)
+      return part.value;
 };
 
 const minValue = (...argArray) => {
