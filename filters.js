@@ -132,8 +132,8 @@ const FILTERS = {
     },
     { //Snowy Taiga
       level: 4,
-      hue: 140,
-      saturation: 60,
+      hue: 0,
+      saturation: 0,
       lightness: 100,
     },
     { //Tundra
@@ -212,7 +212,7 @@ const FILTERS = {
       level: 17,
       hue: 60,
       saturation: 90,
-      lightness: 60,
+      lightness: 45,
     },
   ],
 

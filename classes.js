@@ -96,11 +96,14 @@ class BiomMap extends Map {
     for(let y = 0; y < MATRIX_LENGTH; y++)
       for(let x = 0; x < MATRIX_LENGTH; x++) {
         for(const biom of BIOMS)
-          if(moistureMap[y][x] <= biom.moisture && temperatureMap[y][x] <= biom.temperature) {
+          if(moistureMap[y][x] <= biom.moisture && 
+            temperatureMap[y][x] <= biom.temperature) {
             this.matrix[y][x] = biom.level;
             break;
           }
-        if(heightMap[y][x] > 0 && heightMap[y][x] <= 0.05 && this.matrix[y][x] > 4) {
+        if(heightMap[y][x] > 0 && 
+          heightMap[y][x] <= 0.025 && 
+          this.matrix[y][x] > 4) {
           this.matrix[y][x] = beachLevel;
           continue;
         }

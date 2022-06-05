@@ -50,7 +50,10 @@ const includesTile = (array, tile) => {
   return result;
 }
 
-const getBiomColor = (biomPercentage, heightPercentage, biomFilter, lightnessTable) => {
+const getBiomColor = (biomPercentage, 
+  heightPercentage, 
+  biomFilter, 
+  lightnessTable) => {
   let coeff = 0;
   for (const layer of biomFilter) {
     if (biomPercentage <= layer.level) {
