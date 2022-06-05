@@ -77,7 +77,7 @@ class TemperatureMap extends Map {
     this.matrix = randomNormalizedMatrix();
     for(let y = 0; y < MATRIX_LENGTH; y++)
       for (let x = 0; x < MATRIX_LENGTH; x++)
-        this.matrix[y][x] -= (heightMap[y][x] > 0) ? (heightMap[y][x] / 4) : 0;
+        this.matrix[y][x] -= (heightMap[y][x] > 0) ? (heightMap[y][x] / 3) : 0;
 
     this.matrix = normalizeMatrix(this.matrix);
   }

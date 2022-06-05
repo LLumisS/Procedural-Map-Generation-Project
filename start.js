@@ -11,8 +11,8 @@ const PIXEL_SIZE = 2;
 canvas.height = MATRIX_LENGTH * PIXEL_SIZE;
 canvas.width = MATRIX_LENGTH * PIXEL_SIZE;
 
-const RANDOM_CORNERS = 80;
-const RANDOM_RANGE = 320;
+const RANDOM_CORNERS = 20;
+const RANDOM_RANGE = 80;
 
 const MAP = {
   'PHYSICAL': null,
@@ -38,10 +38,10 @@ function start() {
   MAP['TEMPERATURE'] = temperatureMap;
   MAP['DEFAULT'] = defaultMap;
 
-  defaultMap.draw();
+  apply();
 }
 
-function applyNewSettings() {
+function apply() {
   const setting = settingDefinition(radio);
   const map = MAP[setting];
 
@@ -54,4 +54,4 @@ function applyNewSettings() {
 start();
 
 document.getElementById('refresh').addEventListener('click', start);
-document.getElementById('apply').addEventListener('click', applyNewSettings);
+document.getElementById('apply').addEventListener('click', apply);
