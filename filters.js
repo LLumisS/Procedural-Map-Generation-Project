@@ -1,52 +1,52 @@
 'use strict';
 
 const BIOMS = [
-  { //Tundra
+  {
     level: 1,
     moisture: 0,
     temperature: -0.5, 
   },
-  { //Taiga
+  {
     level: 2,
     moisture: 1,
     temperature: -0.5,
   },
-  { //Step`
+  {
     level: 3,
     moisture: -0.5,
     temperature: 0.5,
   },
-  { //Lyg
+  {
     level: 4,
     moisture: 0,
     temperature: 0.5,
   },
-  { //Sosna
+  {
     level: 5,
     moisture: 1,
     temperature: 0,
   },
-  { //Forest
+  {
     level: 6,
     moisture: 1,
     temperature: 0.5,
   },
-  { //Desert
+  {
     level: 7,
     moisture: -0.5,
     temperature: 1,
   },
-  { //Pustosh
+  {
     level: 8,
     moisture: 0,
     temperature: 1,
   },
-  { //Savanna
+  {
     level: 9,
     moisture: 1,
     temperature: 0.5,
   },
-  { //Jungle
+  {
     level: 10,
     moisture: 1,
     temperature: 1,
