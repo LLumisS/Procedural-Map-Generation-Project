@@ -75,11 +75,7 @@ class TemperatureMap extends Map {
     super(filter);
 
     this.matrix = randomNormalizedMatrix();
-    for (let y = 0; y < MATRIX_LENGTH; y++)
-      for (let x = 0; x < MATRIX_LENGTH; x++)
-        this.matrix[y][x] -= (heightMap[y][x] > 0) ? (heightMap[y][x] / 2) : 0;
-
-    this.matrix = normalizeMatrix(this.matrix);
+    decreaseTemperatureByHeight(this.matrix, heightMap);
   }
 }
 
@@ -88,26 +84,7 @@ class BiomMap extends Map {
   constructor(filter, moistureMap, temperatureMap, heightMap) {
     super(filter);
 
-    this.matrix = Array(MATRIX_LENGTH)
-      .fill(null)
-      .map(() => Array(MATRIX_LENGTH).fill(0));
-
-    const beachLevel = 17;
-    for (let y = 0; y < MATRIX_LENGTH; y++)
-      for (let x = 0; x < MATRIX_LENGTH; x++) {
-        for (const biom of BIOMS)
-          if (moistureMap[y][x] <= biom.moisture &&
-            temperatureMap[y][x] <= biom.temperature) {
-            this.matrix[y][x] = biom.level;
-            break;
-          }
-        if (heightMap[y][x] > 0 &&
-          heightMap[y][x] <= 0.025 &&
-          this.matrix[y][x] > 4) {
-          this.matrix[y][x] = beachLevel;
-          continue;
-        }
-      }
+    this.matrix = biomDefinition(heightMap, moistureMap, temperatureMap);
   }
 
   draw() {

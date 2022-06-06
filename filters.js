@@ -2,82 +2,82 @@
 
 const BIOMS = [
   { //Icy Wasteland
-    level: 1,
+    identifier: 1,
     moisture: -0.5,
     temperature: -0.5,
   },
   { //Snowy Tundra
-    level: 2,
+    identifier: 2,
     moisture: 0,
     temperature: -0.5,
   },
   { //Snowy Forest-Tundra
-    level: 3,
+    identifier: 3,
     moisture: 0.5,
     temperature: -0.5,
   },
   { //Snowy Taiga
-    level: 4,
+    identifier: 4,
     moisture: 1,
     temperature: -0.5,
   },
   { //Tundra
-    level: 5,
+    identifier: 5,
     moisture: -0.5,
     temperature: 0,
   },
   { //Forest-Steppe
-    level: 6,
+    identifier: 6,
     moisture: 0,
     temperature: 0,
   },
   { //Forest
-    level: 7,
+    identifier: 7,
     moisture: 0.5,
     temperature: 0,
   },
   { //Taiga
-    level: 8,
+    identifier: 8,
     moisture: 1,
     temperature: 0,
   },
   { //Plains
-    level: 9,
+    identifier: 9,
     moisture: -0.5,
     temperature: 0.5,
   },
   { //Savanna
-    level: 10,
+    identifier: 10,
     moisture: 0,
     temperature: 0.5,
   },
   { //Forest-Savanna
-    level: 11,
+    identifier: 11,
     moisture: 0.5,
     temperature: 0.5,
   },
   { //Swamp
-    level: 12,
+    identifier: 12,
     moisture: 1,
     temperature: 0.5,
   },
   { //Desert
-    level: 13,
+    identifier: 13,
     moisture: -0.5,
     temperature: 1,
   },
   { //Badlands
-    level: 14,
+    identifier: 14,
     moisture: 0,
     temperature: 1,
   },
   { //Tropical Forest
-    level: 15,
+    identifier: 15,
     moisture: 0.5,
     temperature: 1,
   },
   { //Jungle
-    level: 16,
+    identifier: 16,
     moisture: 1,
     temperature: 1,
   },

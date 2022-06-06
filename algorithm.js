@@ -162,3 +162,38 @@ function riverGeneration(heightMap, y, x, river) {
 function extraMoistureByRivers(moistureMap, heightMap) {
   return null;
 }
+
+function decreaseTemperatureByHeight(temperatureMap, heightMap) {
+  for (let y = 0; y < MATRIX_LENGTH; y++)
+    for (let x = 0; x < MATRIX_LENGTH; x++)
+      temperatureMap[y][x] -= (heightMap[y][x] > 0) ? (heightMap[y][x] / 2) : 0;
+
+  temperatureMap = normalizeMatrix(temperatureMap);
+}
+
+function biomDefinition(heightMap, moistureMap, temperatureMap) {
+  const biomMap = Array(MATRIX_LENGTH)
+    .fill(null)
+    .map(() => Array(MATRIX_LENGTH).fill(0));
+
+  const waterLevel = 0;
+  const beachLevel = 0.025;
+  const beachIdentifier = 17;
+  for (let y = 0; y < MATRIX_LENGTH; y++)
+    for (let x = 0; x < MATRIX_LENGTH; x++) {
+      for (const biom of BIOMS)
+        if (moistureMap[y][x] <= biom.moisture &&
+        temperatureMap[y][x] <= biom.temperature) {
+          biomMap[y][x] = biom.identifier;
+          break;
+        }
+      if (heightMap[y][x] > waterLevel &&
+      heightMap[y][x] <= beachLevel &&
+        biomMap[y][x] > 4) {
+        biomMap[y][x] = beachIdentifier;
+        continue;
+      }
+    }
+
+  return biomMap;
+}
