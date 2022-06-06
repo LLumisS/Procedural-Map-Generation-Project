@@ -14,7 +14,7 @@ const averageValue = (...argArray) => {
   let sum = 0;
   let count = 0;
   for (const arg of argArray)
-    if (isFinite(arg) && arg !== null) {
+    if (!isNaN(arg) && arg !== null) {
       sum += arg;
       count++;
     }
@@ -28,16 +28,16 @@ const getColor = (percentage, filter) => {
   }
 };
 
-const settingDefinition = array => {
-  for (const part of array)
-    if (part.checked)
-      return part.value;
+const settingDefinition = settings => {
+  for (const setting of settings)
+    if (setting.checked)
+      return setting.value;
 };
 
 const minValue = (...argArray) => {
   let min = Infinity;
   for (const arg of argArray)
-    if (isFinite(arg) && arg !== null)
+    if (!isNaN(arg) && arg !== null)
       min = min > arg ? arg : min;
   return min;
 };
@@ -53,15 +53,15 @@ const getBiomColor = (biomPercentage,
   heightPercentage,
   biomFilter,
   lightnessTable) => {
-  let coeff = 0;
+  let coefficient;
   for (const layer of biomFilter) {
     if (biomPercentage <= layer.level) {
       for (const level of lightnessTable)
         if (heightPercentage <= level.height) {
-          coeff = level.coefficient;
+          coefficient = level.coefficient;
           break;
         }
-      const lightness = layer.lightness * (1 - 1 / 8 * coeff);
+      const lightness = layer.lightness * (1 - 1 / 8 * coefficient);
       return `hsl(${layer.hue}, ${layer.saturation}%, ${lightness}%)`;
     }
   }

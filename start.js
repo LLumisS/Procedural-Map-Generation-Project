@@ -11,8 +11,8 @@ const PIXEL_SIZE = 2;
 canvas.height = MATRIX_LENGTH * PIXEL_SIZE;
 canvas.width = MATRIX_LENGTH * PIXEL_SIZE;
 
-const RANDOM_CORNERS = 20;
-const RANDOM_RANGE = 80;
+const RANDOM_RANGE_CORNERS = 20;
+const RANDOM_RANGE_COMMON = 80;
 
 const MAP = {
   'PHYSICAL': null,

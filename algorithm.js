@@ -1,12 +1,12 @@
 'use strict';
 
-function generateMatrix(length, randomCorners) {
+function generateMatrix(length, randomRange) {
   const matrix = Array(length).fill(null).map(() => Array(length).fill(0));
 
-  matrix[0][length - 1] = randomValue(-randomCorners, randomCorners);
-  matrix[length - 1][0] = randomValue(-randomCorners, randomCorners);
-  matrix[0][0] = randomValue(-randomCorners, randomCorners);
-  matrix[length - 1][length - 1] = randomValue(-randomCorners, randomCorners);
+  matrix[0][length - 1] = randomValue(-randomRange, randomRange);
+  matrix[length - 1][0] = randomValue(-randomRange, randomRange);
+  matrix[0][0] = randomValue(-randomRange, randomRange);
+  matrix[length - 1][length - 1] = randomValue(-randomRange, randomRange);
 
   return matrix;
 }
@@ -22,7 +22,7 @@ function diamondSquare(matrix, randomRange) {
   return matrix;
 }
 
-function stageDiamond(matrix, chunkSize, randomFactor) {
+function stageDiamond(matrix, chunkSize, randomRange) {
   const length = matrix.length;
 
   for (let y = 0; y < length - 1; y += chunkSize) {
@@ -41,7 +41,7 @@ function stageDiamond(matrix, chunkSize, randomFactor) {
         BOTTOM_LEFT,
         TOP_LEFT,
         TOP_RIGHT
-      ) + randomValue(-randomFactor, randomFactor);
+      ) + randomValue(-randomRange, randomRange);
 
       const CHANGED_ROW = y + chunkSize / 2;
       const CHANGED_COLUMN = x + chunkSize / 2;
@@ -51,7 +51,7 @@ function stageDiamond(matrix, chunkSize, randomFactor) {
   }
 }
 
-function stageSquare(matrix, chunkSize, randomFactor) {
+function stageSquare(matrix, chunkSize, randomRange) {
   const half = chunkSize / 2;
   const length = matrix.length;
 
@@ -67,7 +67,7 @@ function stageSquare(matrix, chunkSize, randomFactor) {
         TOP,
         LEFT,
         RIGHT
-      ) + randomValue(-randomFactor, randomFactor);
+      ) + randomValue(-randomRange, randomRange);
 
       const CHANGED_ROW = y;
       const CHANGED_COLUMN = x;
@@ -89,8 +89,8 @@ const normalizeMatrix = matrix => {
 const randomNormalizedMatrix = () =>
   normalizeMatrix(
     diamondSquare(
-      generateMatrix(MATRIX_LENGTH, RANDOM_CORNERS),
-      RANDOM_RANGE
+      generateMatrix(MATRIX_LENGTH, RANDOM_RANGE_CORNERS),
+      RANDOM_RANGE_COMMON
     )
   );
 

@@ -122,7 +122,7 @@ class BiomMap extends Map {
           ctx.fillStyle = getColor(heightLevel, FILTERS.PHYSICAL);
         else
           ctx.fillStyle = getBiomColor(this.matrix[y][x],
-            MAP['PHYSICAL'].matrix[y][x],
+            heightLevel,
             this.filter,
             LIGHTNESS_TABLE);
         this.cash[y][x] = ctx.fillStyle;

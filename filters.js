@@ -186,9 +186,9 @@ const FILTERS = {
     },
     { //Desert
       level: 13,
-      hue: 50,
-      saturation: 80,
-      lightness: 80,
+      hue: 60,
+      saturation: 100,
+      lightness: 85,
     },
     { //Badlands
       level: 14,
@@ -211,8 +211,8 @@ const FILTERS = {
     { //Beach
       level: 17,
       hue: 60,
-      saturation: 90,
-      lightness: 50,
+      saturation: 100,
+      lightness: 85,
     },
   ],
 
