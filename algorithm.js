@@ -86,7 +86,7 @@ const normalizeMatrix = matrix => {
   return matrix.map(row => row.map(value => value / max));
 };
 
-const randomNormalizedMatrix = () => 
+const randomNormalizedMatrix = () =>
   normalizeMatrix(
     diamondSquare(
       generateMatrix(MATRIX_LENGTH, RANDOM_CORNERS),
@@ -95,50 +95,50 @@ const randomNormalizedMatrix = () =>
   );
 
 function riversGeneration(heightMap, riverCount) {
-  const length = heightMap.length
+  const length = heightMap.length;
   const riverArray = Array(riverCount).fill(null).map(() => Array());
-  
-  for(let i = 0; i < riverCount; i++) {
+
+  for (let i = 0; i < riverCount; i++) {
     const y = randomValue(0, length - 1);
     const x = randomValue(0, length - 1);
-  
-    if(heightMap[y][x] <= 0) {
+
+    if (heightMap[y][x] <= 0) {
       i--;
       continue;
     }
-  
+
     riverGeneration(heightMap, y, x, riverArray[i]);
   }
 }
-  
-function riverGeneration(heightMap, y, x , river) {
+
+function riverGeneration(heightMap, y, x, river) {
   let End = false;
-  river.push({ y: y, x: x });
-  
-  while(!End) {
-    const top = heightMap[y - 1] && 
-      !includesTile(river, { y: y - 1, x: x }) ?
-        heightMap[y - 1][x] : 
-        null;
+  river.push({ y, x });
 
-    const bottom = heightMap[y + 1] && 
-      !includesTile(river, { y: y + 1, x: x }) ?
-        heightMap[y + 1][x] : 
-        null;
-
-    const left = !includesTile(river, { y: y, x: x - 1 }) ? 
-      heightMap[y][x - 1] : 
+  while (!End) {
+    const top = heightMap[y - 1] &&
+      !includesTile(river, { y: y - 1, x }) ?
+      heightMap[y - 1][x] :
       null;
 
-    const right = !includesTile(river, { y: y, x: x + 1 }) ? 
-      heightMap[y][x + 1] : 
+    const bottom = heightMap[y + 1] &&
+      !includesTile(river, { y: y + 1, x }) ?
+      heightMap[y + 1][x] :
       null;
-  
+
+    const left = !includesTile(river, { y, x: x - 1 }) ?
+      heightMap[y][x - 1] :
+      null;
+
+    const right = !includesTile(river, { y, x: x + 1 }) ?
+      heightMap[y][x + 1] :
+      null;
+
     const min = minValue(top, bottom, left, right);
-  
-    if(min <= 0)
+
+    if (min <= 0)
       End = true;
-    else if(min === top)
+    else if (min === top)
       y += -1;
     else if (min === bottom)
       y += 1;
@@ -150,12 +150,12 @@ function riverGeneration(heightMap, y, x , river) {
       river = [];
       End = true;
       break;
-    } 
-  
-    river.push({ y: y, x: x });
+    }
+
+    river.push({ y, x });
   }
-  
-  for(const tile of river)
+
+  for (const tile of river)
     heightMap[tile.y][tile.x] = 0;
 }
 

@@ -4,7 +4,7 @@ const BIOMS = [
   { //Icy Wasteland
     level: 1,
     moisture: -0.5,
-    temperature: -0.5, 
+    temperature: -0.5,
   },
   { //Snowy Tundra
     level: 2,
@@ -116,7 +116,7 @@ const FILTERS = {
       level: 1,
       hue: 180,
       saturation: 80,
-      lightness: 80,
+      lightness: 90,
     },
     { //Snowy Tundra
       level: 2,
@@ -186,7 +186,7 @@ const FILTERS = {
     },
     { //Desert
       level: 13,
-      hue: 45,
+      hue: 50,
       saturation: 80,
       lightness: 80,
     },
@@ -304,7 +304,7 @@ const FILTERS = {
       saturation: 100,
       lightness: 100,
     },
-    { 
+    {
       level: -0.25,
       hue: 240,
       saturation: 100,
@@ -316,7 +316,7 @@ const FILTERS = {
       saturation: 100,
       lightness: 70,
     },
-    { 
+    {
       level: 0.25,
       hue: 240,
       saturation: 100,
@@ -328,7 +328,7 @@ const FILTERS = {
       saturation: 100,
       lightness: 40,
     },
-    { 
+    {
       level: 0.75,
       hue: 240,
       saturation: 100,

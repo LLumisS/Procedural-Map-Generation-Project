@@ -8,16 +8,16 @@ class Map {
       .map(() => Array(MATRIX_LENGTH).fill(0));
     this.isCash = false;
   }
-  
+
   draw() {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.height, canvas.width);
-  
+
     ctx.beginPath();
     for (let y = 0; y < MATRIX_LENGTH; y++)
       for (let x = 0; x < MATRIX_LENGTH; x++) {
         ctx.fillStyle = getColor(this.matrix[y][x], this.filter);
-        this.cash[y][x] = ctx.fillStyle; 
+        this.cash[y][x] = ctx.fillStyle;
         ctx.fillRect(
           x * PIXEL_SIZE,
           y * PIXEL_SIZE,
@@ -75,9 +75,9 @@ class TemperatureMap extends Map {
     super(filter);
 
     this.matrix = randomNormalizedMatrix();
-    for(let y = 0; y < MATRIX_LENGTH; y++)
+    for (let y = 0; y < MATRIX_LENGTH; y++)
       for (let x = 0; x < MATRIX_LENGTH; x++)
-        this.matrix[y][x] -= (heightMap[y][x] > 0) ? (heightMap[y][x] / 3) : 0;
+        this.matrix[y][x] -= (heightMap[y][x] > 0) ? (heightMap[y][x] / 2) : 0;
 
     this.matrix = normalizeMatrix(this.matrix);
   }
@@ -93,16 +93,16 @@ class BiomMap extends Map {
       .map(() => Array(MATRIX_LENGTH).fill(0));
 
     const beachLevel = 17;
-    for(let y = 0; y < MATRIX_LENGTH; y++)
-      for(let x = 0; x < MATRIX_LENGTH; x++) {
-        for(const biom of BIOMS)
-          if(moistureMap[y][x] <= biom.moisture && 
+    for (let y = 0; y < MATRIX_LENGTH; y++)
+      for (let x = 0; x < MATRIX_LENGTH; x++) {
+        for (const biom of BIOMS)
+          if (moistureMap[y][x] <= biom.moisture &&
             temperatureMap[y][x] <= biom.temperature) {
             this.matrix[y][x] = biom.level;
             break;
           }
-        if(heightMap[y][x] > 0 && 
-          heightMap[y][x] <= 0.025 && 
+        if (heightMap[y][x] > 0 &&
+          heightMap[y][x] <= 0.025 &&
           this.matrix[y][x] > 4) {
           this.matrix[y][x] = beachLevel;
           continue;
@@ -120,10 +120,10 @@ class BiomMap extends Map {
         const heightLevel = MAP['PHYSICAL'].matrix[y][x];
         if (heightLevel <= 0)
           ctx.fillStyle = getColor(heightLevel, FILTERS.PHYSICAL);
-        else 
-          ctx.fillStyle = getBiomColor(this.matrix[y][x], 
-            MAP['PHYSICAL'].matrix[y][x], 
-            this.filter, 
+        else
+          ctx.fillStyle = getBiomColor(this.matrix[y][x],
+            MAP['PHYSICAL'].matrix[y][x],
+            this.filter,
             LIGHTNESS_TABLE);
         this.cash[y][x] = ctx.fillStyle;
         ctx.fillRect(

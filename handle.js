@@ -29,7 +29,7 @@ const getColor = (percentage, filter) => {
 };
 
 const settingDefinition = array => {
-  for(const part of array)
+  for (const part of array)
     if (part.checked)
       return part.value;
 };
@@ -43,16 +43,15 @@ const minValue = (...argArray) => {
 };
 
 const includesTile = (array, tile) => {
-  let result = false;
   for (const pixel of array)
-    if(pixel.y === tile.y && pixel.x === tile.x)
+    if (pixel.y === tile.y && pixel.x === tile.x)
       return true;
-  return result;
-}
+  return false;
+};
 
-const getBiomColor = (biomPercentage, 
-  heightPercentage, 
-  biomFilter, 
+const getBiomColor = (biomPercentage,
+  heightPercentage,
+  biomFilter,
   lightnessTable) => {
   let coeff = 0;
   for (const layer of biomFilter) {
@@ -62,7 +61,7 @@ const getBiomColor = (biomPercentage,
           coeff = level.coefficient;
           break;
         }
-      const lightness = layer.lightness * (1 - 1 / 6 * coeff);
+      const lightness = layer.lightness * (1 - 1 / 8 * coeff);
       return `hsl(${layer.hue}, ${layer.saturation}%, ${lightness}%)`;
     }
   }
