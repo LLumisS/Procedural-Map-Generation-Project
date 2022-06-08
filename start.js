@@ -11,8 +11,9 @@ const PIXEL_SIZE = 2;
 canvas.height = MATRIX_LENGTH * PIXEL_SIZE;
 canvas.width = MATRIX_LENGTH * PIXEL_SIZE;
 
-const RANDOM_RANGE_CORNERS = 20;
-const RANDOM_RANGE_COMMON = 80;
+const RANDOM_RANGE_CORNERS = 30;
+const RANDOM_RANGE_COMMON = 120;
+const GRIT_COEFFICIENT = 3;
 
 const MAP = {
   'PHYSICAL': null,
@@ -23,15 +24,20 @@ const MAP = {
 
 function start() {
   const heightMap = new HeightMap(FILTERS.PHYSICAL);
-  const moistureMap = new MoistureMap(FILTERS.MOISTURE, heightMap.matrix);
+  const moistureMap = new MoistureMap(
+    FILTERS.MOISTURE,
+    heightMap.matrix,
+    GRIT_COEFFICIENT);
   const temperatureMap = new TemperatureMap(
     FILTERS.TEMPERATURE,
-    heightMap.matrix);
+    heightMap.matrix,
+    GRIT_COEFFICIENT);
   const defaultMap = new BiomMap(
     FILTERS.DEFAULT,
+    FILTERS.PHYSICAL,
+    heightMap.matrix,
     moistureMap.matrix,
-    temperatureMap.matrix,
-    heightMap.matrix);
+    temperatureMap.matrix);
 
   MAP['PHYSICAL'] = heightMap;
   MAP['MOISTURE'] = moistureMap;

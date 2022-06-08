@@ -238,13 +238,13 @@ const FILTERS = {
     { //Tropical Forest
       level: 15,
       hue: 120,
-      saturation: 80,
+      saturation: 70,
       lightness: 50,
     },
     { //Jungle
       level: 16,
       hue: 120,
-      saturation: 60,
+      saturation: 50,
       lightness: 50,
     },
     { //Beach

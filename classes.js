@@ -61,30 +61,35 @@ class HeightMap extends Map {
 
 
 class MoistureMap extends Map {
-  constructor(filter, heightMap) {
+  constructor(filter, heightMap, grit) {
     super(filter);
 
-    this.matrix = randomNormalizedMatrix();
+    this.matrix = randomNormalizedMatrix(grit);
     extraMoistureByRivers(this.matrix, heightMap);
   }
 }
 
 
 class TemperatureMap extends Map {
-  constructor(filter, heightMap) {
+  constructor(filter, heightMap, grit) {
     super(filter);
 
-    this.matrix = randomNormalizedMatrix();
+    this.matrix = randomNormalizedMatrix(grit);
     decreaseTemperatureByHeight(this.matrix, heightMap);
   }
 }
 
 
 class BiomMap extends Map {
-  constructor(filter, moistureMap, temperatureMap, heightMap) {
+  constructor(filter, heightFilter, heightMap, moistureMap, temperatureMap,) {
     super(filter);
 
-    this.matrix = biomDefinition(heightMap, moistureMap, temperatureMap);
+    this.matrix = biomDefinition(
+      heightMap,
+      moistureMap,
+      temperatureMap);
+    this.heightMap = heightMap;
+    this.heightFilter = heightFilter;
   }
 
   draw() {
@@ -94,9 +99,9 @@ class BiomMap extends Map {
     ctx.beginPath();
     for (let y = 0; y < MATRIX_LENGTH; y++)
       for (let x = 0; x < MATRIX_LENGTH; x++) {
-        const heightLevel = MAP['PHYSICAL'].matrix[y][x];
+        const heightLevel = this.heightMap[y][x];
         if (heightLevel <= 0)
-          ctx.fillStyle = getColor(heightLevel, FILTERS.PHYSICAL);
+          ctx.fillStyle = getColor(heightLevel, this.heightFilter);
         else
           ctx.fillStyle = getBiomColor(this.matrix[y][x],
             heightLevel,

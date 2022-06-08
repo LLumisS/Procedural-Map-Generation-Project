@@ -86,11 +86,11 @@ const normalizeMatrix = matrix => {
   return matrix.map(row => row.map(value => value / max));
 };
 
-const randomNormalizedMatrix = () =>
+const randomNormalizedMatrix = (grit = 1) =>
   normalizeMatrix(
     diamondSquare(
-      generateMatrix(MATRIX_LENGTH, RANDOM_RANGE_CORNERS),
-      RANDOM_RANGE_COMMON
+      generateMatrix(MATRIX_LENGTH, RANDOM_RANGE_CORNERS / grit),
+      RANDOM_RANGE_COMMON / grit
     )
   );
 
