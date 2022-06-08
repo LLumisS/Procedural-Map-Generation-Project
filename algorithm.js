@@ -27,26 +27,26 @@ function stageDiamond(matrix, chunkSize, randomRange) {
 
   for (let y = 0; y < length - 1; y += chunkSize) {
     for (let x = 0; x < length - 1; x += chunkSize) {
-      const BOTTOM_RIGHT = matrix[y + chunkSize] ?
+      const bottomRight = matrix[y + chunkSize] ?
         matrix[y + chunkSize][x + chunkSize] :
         null;
-      const BOTTOM_LEFT = matrix[y + chunkSize] ?
+      const bottomLeft = matrix[y + chunkSize] ?
         matrix[y + chunkSize][x] :
         null;
-      const TOP_LEFT = matrix[y][x];
-      const TOP_RIGHT = matrix[y][x + chunkSize];
+      const topLeft = matrix[y][x];
+      const topRight = matrix[y][x + chunkSize];
 
       const result = averageValue(
-        BOTTOM_RIGHT,
-        BOTTOM_LEFT,
-        TOP_LEFT,
-        TOP_RIGHT
+        bottomRight,
+        bottomLeft,
+        topLeft,
+        topRight
       ) + randomValue(-randomRange, randomRange);
 
-      const CHANGED_ROW = y + chunkSize / 2;
-      const CHANGED_COLUMN = x + chunkSize / 2;
+      const changedRow = y + chunkSize / 2;
+      const changedColumn = x + chunkSize / 2;
 
-      matrix[CHANGED_ROW][CHANGED_COLUMN] = result;
+      matrix[changedRow][changedColumn] = result;
     }
   }
 }
@@ -57,22 +57,22 @@ function stageSquare(matrix, chunkSize, randomRange) {
 
   for (let y = 0; y < length; y += half) {
     for (let x = (y + half) % chunkSize; x < length; x += chunkSize) {
-      const BOTTOM = matrix[y + half] ? matrix[y + half][x] : null;
-      const TOP = matrix[y - half] ? matrix[y - half][x] : null;
-      const LEFT = matrix[y][x - half];
-      const RIGHT = matrix[y][x + half];
+      const bottom = matrix[y + half] ? matrix[y + half][x] : null;
+      const top = matrix[y - half] ? matrix[y - half][x] : null;
+      const left = matrix[y][x - half];
+      const right = matrix[y][x + half];
 
       const result = averageValue(
-        BOTTOM,
-        TOP,
-        LEFT,
-        RIGHT
+        bottom,
+        top,
+        left,
+        right
       ) + randomValue(-randomRange, randomRange);
 
-      const CHANGED_ROW = y;
-      const CHANGED_COLUMN = x;
+      const changedRow = y;
+      const changedColumn = x;
 
-      matrix[CHANGED_ROW][CHANGED_COLUMN] = result;
+      matrix[changedRow][changedColumn] = result;
     }
   }
 }
@@ -116,41 +116,60 @@ function riverGeneration(heightMap, y, x, river) {
   river.push({ y, x });
 
   while (!End) {
-    const top = heightMap[y - 1] &&
-      !includesTile(river, { y: y - 1, x }) ?
-      heightMap[y - 1][x] :
-      null;
+    const neighbours = {
+      top: {
+        y: y - 1,
+        x,
+        value: heightMap[y - 1] &&
+        !includesTile(river, { y: y - 1, x }) ?
+          heightMap[y][x] :
+          null,
+      },
+      bottom: {
+        y: y + 1,
+        x,
+        value: heightMap[y + 1] &&
+        !includesTile(river, { y: y + 1, x }) ?
+          heightMap[y + 1][x] :
+          null,
+      },
+      left: {
+        y,
+        x: x - 1,
+        value: !includesTile(river, { y, x: x - 1 }) ?
+          heightMap[y][x - 1] :
+          null,
+      },
+      right: {
+        y,
+        x: x + 1,
+        value: !includesTile(river, { y, x: x + 1 }) ?
+          heightMap[y][x + 1] :
+          null
+      },
+    };
 
-    const bottom = heightMap[y + 1] &&
-      !includesTile(river, { y: y + 1, x }) ?
-      heightMap[y + 1][x] :
-      null;
-
-    const left = !includesTile(river, { y, x: x - 1 }) ?
-      heightMap[y][x - 1] :
-      null;
-
-    const right = !includesTile(river, { y, x: x + 1 }) ?
-      heightMap[y][x + 1] :
-      null;
-
-    const min = minValue(top, bottom, left, right);
+    const min = minValue(
+      neighbours.top.value,
+      neighbours.bottom.value,
+      neighbours.left.value,
+      neighbours.right.value);
 
     if (min <= 0)
       End = true;
-    else if (min === top)
-      y += -1;
-    else if (min === bottom)
-      y += 1;
-    else if (min === left)
-      x += -1;
-    else if (min === right)
-      x += 1;
     else if (min === Infinity) {
       river = [];
       End = true;
       break;
     }
+
+    const keys = Object.keys(neighbours);
+    for (const key of keys)
+      if (neighbours[key].value === min) {
+        y = neighbours[key].y;
+        x = neighbours[key].x;
+        break;
+      }
 
     river.push({ y, x });
   }
@@ -176,23 +195,16 @@ function biomDefinition(heightMap, moistureMap, temperatureMap) {
     .fill(null)
     .map(() => Array(MATRIX_LENGTH).fill(0));
 
-  const waterLevel = 0;
-  const beachLevel = 0.025;
-  const beachIdentifier = 17;
   for (let y = 0; y < MATRIX_LENGTH; y++)
     for (let x = 0; x < MATRIX_LENGTH; x++) {
       for (const biom of BIOMS)
         if (moistureMap[y][x] <= biom.moisture &&
-        temperatureMap[y][x] <= biom.temperature) {
+        temperatureMap[y][x] <= biom.temperature &&
+        heightMap[y][x] > biom.heightFrom &&
+        heightMap[y][x] <= biom.heightTo) {
           biomMap[y][x] = biom.identifier;
           break;
         }
-      if (heightMap[y][x] > waterLevel &&
-      heightMap[y][x] <= beachLevel &&
-        biomMap[y][x] > 4) {
-        biomMap[y][x] = beachIdentifier;
-        continue;
-      }
     }
 
   return biomMap;
