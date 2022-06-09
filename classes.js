@@ -81,7 +81,7 @@ class TemperatureMap extends Map {
 
 
 class BiomMap extends Map {
-  constructor(filter, heightFilter, heightMap, moistureMap, temperatureMap,) {
+  constructor(filter, heightFilter, heightMap, moistureMap, temperatureMap) {
     super(filter);
 
     this.matrix = biomDefinition(

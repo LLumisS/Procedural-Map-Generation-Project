@@ -114,6 +114,7 @@ function riversGeneration(heightMap, riverCount) {
 function riverGeneration(heightMap, y, x, river) {
   let End = false;
   river.push({ y, x });
+  const keys = ['top', 'bottom', 'left', 'right'];
 
   while (!End) {
     const neighbours = {
@@ -163,7 +164,6 @@ function riverGeneration(heightMap, y, x, river) {
       break;
     }
 
-    const keys = Object.keys(neighbours);
     for (const key of keys)
       if (neighbours[key].value === min) {
         y = neighbours[key].y;
