@@ -55,17 +55,17 @@ class HeightMap extends Map {
     super(filter);
 
     this.matrix = randomNormalizedMatrix();
-    riversGeneration(this.matrix, RIVERS_COUNT);
+    this.rivers = riversGeneration(this.matrix, RIVERS_COUNT);
   }
 }
 
 
 class MoistureMap extends Map {
-  constructor(filter, heightMap, grit) {
+  constructor(filter, rivers, grit) {
     super(filter);
 
     this.matrix = randomNormalizedMatrix(grit);
-    extraMoistureByRivers(this.matrix, heightMap);
+    extraMoistureByRivers(this.matrix, rivers, RIVERS_RADIUS);
   }
 }
 

@@ -5,7 +5,9 @@ const canvas = document.getElementById('map');
 
 const N = 8;
 const MATRIX_LENGTH = powerInt(2, N) + 1;
+
 const RIVERS_COUNT = 10;
+const RIVERS_RADIUS = 10;
 
 const PIXEL_SIZE = 2;
 canvas.height = MATRIX_LENGTH * PIXEL_SIZE;
@@ -13,7 +15,7 @@ canvas.width = MATRIX_LENGTH * PIXEL_SIZE;
 
 const RANDOM_RANGE_CORNERS = 30;
 const RANDOM_RANGE_COMMON = 120;
-const GRIT_COEFFICIENT = 3;
+const GRIT_COEFFICIENT = 2.5;
 
 const MAP = {
   'PHYSICAL': null,
@@ -26,7 +28,7 @@ function start() {
   const heightMap = new HeightMap(FILTERS.PHYSICAL);
   const moistureMap = new MoistureMap(
     FILTERS.MOISTURE,
-    heightMap.matrix,
+    heightMap.rivers,
     GRIT_COEFFICIENT);
   const temperatureMap = new TemperatureMap(
     FILTERS.TEMPERATURE,

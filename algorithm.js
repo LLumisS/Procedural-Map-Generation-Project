@@ -94,11 +94,11 @@ const randomNormalizedMatrix = (grit = 1) =>
     )
   );
 
-function riversGeneration(heightMap, riverCount) {
+function riversGeneration(heightMap, riversCount) {
   const length = heightMap.length;
-  const riverArray = Array(riverCount).fill(null).map(() => Array());
+  const riversArray = Array(riversCount).fill(null).map(() => Array());
 
-  for (let i = 0; i < riverCount; i++) {
+  for (let i = 0; i < riversCount; i++) {
     const y = randomValue(0, length - 1);
     const x = randomValue(0, length - 1);
 
@@ -107,8 +107,10 @@ function riversGeneration(heightMap, riverCount) {
       continue;
     }
 
-    riverGeneration(heightMap, y, x, riverArray[i]);
+    riverGeneration(heightMap, y, x, riversArray[i]);
   }
+
+  return riversArray;
 }
 
 function riverGeneration(heightMap, y, x, river) {
@@ -159,7 +161,7 @@ function riverGeneration(heightMap, y, x, river) {
     if (min <= 0)
       End = true;
     else if (min === Infinity) {
-      river = [];
+      river.length = 0;
       End = true;
       break;
     }
@@ -178,8 +180,37 @@ function riverGeneration(heightMap, y, x, river) {
     heightMap[tile.y][tile.x] = 0;
 }
 
-function extraMoistureByRivers(moistureMap, heightMap) {
-  return null;
+function extraMoistureByRivers(moistureMap, rivers, radius) {
+  const extraMoisture = 1 / 1300;
+
+  const riversCount = rivers.length;
+  for (let n = 0; n < riversCount; n++) {
+    const riverLength = rivers[n].length;
+    for (let i = 0; i < riverLength; i++) {
+      const centerY = rivers[n][i].y;
+      const centerX = rivers[n][i].x;
+      const TRadius = radius;
+
+      while (radius > 0) {
+        const startY = centerY - radius;
+        const startX = centerX - radius;
+
+        const endY = startY + 2 * radius;
+        const endX = startX + 2 * radius;
+
+        for (let y = startY; y <= endY; y++)
+          for (let x = startX; x <= endX; x++)
+            if (moistureMap[y] && !isNaN(moistureMap[y][x]))
+              moistureMap[y][x] += extraMoisture;
+
+        radius--;
+      }
+
+      radius = TRadius;
+    }
+  }
+
+  normalizeMatrix(moistureMap);
 }
 
 function decreaseTemperatureByHeight(temperatureMap, heightMap) {
