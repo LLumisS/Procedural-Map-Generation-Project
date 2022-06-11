@@ -8,6 +8,8 @@ const MATRIX_LENGTH = powerInt(2, N) + 1;
 
 const MAX_RIVERS_COUNT = 6;
 const RIVERS_WET_RADIUS = 14;
+const MIN_RIVERS_LENGTH = 15;
+const EXTRA_MOISTURE = 1 / 1100;
 
 const PIXEL_SIZE = 2;
 canvas.height = MATRIX_LENGTH * PIXEL_SIZE;
@@ -25,18 +27,13 @@ const MAP = {
 };
 
 function start() {
-  const heightMap = new HeightMap(
-    FILTERS.PHYSICAL,
-    MAX_RIVERS_COUNT);
+  const heightMap = new HeightMap(FILTERS.PHYSICAL);
   const moistureMap = new MoistureMap(
     FILTERS.MOISTURE,
-    heightMap.rivers,
-    RIVERS_WET_RADIUS,
-    GRIT_COEFFICIENT);
+    heightMap.rivers);
   const temperatureMap = new TemperatureMap(
     FILTERS.TEMPERATURE,
-    heightMap.matrix,
-    GRIT_COEFFICIENT);
+    heightMap.matrix);
   const defaultMap = new BiomMap(
     FILTERS.DEFAULT,
     FILTERS.PHYSICAL,

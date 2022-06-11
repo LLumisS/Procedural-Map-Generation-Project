@@ -8,14 +8,14 @@ const BIOMS = [
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Snowy Tundra
+  { //Tundra
     identifier: 2,
     moisture: 0,
     temperature: -0.5,
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Snowy Forest-Tundra
+  { //Tree Tundra
     identifier: 3,
     moisture: 0.5,
     temperature: -0.5,
@@ -29,7 +29,7 @@ const BIOMS = [
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Tundra
+  { //Grass Steppe
     identifier: 5,
     moisture: -0.5,
     temperature: 0,
@@ -43,7 +43,7 @@ const BIOMS = [
     heightFrom: 0,
     heightTo: 0.025,
   },
-  { //Forest-Steppe
+  { //Tree Steppe
     identifier: 6,
     moisture: 0,
     temperature: 0,
@@ -64,21 +64,21 @@ const BIOMS = [
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Steppe
+  { //Semi Desert
     identifier: 9,
     moisture: -0.5,
     temperature: 0.5,
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Savanna
+  { //Grass Savanna
     identifier: 10,
     moisture: 0,
     temperature: 0.5,
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Forest-Savanna
+  { //Tree Savanna
     identifier: 11,
     moisture: 0.5,
     temperature: 0.5,
@@ -99,14 +99,14 @@ const BIOMS = [
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Badlands
+  { //Semi Desert
     identifier: 14,
     moisture: 0,
     temperature: 1,
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Tropical Forest
+  { //Tropical Dry Forest
     identifier: 15,
     moisture: 0.5,
     temperature: 1,
@@ -175,7 +175,7 @@ const FILTERS = {
       saturation: 0,
       lightness: 100,
     },
-    { //Steppe
+    { //Grass Steppe
       level: 5,
       hue: 50,
       saturation: 80,

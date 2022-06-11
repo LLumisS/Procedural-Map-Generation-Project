@@ -107,7 +107,6 @@ function fieldTilesDefinition(heightMap) {
 }
 
 function riversGeneration(heightMap, riversCount, fieldTiles) {
-  const length = heightMap.length;
   const riversArray = Array(riversCount).fill(null).map(() => Array());
 
   for (let i = 0; i < riversCount; i++) {
@@ -188,23 +187,21 @@ function riverGeneration(heightMap, { y, x }, river) {
     river.push({ y, x });
   }
 
-  if (river.length === 10)
+  if (river.length < MIN_RIVERS_LENGTH)
     river.length = 0;
   else
     for (const tile of river)
       heightMap[tile.y][tile.x] = 0;
 }
 
-function extraMoistureByRivers(moistureMap, rivers, radius) {
-  const extraMoisture = 1 / 1100;
-
+function extraMoistureByRivers(moistureMap, rivers) {
   const riversCount = rivers.length;
   for (let n = 0; n < riversCount; n++) {
     const riverLength = rivers[n].length;
     for (let i = 0; i < riverLength; i++) {
       const centerY = rivers[n][i].y;
       const centerX = rivers[n][i].x;
-      const TRadius = radius;
+      let radius = RIVERS_WET_RADIUS;
 
       while (radius > 0) {
         const startY = centerY - radius;
@@ -216,12 +213,10 @@ function extraMoistureByRivers(moistureMap, rivers, radius) {
         for (let y = startY; y <= endY; y++)
           for (let x = startX; x <= endX; x++)
             if (moistureMap[y] && !isNaN(moistureMap[y][x]))
-              moistureMap[y][x] += extraMoisture;
+              moistureMap[y][x] += EXTRA_MOISTURE;
 
         radius--;
       }
-
-      radius = TRadius;
     }
   }
 }
