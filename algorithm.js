@@ -130,44 +130,29 @@ function riverGeneration(heightMap, { y, x }, river) {
   const keys = ['top', 'bottom', 'left', 'right'];
 
   while (!End) {
+    const top = heightMap[y - 1] &&
+    !includesTile(river, { y: y - 1, x }) ?
+      heightMap[y][x] :
+      null;
+    const bottom = heightMap[y + 1] &&
+    !includesTile(river, { y: y + 1, x }) ?
+      heightMap[y + 1][x] :
+      null;
+    const left = !includesTile(river, { y, x: x - 1 }) ?
+      heightMap[y][x - 1] :
+      null;
+    const right = !includesTile(river, { y, x: x + 1 }) ?
+      heightMap[y][x + 1] :
+      null;
+
     const neighbours = {
-      top: {
-        y: y - 1,
-        x,
-        value: heightMap[y - 1] &&
-        !includesTile(river, { y: y - 1, x }) ?
-          heightMap[y][x] :
-          null,
-      },
-      bottom: {
-        y: y + 1,
-        x,
-        value: heightMap[y + 1] &&
-        !includesTile(river, { y: y + 1, x }) ?
-          heightMap[y + 1][x] :
-          null,
-      },
-      left: {
-        y,
-        x: x - 1,
-        value: !includesTile(river, { y, x: x - 1 }) ?
-          heightMap[y][x - 1] :
-          null,
-      },
-      right: {
-        y,
-        x: x + 1,
-        value: !includesTile(river, { y, x: x + 1 }) ?
-          heightMap[y][x + 1] :
-          null
-      },
+      top: { y: y - 1, x, value: top },
+      bottom: { y: y + 1, x, value: bottom },
+      left: { y, x: x - 1, value: left },
+      right: { y, x: x + 1, value: right },
     };
 
-    const min = minValue(
-      neighbours.top.value,
-      neighbours.bottom.value,
-      neighbours.left.value,
-      neighbours.right.value);
+    const min = minValue(top, bottom, left, right);
 
     if (min <= 0)
       End = true;
