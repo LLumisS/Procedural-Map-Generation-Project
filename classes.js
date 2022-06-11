@@ -51,21 +51,31 @@ class Map {
 
 
 class HeightMap extends Map {
-  constructor(filter) {
+  constructor(filter, maxRiversCount) {
     super(filter);
 
     this.matrix = randomNormalizedMatrix();
-    this.rivers = riversGeneration(this.matrix, RIVERS_COUNT);
+
+    const fieldTiles = fieldTilesDefinition(this.matrix);
+    const tiles = powerInt(this.matrix.length, 2);
+    const fieldCoefficient = 1 - Math.abs(0.5 - fieldTiles.length / tiles);
+    const riversCount = Math.ceil(maxRiversCount * fieldCoefficient);
+
+    this.rivers = riversGeneration(
+      this.matrix,
+      riversCount,
+      fieldTiles);
   }
 }
 
 
 class MoistureMap extends Map {
-  constructor(filter, rivers, grit) {
+  constructor(filter, rivers, riversWetRadius, grit) {
     super(filter);
 
     this.matrix = randomNormalizedMatrix(grit);
-    extraMoistureByRivers(this.matrix, rivers, RIVERS_RADIUS);
+    extraMoistureByRivers(this.matrix, rivers, riversWetRadius);
+    this.matrix = normalizeMatrix(this.matrix);
   }
 }
 

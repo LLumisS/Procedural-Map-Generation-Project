@@ -154,16 +154,16 @@ const FILTERS = {
     { //Icy Wasteland
       level: 1,
       hue: 180,
-      saturation: 80,
+      saturation: 40,
       lightness: 90,
     },
-    { //Snowy Tundra
+    { //Tundra
       level: 2,
       hue: 35,
-      saturation: 15,
+      saturation: 25,
       lightness: 50,
     },
-    { //Snowy Forest-Tundra
+    { //Tree Tundra
       level: 3,
       hue: 70,
       saturation: 15,
@@ -175,13 +175,13 @@ const FILTERS = {
       saturation: 0,
       lightness: 100,
     },
-    { //Tundra
+    { //Steppe
       level: 5,
-      hue: 35,
-      saturation: 25,
-      lightness: 50,
+      hue: 50,
+      saturation: 80,
+      lightness: 60,
     },
-    { //Forest-Steppe
+    { //Tree Steppe
       level: 6,
       hue: 80,
       saturation: 60,
@@ -199,19 +199,19 @@ const FILTERS = {
       saturation: 60,
       lightness: 30,
     },
-    { //Plains
+    { //Semi Desert
       level: 9,
-      hue: 50,
-      saturation: 80,
-      lightness: 60,
+      hue: 55,
+      saturation: 90,
+      lightness: 70,
     },
-    { //Savanna
+    { //Grass Savanna
       level: 10,
       hue: 65,
       saturation: 50,
       lightness: 60,
     },
-    { //Forest-Savanna
+    { //Tree Savanna
       level: 11,
       hue: 75,
       saturation: 50,
@@ -229,23 +229,23 @@ const FILTERS = {
       saturation: 100,
       lightness: 85,
     },
-    { //Badlands
+    { //Semi Desert
       level: 14,
       hue: 40,
       saturation: 50,
       lightness: 60,
     },
-    { //Tropical Forest
+    { //Tropical Dry Forest
       level: 15,
-      hue: 120,
-      saturation: 70,
-      lightness: 50,
+      hue: 80,
+      saturation: 40,
+      lightness: 35,
     },
     { //Jungle
       level: 16,
       hue: 120,
-      saturation: 50,
-      lightness: 50,
+      saturation: 60,
+      lightness: 25,
     },
     { //Beach
       level: 17,

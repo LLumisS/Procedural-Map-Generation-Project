@@ -94,26 +94,38 @@ const randomNormalizedMatrix = (grit = 1) =>
     )
   );
 
-function riversGeneration(heightMap, riversCount) {
+function fieldTilesDefinition(heightMap) {
+  const fieldTiles = Array();
+
+  const length = heightMap.length;
+  for (let y = 0; y < length; y++)
+    for (let x = 0; x < length; x++)
+      if (heightMap[y][x] > 0)
+        fieldTiles.push({ y, x });
+
+  return fieldTiles;
+}
+
+function riversGeneration(heightMap, riversCount, fieldTiles) {
   const length = heightMap.length;
   const riversArray = Array(riversCount).fill(null).map(() => Array());
 
   for (let i = 0; i < riversCount; i++) {
-    const y = randomValue(0, length - 1);
-    const x = randomValue(0, length - 1);
+    const n = randomValue(0, fieldTiles.length - 1);
 
-    if (heightMap[y][x] <= 0) {
+    const y = fieldTiles[n].y;
+    const x = fieldTiles[n].x;
+
+    riverGeneration(heightMap, { y, x }, riversArray[i]);
+    if (riversArray[i].length === 0) {
       i--;
-      continue;
     }
-
-    riverGeneration(heightMap, y, x, riversArray[i]);
   }
 
   return riversArray;
 }
 
-function riverGeneration(heightMap, y, x, river) {
+function riverGeneration(heightMap, { y, x }, river) {
   let End = false;
   river.push({ y, x });
   const keys = ['top', 'bottom', 'left', 'right'];
@@ -176,12 +188,15 @@ function riverGeneration(heightMap, y, x, river) {
     river.push({ y, x });
   }
 
-  for (const tile of river)
-    heightMap[tile.y][tile.x] = 0;
+  if (river.length === 10)
+    river.length = 0;
+  else
+    for (const tile of river)
+      heightMap[tile.y][tile.x] = 0;
 }
 
 function extraMoistureByRivers(moistureMap, rivers, radius) {
-  const extraMoisture = 1 / 1300;
+  const extraMoisture = 1 / 1100;
 
   const riversCount = rivers.length;
   for (let n = 0; n < riversCount; n++) {
@@ -209,8 +224,6 @@ function extraMoistureByRivers(moistureMap, rivers, radius) {
       radius = TRadius;
     }
   }
-
-  normalizeMatrix(moistureMap);
 }
 
 function decreaseTemperatureByHeight(temperatureMap, heightMap) {
