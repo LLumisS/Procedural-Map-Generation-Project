@@ -169,22 +169,22 @@ const FILTERS = {
       saturation: 15,
       lightness: 50,
     },
-    { //Snowy Taiga
+    { //Taiga
       level: 4,
-      hue: 0,
-      saturation: 0,
-      lightness: 100,
+      hue: 140,
+      saturation: 60,
+      lightness: 30,
     },
     { //Grass Steppe
       level: 5,
       hue: 50,
-      saturation: 80,
-      lightness: 60,
+      saturation: 30,
+      lightness: 50,
     },
     { //Tree Steppe
       level: 6,
       hue: 80,
-      saturation: 60,
+      saturation: 30,
       lightness: 50,
     },
     { //Forest
@@ -193,17 +193,17 @@ const FILTERS = {
       saturation: 60,
       lightness: 40,
     },
-    { //Taiga
+    { //Swamp
       level: 8,
-      hue: 140,
-      saturation: 60,
-      lightness: 30,
+      hue: 100,
+      saturation: 30,
+      lightness: 20,
     },
     { //Semi Desert
       level: 9,
       hue: 55,
-      saturation: 90,
-      lightness: 70,
+      saturation: 65,
+      lightness: 65,
     },
     { //Grass Savanna
       level: 10,
@@ -217,11 +217,11 @@ const FILTERS = {
       saturation: 50,
       lightness: 60,
     },
-    { //Swamp
+    { //Tropical Moist Forest
       level: 12,
-      hue: 100,
-      saturation: 30,
-      lightness: 30,
+      hue: 120,
+      saturation: 40,
+      lightness: 40,
     },
     { //Desert
       level: 13,
@@ -231,21 +231,21 @@ const FILTERS = {
     },
     { //Semi Desert
       level: 14,
-      hue: 40,
+      hue: 30,
       saturation: 50,
-      lightness: 60,
+      lightness: 50,
     },
     { //Tropical Dry Forest
       level: 15,
-      hue: 80,
-      saturation: 40,
-      lightness: 35,
+      hue: 100,
+      saturation: 15,
+      lightness: 40,
     },
     { //Jungle
       level: 16,
       hue: 120,
-      saturation: 60,
-      lightness: 25,
+      saturation: 85,
+      lightness: 20,
     },
     { //Beach
       level: 17,
