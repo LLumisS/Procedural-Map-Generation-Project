@@ -14,13 +14,6 @@ const average = (...argArray) => {
   return sum / count;
 };
 
-const color = (percentage, filter) => {
-  for (const layer of filter) {
-    if (percentage <= layer.level)
-      return `hsl(${layer.hue}, ${layer.saturation}%, ${layer.lightness}%)`;
-  }
-};
-
 const settingDef = settings => {
   for (const setting of settings)
     if (setting.checked)
@@ -45,20 +38,46 @@ const includes = (array, tile) => {
   return false;
 };
 
-const biomColor = (biomPercentage,
-  heightPercentage,
-  biomFilter,
-  lightnessTable) => {
-  let coefficient;
-  for (const layer of biomFilter) {
-    if (biomPercentage <= layer.level) {
-      for (const level of lightnessTable)
-        if (heightPercentage <= level.height) {
-          coefficient = level.coefficient;
-          break;
-        }
-      const lightness = layer.lightness * (1 - 1 / 8 * coefficient);
-      return `hsl(${layer.hue}, ${layer.saturation}%, ${lightness}%)`;
-    }
+//
+
+const color = (percentage, filter) => {
+  for (const layer of filter) {
+    if (percentage <= layer.level)
+      return `hsl(${layer.hue}, ${layer.saturation}%, ${layer.lightness}%)`;
   }
 };
+
+const lightness = (
+  heightPercentage,
+  lightnessTable,
+  layer
+) => {
+  let coefficient;
+  for (const level of lightnessTable)
+    if (heightPercentage <= level.height) {
+      coefficient = level.coefficient;
+      break;
+    }
+  const lightness = layer.lightness * (1 - 1 / 8 * coefficient);
+  return `hsl(${layer.hue}, ${layer.saturation}%, ${lightness}%)`;
+};
+
+const biomColor = (
+  biomPercentage,
+  heightPercentage,
+  biomFilter,
+  lightnessTable
+) => {
+  for (const layer of biomFilter)
+    if (biomPercentage <= layer.level)
+      return lightness(heightPercentage, lightnessTable, layer);
+};
+
+//
+
+function matrixPassing(callback, matrix,
+  startY = 0, startX = 0, endY = matrix.length, endX = matrix.length) {
+  for (let y = startY; y < endY; y++)
+    for (let x = startX; x < endX; x++)
+      callback({ y, x });
+}

@@ -1,6 +1,6 @@
 'use strict';
 
-function generateMatrix(length, randomRange) {
+function matrixGen(length, randomRange) {
   const matrix = Array(length).fill(null).map(() => Array(length).fill(0));
 
   const last = length - 1;
@@ -90,7 +90,7 @@ function square(matrix, chunkSize, randomRange) {
   }
 }
 
-const normalizeMatrix = matrix => {
+const normalize = matrix => {
   let max = -Infinity;
   for (const row of matrix)
     for (const value of row)
@@ -99,27 +99,31 @@ const normalizeMatrix = matrix => {
   return matrix.map(row => row.map(value => value / max));
 };
 
-const randomNormalizedMatrix = (grit = 1) =>
-  normalizeMatrix(
+const randomMatrix = (grit = 1) =>
+  normalize(
     diamondSquare(
-      generateMatrix(MATRIX_LENGTH, RANDOM_RANGE_CORNERS / grit),
+      matrixGen(MATRIX_LENGTH, RANDOM_RANGE_CORNERS / grit),
       RANDOM_RANGE_COMMON / grit
     )
   );
 
+//
+
 function fieldDef(heightMap) {
   const fieldTiles = Array();
+  const isField = ({ y, x }) => {
+    if (heightMap[y][x] > 0)
+      fieldTiles.push({ y, x });
+  };
 
-  const length = heightMap.length;
-  for (let y = 0; y < length; y++)
-    for (let x = 0; x < length; x++)
-      if (heightMap[y][x] > 0)
-        fieldTiles.push({ y, x });
+  matrixPassing(isField, heightMap);
 
   return fieldTiles;
 }
 
-function riversGeneration(heightMap, riversCount, fieldTiles) {
+//
+
+function riversGen(heightMap, riversCount, fieldTiles) {
   const riversArray = Array(riversCount).fill(null).map(() => Array());
 
   for (let i = 0; i < riversCount; i++) {
@@ -129,7 +133,7 @@ function riversGeneration(heightMap, riversCount, fieldTiles) {
     const x = fieldTiles[n].x;
 
     const river = riversArray[i];
-    riverGeneration(heightMap, { y, x }, river);
+    riverGen(heightMap, { y, x }, river);
     if (riversArray[i].length < MIN_RIVERS_LENGTH)
       i--;
     else
@@ -140,7 +144,7 @@ function riversGeneration(heightMap, riversCount, fieldTiles) {
   return riversArray;
 }
 
-function riverGeneration(heightMap, { y, x }, river) {
+function riverGen(heightMap, { y, x }, river) {
   river.push({ y, x });
 
   let End = false;
@@ -192,59 +196,73 @@ function waysDef(matrix, { y, x }, river) {
   return neighbours;
 }
 
-function moistureByRivers(moistureMap, rivers) {
+//
+
+function riversMoisture(moistureMap, rivers) {
   const riversCount = rivers.length;
-  for (let n = 0; n < riversCount; n++) {
-    const riverLength = rivers[n].length;
-    for (let i = 0; i < riverLength; i++) {
-      const centerY = rivers[n][i].y;
-      const centerX = rivers[n][i].x;
-      let radius = RIVERS_WET_RADIUS;
+  for (let n = 0; n < riversCount; n++)
+    riverMoisture(moistureMap, rivers[n]);
+}
 
-      while (radius > 0) {
-        const startY = centerY - radius;
-        const startX = centerX - radius;
+function riverMoisture(moistureMap, river) {
+  const riverLength = river.length;
+  for (let i = 0; i < riverLength; i++) {
+    const centerY = river[i].y;
+    const centerX = river[i].x;
+    const radius = RIVERS_WET_RADIUS;
 
-        const endY = startY + 2 * radius;
-        const endX = startX + 2 * radius;
-
-        for (let y = startY; y <= endY; y++)
-          for (let x = startX; x <= endX; x++)
-            if (moistureMap[y] && !isNaN(moistureMap[y][x]))
-              moistureMap[y][x] += EXTRA_MOISTURE;
-
-        radius--;
-      }
-    }
+    tileMoisture(moistureMap, radius, centerY, centerX);
   }
 }
 
-function coldByHeight(temperatureMap, heightMap) {
-  for (let y = 0; y < MATRIX_LENGTH; y++)
-    for (let x = 0; x < MATRIX_LENGTH; x++)
-      temperatureMap[y][x] -= (heightMap[y][x] > 0) ?
-        (heightMap[y][x] / 2) :
-        0;
+function tileMoisture(moistureMap, radius, centerY, centerX) {
+  const extraMoisture = ({ y, x }) => {
+    if (moistureMap[y] && !isNaN(moistureMap[y][x]))
+      moistureMap[y][x] += EXTRA_MOISTURE;
+  };
 
-  temperatureMap = normalizeMatrix(temperatureMap);
+  while (radius > 0) {
+    const startY = centerY - radius;
+    const startX = centerX - radius;
+    const endY = startY + 2 * radius;
+    const endX = startX + 2 * radius;
+
+    matrixPassing(extraMoisture, moistureMap, startY, startX, endY, endX);
+    radius--;
+  }
 }
 
-function biomDefinition(heightMap, moistureMap, temperatureMap) {
+//
+
+function coldByHeight(temperatureMap, heightMap) {
+  const decrease = ({ y, x }) => {
+    temperatureMap[y][x] -= (heightMap[y][x] > 0) ?
+      (heightMap[y][x] / 2) :
+      0;
+  };
+
+  matrixPassing(decrease, temperatureMap);
+}
+
+//
+
+function biomDef(heightMap, moistureMap, temperatureMap) {
   const biomMap = Array(MATRIX_LENGTH)
     .fill(null)
     .map(() => Array(MATRIX_LENGTH).fill(0));
 
-  for (let y = 0; y < MATRIX_LENGTH; y++)
-    for (let x = 0; x < MATRIX_LENGTH; x++) {
-      for (const biom of BIOMS)
-        if (moistureMap[y][x] <= biom.moisture &&
-        temperatureMap[y][x] <= biom.temperature &&
-        heightMap[y][x] > biom.heightFrom &&
-        heightMap[y][x] <= biom.heightTo) {
-          biomMap[y][x] = biom.identifier;
-          break;
-        }
-    }
+  const getBiom = ({ y, x }) => {
+    for (const biom of BIOMS)
+      if (moistureMap[y][x] <= biom.moisture &&
+      temperatureMap[y][x] <= biom.temperature &&
+      heightMap[y][x] > biom.heightFrom &&
+      heightMap[y][x] <= biom.heightTo) {
+        biomMap[y][x] = biom.identifier;
+        break;
+      }
+  };
+
+  matrixPassing(getBiom, heightMap);
 
   return biomMap;
 }

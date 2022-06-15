@@ -54,14 +54,14 @@ class HeightMap extends Map {
   constructor(filter) {
     super(filter);
 
-    this.matrix = randomNormalizedMatrix();
+    this.matrix = randomMatrix();
 
     const fieldTiles = fieldDef(this.matrix);
     const tiles = Math.pow(this.matrix.length, 2);
     const riversCoef = 1 - Math.abs(0.5 - fieldTiles.length / tiles);
     const riversCount = Math.floor(MAX_RIVERS_COUNT * riversCoef);
 
-    this.rivers = riversGeneration(
+    this.rivers = riversGen(
       this.matrix,
       riversCount,
       fieldTiles
@@ -74,9 +74,9 @@ class MoistureMap extends Map {
   constructor(filter, rivers) {
     super(filter);
 
-    this.matrix = randomNormalizedMatrix(GRIT_COEFFICIENT);
-    moistureByRivers(this.matrix, rivers);
-    this.matrix = normalizeMatrix(this.matrix);
+    this.matrix = randomMatrix(GRIT_COEFFICIENT);
+    riversMoisture(this.matrix, rivers);
+    this.matrix = normalize(this.matrix);
   }
 }
 
@@ -85,8 +85,9 @@ class TemperatureMap extends Map {
   constructor(filter, heightMap) {
     super(filter);
 
-    this.matrix = randomNormalizedMatrix(GRIT_COEFFICIENT);
+    this.matrix = randomMatrix(GRIT_COEFFICIENT);
     coldByHeight(this.matrix, heightMap);
+    this.matrix = normalize(this.matrix);
   }
 }
 
@@ -95,7 +96,7 @@ class BiomMap extends Map {
   constructor(filter, heightFilter, heightMap, moistureMap, temperatureMap) {
     super(filter);
 
-    this.matrix = biomDefinition(
+    this.matrix = biomDef(
       heightMap,
       moistureMap,
       temperatureMap
