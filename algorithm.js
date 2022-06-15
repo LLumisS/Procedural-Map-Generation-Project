@@ -192,7 +192,7 @@ function waysDef(matrix, { y, x }, river) {
   return neighbours;
 }
 
-function extraMoistureByRivers(moistureMap, rivers) {
+function moistureByRivers(moistureMap, rivers) {
   const riversCount = rivers.length;
   for (let n = 0; n < riversCount; n++) {
     const riverLength = rivers[n].length;
@@ -219,7 +219,7 @@ function extraMoistureByRivers(moistureMap, rivers) {
   }
 }
 
-function decreaseTemperatureByHeight(temperatureMap, heightMap) {
+function coldByHeight(temperatureMap, heightMap) {
   for (let y = 0; y < MATRIX_LENGTH; y++)
     for (let x = 0; x < MATRIX_LENGTH; x++)
       temperatureMap[y][x] -= (heightMap[y][x] > 0) ?

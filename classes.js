@@ -75,7 +75,7 @@ class MoistureMap extends Map {
     super(filter);
 
     this.matrix = randomNormalizedMatrix(GRIT_COEFFICIENT);
-    extraMoistureByRivers(this.matrix, rivers);
+    moistureByRivers(this.matrix, rivers);
     this.matrix = normalizeMatrix(this.matrix);
   }
 }
@@ -86,7 +86,7 @@ class TemperatureMap extends Map {
     super(filter);
 
     this.matrix = randomNormalizedMatrix(GRIT_COEFFICIENT);
-    decreaseTemperatureByHeight(this.matrix, heightMap);
+    coldByHeight(this.matrix, heightMap);
   }
 }
 
