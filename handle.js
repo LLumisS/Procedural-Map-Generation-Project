@@ -14,7 +14,7 @@ const average = (...argArray) => {
   return sum / count;
 };
 
-const getColor = (percentage, filter) => {
+const color = (percentage, filter) => {
   for (const layer of filter) {
     if (percentage <= layer.level)
       return `hsl(${layer.hue}, ${layer.saturation}%, ${layer.lightness}%)`;
@@ -45,7 +45,7 @@ const includes = (array, tile) => {
   return false;
 };
 
-const getBiomColor = (biomPercentage,
+const biomColor = (biomPercentage,
   heightPercentage,
   biomFilter,
   lightnessTable) => {

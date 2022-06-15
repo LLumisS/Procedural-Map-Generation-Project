@@ -22,6 +22,13 @@ const BIOMS = [
     heightFrom: 0,
     heightTo: 1,
   },
+  { //Beach
+    identifier: 17,
+    moisture: 1,
+    temperature: 1,
+    heightFrom: 0,
+    heightTo: 0.025,
+  },
   { //Taiga
     identifier: 4,
     moisture: 1,
@@ -35,13 +42,6 @@ const BIOMS = [
     temperature: 0,
     heightFrom: 0,
     heightTo: 1,
-  },
-  { //Beach
-    identifier: 17,
-    moisture: 1,
-    temperature: 1,
-    heightFrom: 0,
-    heightTo: 0.025,
   },
   { //Tree Steppe
     identifier: 6,

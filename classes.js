@@ -16,7 +16,7 @@ class Map {
     ctx.beginPath();
     for (let y = 0; y < MATRIX_LENGTH; y++)
       for (let x = 0; x < MATRIX_LENGTH; x++) {
-        ctx.fillStyle = getColor(this.matrix[y][x], this.filter);
+        ctx.fillStyle = color(this.matrix[y][x], this.filter);
         this.cash[y][x] = ctx.fillStyle;
         ctx.fillRect(
           x * PIXEL_SIZE,
@@ -98,7 +98,8 @@ class BiomMap extends Map {
     this.matrix = biomDefinition(
       heightMap,
       moistureMap,
-      temperatureMap);
+      temperatureMap
+    );
     this.heightMap = heightMap;
     this.heightFilter = heightFilter;
   }
@@ -112,9 +113,9 @@ class BiomMap extends Map {
       for (let x = 0; x < MATRIX_LENGTH; x++) {
         const heightLevel = this.heightMap[y][x];
         if (heightLevel <= 0)
-          ctx.fillStyle = getColor(heightLevel, this.heightFilter);
+          ctx.fillStyle = color(heightLevel, this.heightFilter);
         else
-          ctx.fillStyle = getBiomColor(this.matrix[y][x],
+          ctx.fillStyle = biomColor(this.matrix[y][x],
             heightLevel,
             this.filter,
             LIGHTNESS_TABLE);
