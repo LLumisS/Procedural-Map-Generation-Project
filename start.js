@@ -4,7 +4,7 @@ const radio = document.getElementsByClassName('class_filter');
 const canvas = document.getElementById('map');
 
 const N = 8;
-const MATRIX_LENGTH = powerInt(2, N) + 1;
+const MATRIX_LENGTH = Math.pow(2, N) + 1;
 
 const MAX_RIVERS_COUNT = 6;
 const RIVERS_WET_RADIUS = 14;
@@ -30,16 +30,19 @@ function start() {
   const heightMap = new HeightMap(FILTERS.PHYSICAL);
   const moistureMap = new MoistureMap(
     FILTERS.MOISTURE,
-    heightMap.rivers);
+    heightMap.rivers
+  );
   const temperatureMap = new TemperatureMap(
     FILTERS.TEMPERATURE,
-    heightMap.matrix);
+    heightMap.matrix
+  );
   const defaultMap = new BiomMap(
     FILTERS.DEFAULT,
     FILTERS.PHYSICAL,
     heightMap.matrix,
     moistureMap.matrix,
-    temperatureMap.matrix);
+    temperatureMap.matrix
+  );
 
   MAP['PHYSICAL'] = heightMap;
   MAP['MOISTURE'] = moistureMap;

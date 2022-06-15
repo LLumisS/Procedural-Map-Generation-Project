@@ -56,15 +56,16 @@ class HeightMap extends Map {
 
     this.matrix = randomNormalizedMatrix();
 
-    const fieldTiles = fieldTilesDefinition(this.matrix);
-    const tiles = powerInt(this.matrix.length, 2);
-    const fieldCoefficient = 1 - Math.abs(0.5 - fieldTiles.length / tiles);
-    const riversCount = Math.ceil(MAX_RIVERS_COUNT * fieldCoefficient);
+    const fieldTiles = fieldDef(this.matrix);
+    const tiles = Math.pow(this.matrix.length, 2);
+    const riversCoef = 1 - Math.abs(0.5 - fieldTiles.length / tiles);
+    const riversCount = Math.floor(MAX_RIVERS_COUNT * riversCoef);
 
     this.rivers = riversGeneration(
       this.matrix,
       riversCount,
-      fieldTiles);
+      fieldTiles
+    );
   }
 }
 

@@ -1,16 +1,9 @@
 'use strict';
 
-const powerInt = (value, power) => {
-  let result = 1;
-  for (let i = 0; i < power; i++)
-    result *= value;
-  return result;
-};
-
-const randomValue = (min, max) =>
+const random = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
 
-const averageValue = (...argArray) => {
+const average = (...argArray) => {
   let sum = 0;
   let count = 0;
   for (const arg of argArray)
@@ -34,15 +27,18 @@ const settingDefinition = settings => {
       return setting.value;
 };
 
-const minValue = (...argArray) => {
+const min = (...argArray) => {
   let min = Infinity;
   for (const arg of argArray)
     if (!isNaN(arg) && arg !== null)
-      min = min > arg ? arg : min;
+      min = min > arg ?
+        arg :
+        min;
+
   return min;
 };
 
-const includesTile = (array, tile) => {
+const includes = (array, tile) => {
   for (const pixel of array)
     if (pixel.y === tile.y && pixel.x === tile.x)
       return true;
