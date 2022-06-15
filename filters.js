@@ -22,7 +22,7 @@ const BIOMS = [
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Snowy Taiga
+  { //Taiga
     identifier: 4,
     moisture: 1,
     temperature: -0.5,
@@ -57,7 +57,7 @@ const BIOMS = [
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Taiga
+  { //Swamp
     identifier: 8,
     moisture: 1,
     temperature: 0,
@@ -85,7 +85,7 @@ const BIOMS = [
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Swamp
+  { //Tropical Moist Forest
     identifier: 12,
     moisture: 1,
     temperature: 0.5,
