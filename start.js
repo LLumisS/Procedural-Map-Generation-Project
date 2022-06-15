@@ -53,7 +53,7 @@ function start() {
 }
 
 function apply() {
-  const setting = settingDefinition(radio);
+  const setting = settingDef(radio);
   const map = MAP[setting];
 
   if (!map.isCash)

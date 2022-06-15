@@ -21,7 +21,7 @@ const color = (percentage, filter) => {
   }
 };
 
-const settingDefinition = settings => {
+const settingDef = settings => {
   for (const setting of settings)
     if (setting.checked)
       return setting.value;

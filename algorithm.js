@@ -23,16 +23,15 @@ function generateMatrix(length, randomRange) {
 
 function diamondSquare(matrix, randomRange) {
   let chunkSize = matrix.length - 1;
-
   for (chunkSize; chunkSize > 1; chunkSize /= 2, randomRange /= 2) {
-    stageDiamond(matrix, chunkSize, randomRange);
-    stageSquare(matrix, chunkSize, randomRange);
+    diamond(matrix, chunkSize, randomRange);
+    square(matrix, chunkSize, randomRange);
   }
 
   return matrix;
 }
 
-function stageDiamond(matrix, chunkSize, randomRange) {
+function diamond(matrix, chunkSize, randomRange) {
   const length = matrix.length;
 
   for (let y = 0; y < length - 1; y += chunkSize) {
@@ -61,7 +60,7 @@ function stageDiamond(matrix, chunkSize, randomRange) {
   }
 }
 
-function stageSquare(matrix, chunkSize, randomRange) {
+function square(matrix, chunkSize, randomRange) {
   const half = chunkSize / 2;
   const length = matrix.length;
 
@@ -223,7 +222,9 @@ function extraMoistureByRivers(moistureMap, rivers) {
 function decreaseTemperatureByHeight(temperatureMap, heightMap) {
   for (let y = 0; y < MATRIX_LENGTH; y++)
     for (let x = 0; x < MATRIX_LENGTH; x++)
-      temperatureMap[y][x] -= (heightMap[y][x] > 0) ? (heightMap[y][x] / 2) : 0;
+      temperatureMap[y][x] -= (heightMap[y][x] > 0) ?
+        (heightMap[y][x] / 2) :
+        0;
 
   temperatureMap = normalizeMatrix(temperatureMap);
 }
