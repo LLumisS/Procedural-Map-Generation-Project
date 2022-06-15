@@ -56,10 +56,7 @@ function apply() {
   const setting = settingDef(radio);
   const map = MAP[setting];
 
-  if (!map.isCash)
-    map.draw();
-  else
-    map.drawFromCash();
+  map.draw();
 }
 
 start();

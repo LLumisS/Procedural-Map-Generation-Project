@@ -7,45 +7,39 @@ class Map {
       .fill(null)
       .map(() => Array(MATRIX_LENGTH).fill(0));
     this.isCash = false;
+
+    this.callback = () => {};
+    this.cbCommon = ({ y, x }, ctx) => {
+      ctx.fillStyle = color(this.matrix[y][x], this.filter);
+      this.cash[y][x] = ctx.fillStyle;
+    };
+    this.cbCash = ({ y, x }, ctx) => {
+      ctx.fillStyle = this.cash[y][x];
+    };
   }
 
   draw() {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.height, canvas.width);
 
+    this.callback = this.isCash ?
+      this.cbCash :
+      this.cbCommon;
+    const colorize = ({ y, x }) => {
+      this.callback({ y, x }, ctx);
+      ctx.fillRect(
+        x * PIXEL_SIZE,
+        y * PIXEL_SIZE,
+        PIXEL_SIZE,
+        PIXEL_SIZE
+      );
+    };
+
     ctx.beginPath();
-    for (let y = 0; y < MATRIX_LENGTH; y++)
-      for (let x = 0; x < MATRIX_LENGTH; x++) {
-        ctx.fillStyle = color(this.matrix[y][x], this.filter);
-        this.cash[y][x] = ctx.fillStyle;
-        ctx.fillRect(
-          x * PIXEL_SIZE,
-          y * PIXEL_SIZE,
-          PIXEL_SIZE,
-          PIXEL_SIZE
-        );
-      }
+    matrixPassing(colorize, this.matrix);
     ctx.closePath();
 
     this.isCash = true;
-  }
-
-  drawFromCash() {
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.height, canvas.width);
-
-    ctx.beginPath();
-    for (let y = 0; y < MATRIX_LENGTH; y++)
-      for (let x = 0; x < MATRIX_LENGTH; x++) {
-        ctx.fillStyle = this.cash[y][x];
-        ctx.fillRect(
-          x * PIXEL_SIZE,
-          y * PIXEL_SIZE,
-          PIXEL_SIZE,
-          PIXEL_SIZE
-        );
-      }
-    ctx.closePath();
   }
 }
 
@@ -103,33 +97,17 @@ class BiomMap extends Map {
     );
     this.heightMap = heightMap;
     this.heightFilter = heightFilter;
-  }
 
-  draw() {
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.height, canvas.width);
-
-    ctx.beginPath();
-    for (let y = 0; y < MATRIX_LENGTH; y++)
-      for (let x = 0; x < MATRIX_LENGTH; x++) {
-        const heightLevel = this.heightMap[y][x];
-        if (heightLevel <= 0)
-          ctx.fillStyle = color(heightLevel, this.heightFilter);
-        else
-          ctx.fillStyle = biomColor(this.matrix[y][x],
-            heightLevel,
-            this.filter,
-            LIGHTNESS_TABLE);
-        this.cash[y][x] = ctx.fillStyle;
-        ctx.fillRect(
-          x * PIXEL_SIZE,
-          y * PIXEL_SIZE,
-          PIXEL_SIZE,
-          PIXEL_SIZE
-        );
-      }
-    ctx.closePath();
-
-    this.isCash = true;
+    this.cbCommon = ({ y, x }, ctx) => {
+      const heightLevel = this.heightMap[y][x];
+      if (heightLevel <= 0)
+        ctx.fillStyle = color(heightLevel, this.heightFilter);
+      else
+        ctx.fillStyle = biomColor(this.matrix[y][x],
+          heightLevel,
+          this.filter,
+          LIGHTNESS_TABLE);
+      this.cash[y][x] = ctx.fillStyle;
+    };
   }
 }
