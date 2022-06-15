@@ -10,7 +10,7 @@
   },
   "rules": {
     "indent": ["error", 2],
-    "linebreak-style": ["error", "windows"],
+    "linebreak-style": ["error", "unix"],
     "quotes": [
       "error",
       "single",
@@ -160,6 +160,6 @@
     "template-curly-spacing": ["error", "never"],
 
     "no-undef": ["off"],
-    "no-unused-vars":["off"],
+    "no-unused-vars":["off"]
   }
 }

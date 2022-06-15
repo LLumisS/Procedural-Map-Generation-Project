@@ -19,6 +19,9 @@ header {
 }
 
 #refresh {
+  position: absolute;
+  left: 50px;
+  bottom: 10px;
   font-weight: bold;
   height: 40px;
   width: 100px;
@@ -57,7 +60,7 @@ header {
 }
 
 .form_radio {
-	margin-top: 3px;
+	margin-bottom: 4px;
 }
 .form_radio label {
 	display: inline-block;

@@ -5,9 +5,10 @@
     <link rel="stylesheet" href="style.css">
     <title>MapGen</title>
     <script src="filters.js"></script>
-    <script src="common.js"></script>
+    <script src="handle.js"></script>
     <script src="algorithm.js"></script>
-    <script src="draw.js" defer></script>
+    <script src="classes.js"></script>
+    <script src="start.js" defer></script>
 </head>
 <body>
   <header>
@@ -23,13 +24,13 @@
         <span id="filter">Map Filter:</span>
         <div class="form_radio">
           <label>
-            <input class="class_filter" type="radio" id="none-filter" name="filter" value="DEFAULT">
+            <input class="class_filter" type="radio" id="none-filter" name="filter" value="DEFAULT" checked="checked">
             None
           </label>
         </div>
         <div class="form_radio">
           <label>
-            <input class="class_filter" type="radio" id="physical-filter" name="filter" value="PHYSICAL" checked="checked">
+            <input class="class_filter" type="radio" id="physical-filter" name="filter" value="PHYSICAL">
             Physical
           </label>
         </div>
@@ -47,8 +48,9 @@
         </div>
       </div>
       <div><button id="apply">Apply</button></div>
+      <div><button id="refresh">Refresh</button></div>
     </div>
   </main>
-  <div><button id="refresh">Refresh</button></div>
+  
 </body>
 </html>

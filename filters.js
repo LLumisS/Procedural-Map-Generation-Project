@@ -1,119 +1,257 @@
 'use strict';
 
 const BIOMS = [
-  {
-    level: 1,
-    moisture: 0,
-    temperature: -0.5, 
+  { //Icy Wasteland
+    identifier: 1,
+    moisture: -0.5,
+    temperature: -0.5,
+    heightFrom: 0,
+    heightTo: 1,
   },
-  {
-    level: 2,
+  { //Tundra
+    identifier: 2,
+    moisture: 0,
+    temperature: -0.5,
+    heightFrom: 0,
+    heightTo: 1,
+  },
+  { //Tree Tundra
+    identifier: 3,
+    moisture: 0.5,
+    temperature: -0.5,
+    heightFrom: 0,
+    heightTo: 1,
+  },
+  { //Snowy Taiga
+    identifier: 4,
     moisture: 1,
     temperature: -0.5,
+    heightFrom: 0,
+    heightTo: 1,
   },
-  {
-    level: 3,
+  { //Grass Steppe
+    identifier: 5,
     moisture: -0.5,
-    temperature: 0.5,
+    temperature: 0,
+    heightFrom: 0,
+    heightTo: 1,
   },
-  {
-    level: 4,
+  { //Beach
+    identifier: 17,
+    moisture: 1,
+    temperature: 1,
+    heightFrom: 0,
+    heightTo: 0.025,
+  },
+  { //Tree Steppe
+    identifier: 6,
     moisture: 0,
-    temperature: 0.5,
+    temperature: 0,
+    heightFrom: 0,
+    heightTo: 1,
   },
-  {
-    level: 5,
+  { //Forest
+    identifier: 7,
+    moisture: 0.5,
+    temperature: 0,
+    heightFrom: 0,
+    heightTo: 1,
+  },
+  { //Taiga
+    identifier: 8,
     moisture: 1,
     temperature: 0,
+    heightFrom: 0,
+    heightTo: 1,
   },
-  {
-    level: 6,
+  { //Semi Desert
+    identifier: 9,
+    moisture: -0.5,
+    temperature: 0.5,
+    heightFrom: 0,
+    heightTo: 1,
+  },
+  { //Grass Savanna
+    identifier: 10,
+    moisture: 0,
+    temperature: 0.5,
+    heightFrom: 0,
+    heightTo: 1,
+  },
+  { //Tree Savanna
+    identifier: 11,
+    moisture: 0.5,
+    temperature: 0.5,
+    heightFrom: 0,
+    heightTo: 1,
+  },
+  { //Swamp
+    identifier: 12,
     moisture: 1,
     temperature: 0.5,
+    heightFrom: 0,
+    heightTo: 1,
   },
-  {
-    level: 7,
+  { //Desert
+    identifier: 13,
     moisture: -0.5,
     temperature: 1,
+    heightFrom: 0,
+    heightTo: 1,
   },
-  {
-    level: 8,
+  { //Semi Desert
+    identifier: 14,
     moisture: 0,
     temperature: 1,
+    heightFrom: 0,
+    heightTo: 1,
   },
-  {
-    level: 9,
-    moisture: 1,
-    temperature: 0.5,
+  { //Tropical Dry Forest
+    identifier: 15,
+    moisture: 0.5,
+    temperature: 1,
+    heightFrom: 0,
+    heightTo: 1,
   },
-  {
-    level: 10,
+  { //Jungle
+    identifier: 16,
     moisture: 1,
     temperature: 1,
+    heightFrom: 0,
+    heightTo: 1,
+  },
+];
+
+const LIGHTNESS_TABLE = [
+  {
+    height: 0.2,
+    coefficient: 0,
+  },
+  {
+    height: 0.4,
+    coefficient: 1,
+  },
+  {
+    height: 0.6,
+    coefficient: 2,
+  },
+  {
+    height: 0.8,
+    coefficient: 3,
+  },
+  {
+    height: 0.9,
+    coefficient: 4,
+  },
+  {
+    height: 1,
+    coefficient: 5,
   },
 ];
 
 const FILTERS = {
   'DEFAULT': [
-    {
+    { //Icy Wasteland
       level: 1,
-      hue: 0,
-      saturation: 0,
-      lightness: 0,
+      hue: 180,
+      saturation: 40,
+      lightness: 90,
     },
-    {
+    { //Tundra
       level: 2,
-      hue: 0,
-      saturation: 0,
-      lightness: 0,
+      hue: 35,
+      saturation: 25,
+      lightness: 50,
     },
-    {
+    { //Tree Tundra
       level: 3,
-      hue: 0,
-      saturation: 0,
-      lightness: 0,
+      hue: 70,
+      saturation: 15,
+      lightness: 50,
     },
-    {
+    { //Taiga
       level: 4,
-      hue: 0,
-      saturation: 0,
-      lightness: 0,
+      hue: 140,
+      saturation: 60,
+      lightness: 30,
     },
-    {
+    { //Grass Steppe
       level: 5,
-      hue: 0,
-      saturation: 0,
-      lightness: 0,
+      hue: 50,
+      saturation: 30,
+      lightness: 50,
     },
-    {
+    { //Tree Steppe
       level: 6,
-      hue: 0,
-      saturation: 0,
-      lightness: 0,
+      hue: 80,
+      saturation: 30,
+      lightness: 50,
     },
-    {
+    { //Forest
       level: 7,
-      hue: 0,
-      saturation: 0,
-      lightness: 0,
+      hue: 120,
+      saturation: 60,
+      lightness: 40,
     },
-    {
+    { //Swamp
       level: 8,
-      hue: 0,
-      saturation: 0,
-      lightness: 0,
+      hue: 100,
+      saturation: 30,
+      lightness: 20,
     },
-    {
+    { //Semi Desert
       level: 9,
-      hue: 0,
-      saturation: 0,
-      lightness: 0,
+      hue: 55,
+      saturation: 65,
+      lightness: 65,
     },
-    {
+    { //Grass Savanna
       level: 10,
-      hue: 0,
-      saturation: 0,
-      lightness: 0,
+      hue: 65,
+      saturation: 50,
+      lightness: 60,
+    },
+    { //Tree Savanna
+      level: 11,
+      hue: 75,
+      saturation: 50,
+      lightness: 60,
+    },
+    { //Tropical Moist Forest
+      level: 12,
+      hue: 120,
+      saturation: 40,
+      lightness: 40,
+    },
+    { //Desert
+      level: 13,
+      hue: 60,
+      saturation: 100,
+      lightness: 85,
+    },
+    { //Semi Desert
+      level: 14,
+      hue: 30,
+      saturation: 50,
+      lightness: 50,
+    },
+    { //Tropical Dry Forest
+      level: 15,
+      hue: 100,
+      saturation: 15,
+      lightness: 40,
+    },
+    { //Jungle
+      level: 16,
+      hue: 120,
+      saturation: 85,
+      lightness: 20,
+    },
+    { //Beach
+      level: 17,
+      hue: 60,
+      saturation: 100,
+      lightness: 85,
     },
   ],
 
@@ -205,7 +343,7 @@ const FILTERS = {
       saturation: 100,
       lightness: 100,
     },
-    { 
+    {
       level: -0.25,
       hue: 240,
       saturation: 100,
@@ -217,7 +355,7 @@ const FILTERS = {
       saturation: 100,
       lightness: 70,
     },
-    { 
+    {
       level: 0.25,
       hue: 240,
       saturation: 100,
@@ -229,7 +367,7 @@ const FILTERS = {
       saturation: 100,
       lightness: 40,
     },
-    { 
+    {
       level: 0.75,
       hue: 240,
       saturation: 100,
