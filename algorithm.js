@@ -138,11 +138,13 @@ function riversGen(heightMap, riversCount, fieldTiles) {
     for (let i = 0; i < riversCount; i++) {
       const n = random(0, fieldTiles.length - 1);
 
-      const y = fieldTiles[n].y;
-      const x = fieldTiles[n].x;
+      const sourse = {
+        y: fieldTiles[n].y,
+        x: fieldTiles[n].x,
+      };
 
       const river = riversArray[i];
-      riverGen(heightMap, { y, x }, river);
+      riverGen(heightMap, sourse, river);
       if (river.length < MIN_RIVERS_LENGTH)
         i--;
       else
