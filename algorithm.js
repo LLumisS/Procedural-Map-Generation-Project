@@ -1,5 +1,9 @@
 'use strict';
 
+/*
+Diamond-Square Matrix Generation Algorithm
+*/
+
 function matrixGen(length, randomRange) {
   const matrix = Array(length).fill(null).map(() => Array(length).fill(0));
 
@@ -107,7 +111,9 @@ const randomMatrix = (grit = 1) =>
     )
   );
 
-//
+/*
+Field Tiles Definition Algorithm
+*/
 
 function fieldDef(heightMap) {
   const fieldTiles = Array();
@@ -116,30 +122,33 @@ function fieldDef(heightMap) {
       fieldTiles.push({ y, x });
   };
 
-  matrixPassing(isField, heightMap);
+  matrixBypassing(isField, heightMap);
 
   return fieldTiles;
 }
 
-//
+/*
+Rivers Generation Algorithm
+*/
 
 function riversGen(heightMap, riversCount, fieldTiles) {
   const riversArray = Array(riversCount).fill(null).map(() => Array());
 
-  for (let i = 0; i < riversCount; i++) {
-    const n = random(0, fieldTiles.length - 1);
+  if (fieldTiles.length > 0)
+    for (let i = 0; i < riversCount; i++) {
+      const n = random(0, fieldTiles.length - 1);
 
-    const y = fieldTiles[n].y;
-    const x = fieldTiles[n].x;
+      const y = fieldTiles[n].y;
+      const x = fieldTiles[n].x;
 
-    const river = riversArray[i];
-    riverGen(heightMap, { y, x }, river);
-    if (riversArray[i].length < MIN_RIVERS_LENGTH)
-      i--;
-    else
-      for (const tile of river)
-        heightMap[tile.y][tile.x] = 0;
-  }
+      const river = riversArray[i];
+      riverGen(heightMap, { y, x }, river);
+      if (river.length < MIN_RIVERS_LENGTH)
+        i--;
+      else
+        for (const tile of river)
+          heightMap[tile.y][tile.x] = 0;
+    }
 
   return riversArray;
 }
@@ -159,80 +168,83 @@ function riverGen(heightMap, { y, x }, river) {
       End = true;
     } else {
       const keys = Object.keys(ways);
-      for (const key of keys)
-        if (ways[key].value === min) {
-          y = ways[key].y;
-          x = ways[key].x;
+      for (const key of keys) {
+        const way = ways[key];
+        if (way.value === min) {
+          y = way.y;
+          x = way.x;
+          break;
         }
+      }
       river.push({ y, x });
     }
   }
 }
 
 function waysDef(matrix, { y, x }, river) {
-  const neighbours = {
+  const ways = {
     top: { y: y - 1, x },
     bottom: { y: y + 1, x },
     left: { y, x: x - 1 },
     right: { y, x: x + 1 },
   };
-  const keys = Object.keys(neighbours);
+  const keys = Object.keys(ways);
 
+  const values = [];
   for (const key of keys) {
-    const y = neighbours[key].y;
-    const x = neighbours[key].x;
-    neighbours[key].value = matrix[y] && !includes(river, { y, x }) ?
+    const way = ways[key];
+    const y = way.y;
+    const x = way.x;
+    way.value = matrix[y] && !includes(river, { y, x }) ?
       matrix[y][x] :
       null;
+    values.push(way.value);
   }
 
-  neighbours.min = min(
-    neighbours.top.value,
-    neighbours.bottom.value,
-    neighbours.left.value,
-    neighbours.right.value,
-  );
+  ways.min = min(...values);
 
-  return neighbours;
+  return ways;
 }
 
-//
+/*
+Moisture Increasing Algorithm
+*/
 
 function riversMoisture(moistureMap, rivers) {
   const riversCount = rivers.length;
-  for (let n = 0; n < riversCount; n++)
-    riverMoisture(moistureMap, rivers[n]);
+  for (let n = 0; n < riversCount; n++) {
+    const river = rivers[n];
+    riverMoisture(moistureMap, river);
+  }
 }
 
 function riverMoisture(moistureMap, river) {
   const riverLength = river.length;
   for (let i = 0; i < riverLength; i++) {
-    const centerY = river[i].y;
-    const centerX = river[i].x;
-    const radius = RIVERS_WET_RADIUS;
-
-    tileMoisture(moistureMap, radius, centerY, centerX);
+    const tile = river[i];
+    tileMoisture(moistureMap, tile);
   }
 }
 
-function tileMoisture(moistureMap, radius, centerY, centerX) {
+function tileMoisture(moistureMap, tile) {
   const extraMoisture = ({ y, x }) => {
     if (moistureMap[y] && !isNaN(moistureMap[y][x]))
       moistureMap[y][x] += EXTRA_MOISTURE;
   };
 
-  while (radius > 0) {
-    const startY = centerY - radius;
-    const startX = centerX - radius;
+  for (let radius = 1; radius <= RIVERS_WET_RADIUS; radius++) {
+    const startY = tile.y - radius;
+    const startX = tile.x - radius;
     const endY = startY + 2 * radius;
     const endX = startX + 2 * radius;
 
-    matrixPassing(extraMoisture, moistureMap, startY, startX, endY, endX);
-    radius--;
+    matrixBypassing(extraMoisture, moistureMap, startY, startX, endY, endX);
   }
 }
 
-//
+/*
+Temperature Decreasing Algorithm
+*/
 
 function coldByHeight(temperatureMap, heightMap) {
   const decrease = ({ y, x }) => {
@@ -241,28 +253,34 @@ function coldByHeight(temperatureMap, heightMap) {
       0;
   };
 
-  matrixPassing(decrease, temperatureMap);
+  matrixBypassing(decrease, temperatureMap);
 }
 
-//
+/*
+Biom Map Generation Algorithm
+*/
 
-function biomDef(heightMap, moistureMap, temperatureMap) {
+function biomsDef(heightMap, moistureMap, temperatureMap) {
   const biomMap = Array(MATRIX_LENGTH)
     .fill(null)
     .map(() => Array(MATRIX_LENGTH).fill(0));
 
   const getBiom = ({ y, x }) => {
-    for (const biom of BIOMS)
-      if (moistureMap[y][x] <= biom.moisture &&
-      temperatureMap[y][x] <= biom.temperature &&
-      heightMap[y][x] > biom.heightFrom &&
-      heightMap[y][x] <= biom.heightTo) {
+    for (const biom of BIOMS) {
+      const enough = {
+        moisture: moistureMap[y][x] <= biom.moisture,
+        temperature: temperatureMap[y][x] <= biom.temperature,
+        height: heightMap[y][x] > biom.heightFrom &&
+          heightMap[y][x] <= biom.heightTo,
+      };
+      if (enough.moisture && enough.temperature && enough.height) {
         biomMap[y][x] = biom.identifier;
         break;
       }
+    }
   };
 
-  matrixPassing(getBiom, heightMap);
+  matrixBypassing(getBiom, biomMap);
 
   return biomMap;
 }

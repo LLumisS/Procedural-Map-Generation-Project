@@ -3,13 +3,14 @@
 class Map {
   constructor(filter) {
     this.filter = filter;
+
     this.cash = Array(MATRIX_LENGTH)
       .fill(null)
       .map(() => Array(MATRIX_LENGTH).fill(0));
-    this.isCash = false;
+    this.hasCash = false;
 
     this.callback = () => {};
-    this.cbCommon = ({ y, x }, ctx) => {
+    this.cbStd = ({ y, x }, ctx) => {
       ctx.fillStyle = color(this.matrix[y][x], this.filter);
       this.cash[y][x] = ctx.fillStyle;
     };
@@ -22,9 +23,9 @@ class Map {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.height, canvas.width);
 
-    this.callback = this.isCash ?
+    this.callback = this.hasCash ?
       this.cbCash :
-      this.cbCommon;
+      this.cbStd;
     const colorize = ({ y, x }) => {
       this.callback({ y, x }, ctx);
       ctx.fillRect(
@@ -36,10 +37,10 @@ class Map {
     };
 
     ctx.beginPath();
-    matrixPassing(colorize, this.matrix);
+    matrixBypassing(colorize, this.matrix);
     ctx.closePath();
 
-    this.isCash = true;
+    this.hasCash = true;
   }
 }
 
@@ -90,23 +91,23 @@ class BiomMap extends Map {
   constructor(filter, heightFilter, heightMap, moistureMap, temperatureMap) {
     super(filter);
 
-    this.matrix = biomDef(
+    this.matrix = biomsDef(
       heightMap,
       moistureMap,
       temperatureMap
     );
-    this.heightMap = heightMap;
-    this.heightFilter = heightFilter;
 
-    this.cbCommon = ({ y, x }, ctx) => {
-      const heightLevel = this.heightMap[y][x];
+    this.cbStd = ({ y, x }, ctx) => {
+      const heightLevel = heightMap[y][x];
       if (heightLevel <= 0)
-        ctx.fillStyle = color(heightLevel, this.heightFilter);
+        ctx.fillStyle = color(heightLevel, heightFilter);
       else
-        ctx.fillStyle = biomColor(this.matrix[y][x],
+        ctx.fillStyle = biomColor(
+          this.matrix[y][x],
           heightLevel,
           this.filter,
-          LIGHTNESS_TABLE);
+          LIGHTNESS_TABLE
+        );
       this.cash[y][x] = ctx.fillStyle;
     };
   }

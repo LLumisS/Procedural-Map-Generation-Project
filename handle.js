@@ -1,7 +1,6 @@
 'use strict';
 
-const random = (min, max) =>
-  Math.floor(Math.random() * (max - min + 1) + min);
+const random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 
 const average = (...argArray) => {
   let sum = 0;
@@ -38,7 +37,9 @@ const includes = (array, tile) => {
   return false;
 };
 
-//
+/*
+Color Definition Algorithm
+*/
 
 const color = (percentage, filter) => {
   for (const layer of filter) {
@@ -47,10 +48,10 @@ const color = (percentage, filter) => {
   }
 };
 
-const lightness = (
+const getLightness = (
   heightPercentage,
   lightnessTable,
-  layer
+  biom
 ) => {
   let coefficient;
   for (const level of lightnessTable)
@@ -58,8 +59,8 @@ const lightness = (
       coefficient = level.coefficient;
       break;
     }
-  const lightness = layer.lightness * (1 - 1 / 8 * coefficient);
-  return `hsl(${layer.hue}, ${layer.saturation}%, ${lightness}%)`;
+  const change = (1 - 1 / 8 * coefficient);
+  return biom.lightness * change;
 };
 
 const biomColor = (
@@ -68,16 +69,26 @@ const biomColor = (
   biomFilter,
   lightnessTable
 ) => {
-  for (const layer of biomFilter)
-    if (biomPercentage <= layer.level)
-      return lightness(heightPercentage, lightnessTable, layer);
+  for (const biom of biomFilter)
+    if (biomPercentage <= biom.identifier) {
+      const lightness = getLightness(heightPercentage, lightnessTable, biom);
+      return `hsl(${biom.hue}, ${biom.saturation}%, ${lightness}%)`;
+    }
 };
 
-//
+/*
+Matrix Bypassing Algorithm
+*/
 
-function matrixPassing(callback, matrix,
-  startY = 0, startX = 0, endY = matrix.length, endX = matrix.length) {
+const matrixBypassing = (
+  callback,
+  matrix,
+  startY = 0,
+  startX = 0,
+  endY = matrix.length,
+  endX = matrix.length,
+) => {
   for (let y = startY; y < endY; y++)
     for (let x = startX; x < endX; x++)
       callback({ y, x });
-}
+};
