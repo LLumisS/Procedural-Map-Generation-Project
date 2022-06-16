@@ -146,9 +146,6 @@ function riversGen(heightMap, riversCount, fieldTiles) {
       riverGen(heightMap, sourse, river);
       if (river.length < MIN_RIVERS_LENGTH)
         i--;
-      else
-        for (const tile of river)
-          heightMap[tile.y][tile.x] = 0;
     }
 
   return riversArray;

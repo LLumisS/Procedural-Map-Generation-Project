@@ -62,6 +62,12 @@ class HeightMap extends Map {
       fieldTiles
     );
   }
+
+  digRivers() {
+    for (const river of this.rivers)
+      for (const tile of river)
+        this.matrix[tile.y][tile.x] = 0;
+  }
 }
 
 

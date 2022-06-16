@@ -15,8 +15,8 @@ const PIXEL_SIZE = 2;
 canvas.height = MATRIX_LENGTH * PIXEL_SIZE;
 canvas.width = MATRIX_LENGTH * PIXEL_SIZE;
 
-const RANDOM_RANGE_CORNERS = 35;
-const RANDOM_RANGE_COMMON = 140;
+const RANDOM_RANGE_CORNERS = 30;
+const RANDOM_RANGE_COMMON = 120;
 const GRIT_COEFFICIENT = 3;
 
 const MAP = {
@@ -36,6 +36,7 @@ function start() {
     FILTERS.TEMPERATURE,
     heightMap.matrix
   );
+  heightMap.digRivers();
   const defaultMap = new BiomMap(
     FILTERS.DEFAULT,
     FILTERS.PHYSICAL,
