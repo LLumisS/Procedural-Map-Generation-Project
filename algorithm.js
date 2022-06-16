@@ -8,17 +8,16 @@ function matrixGen(length, randomRange) {
   const matrix = Array(length).fill(null).map(() => Array(length).fill(0));
 
   const last = length - 1;
-  const corners = {
-    topLeft: { x: 0, y: 0 },
-    topRight: { x: last, y: 0 },
-    bottomLeft: { x: 0, y: last },
-    bottomRight: { x: last, y: last },
-  };
-  const keys = Object.keys(corners);
+  const corners = [
+    { x: 0, y: 0 },
+    { x: last, y: 0 },
+    { x: 0, y: last },
+    { x: last, y: last },
+  ];
 
-  for (const key of keys) {
-    const x = corners[key].x;
-    const y = corners[key].y;
+  for (const corner of corners) {
+    const x = corner.x;
+    const y = corner.y;
     matrix[y][x] = random(-randomRange, randomRange);
   }
 
@@ -35,26 +34,33 @@ function diamondSquare(matrix, randomRange) {
   return matrix;
 }
 
+function averageRandom(matrix, elements, randomRange) {
+  const values = [];
+  for (const elem of elements) {
+    const x = elem.x;
+    const y = elem.y;
+    elem.value = matrix[y] ?
+      matrix[y][x] :
+      null;
+    values.push(elem.value);
+  }
+
+  return average(...values) + random(-randomRange, randomRange);
+}
+
 function diamond(matrix, chunkSize, randomRange) {
   const length = matrix.length;
 
   for (let y = 0; y < length - 1; y += chunkSize) {
     for (let x = 0; x < length - 1; x += chunkSize) {
-      const bottomRight = matrix[y + chunkSize] ?
-        matrix[y + chunkSize][x + chunkSize] :
-        null;
-      const bottomLeft = matrix[y + chunkSize] ?
-        matrix[y + chunkSize][x] :
-        null;
-      const topLeft = matrix[y][x];
-      const topRight = matrix[y][x + chunkSize];
+      const chunkCorners = [
+        { x, y },
+        { x, y: y + chunkSize },
+        { x: x + chunkSize, y },
+        { x: x + chunkSize, y: y + chunkSize },
+      ];
 
-      const result = average(
-        bottomRight,
-        bottomLeft,
-        topLeft,
-        topRight
-      ) + random(-randomRange, randomRange);
+      const result = averageRandom(matrix, chunkCorners, randomRange);
 
       const changedY = y + chunkSize / 2;
       const changedX = x + chunkSize / 2;
@@ -70,21 +76,14 @@ function square(matrix, chunkSize, randomRange) {
 
   for (let y = 0; y < length; y += half) {
     for (let x = (y + half) % chunkSize; x < length; x += chunkSize) {
-      const bottom = matrix[y + half] ?
-        matrix[y + half][x] :
-        null;
-      const top = matrix[y - half] ?
-        matrix[y - half][x] :
-        null;
-      const left = matrix[y][x - half];
-      const right = matrix[y][x + half];
+      const chunkSides = [
+        { x, y: y - half },
+        { x, y: y + half },
+        { x: x + half, y },
+        { x: x - half, y },
+      ];
 
-      const result = average(
-        bottom,
-        top,
-        left,
-        right
-      ) + random(-randomRange, randomRange);
+      const result = averageRandom(matrix, chunkSides, randomRange);
 
       const changedY = y;
       const changedX = x;
@@ -184,17 +183,15 @@ function riverGen(heightMap, { y, x }, river) {
 }
 
 function waysDef(matrix, { y, x }, river) {
-  const ways = {
-    top: { y: y - 1, x },
-    bottom: { y: y + 1, x },
-    left: { y, x: x - 1 },
-    right: { y, x: x + 1 },
-  };
-  const keys = Object.keys(ways);
+  const ways = [
+    { y: y - 1, x },
+    { y: y + 1, x },
+    { y, x: x - 1 },
+    { y, x: x + 1 },
+  ];
 
   const values = [];
-  for (const key of keys) {
-    const way = ways[key];
+  for (const way of ways) {
     const y = way.y;
     const x = way.x;
     way.value = matrix[y] && !includes(river, { y, x }) ?
