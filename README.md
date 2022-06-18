@@ -5,4 +5,11 @@ Always random terrain:
   3. Temperature Map related with Height.
   4. Bioms related with Height/Moisture/Temperature.
 
-All maps have visualization.
+Each map has visualization.
+
+Example:
+
+1. <img src="./images/physical.png">
+2. <img src="./images/moisture.png">
+3. <img src="./images/temperature.png">
+4. <img src="./images/default.png">
