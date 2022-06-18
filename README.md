@@ -13,3 +13,5 @@ Example:
 2. <img src="./images/moisture.png">
 3. <img src="./images/temperature.png">
 4. <img src="./images/default.png">
+
+Try <a href="https://llumiss.github.io/CourseWork/">it</a> by yourself.
