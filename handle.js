@@ -67,13 +67,13 @@ const getLightness = (
   lightnessTable,
   biom
 ) => {
-  let coefficient;
+  let stage;
   for (const level of lightnessTable)
     if (heightPercentage <= level.height) {
-      coefficient = level.coefficient;
+      stage = level.stage;
       break;
     }
-  const change = (1 - 1 / 8 * coefficient);
+  const change = (1 - DARKNESS_PER_STAGE * stage);
   return biom.lightness * change;
 };
 

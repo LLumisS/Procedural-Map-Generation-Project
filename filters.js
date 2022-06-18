@@ -132,27 +132,27 @@ const BIOMS = [
 const LIGHTNESS_TABLE = [
   {
     height: 0.2,
-    coefficient: 0,
+    stage: 0,
   },
   {
     height: 0.4,
-    coefficient: 1,
+    stage: 1,
   },
   {
     height: 0.6,
-    coefficient: 2,
+    stage: 2,
   },
   {
     height: 0.8,
-    coefficient: 3,
+    stage: 3,
   },
   {
     height: 0.9,
-    coefficient: 4,
+    stage: 4,
   },
   {
     height: 1,
-    coefficient: 5,
+    stage: 5,
   },
 ];
 

@@ -35,6 +35,7 @@ function diamondSquare(matrix, randomRange) {
 }
 
 function diamond(matrix, chunkSize, randomRange) {
+  const half = chunkSize / 2;
   const length = matrix.length;
 
   for (let y = 0; y < length - 1; y += chunkSize) {
@@ -48,8 +49,8 @@ function diamond(matrix, chunkSize, randomRange) {
 
       const result = averageRandom(matrix, chunkCorners, randomRange);
 
-      const changedY = y + chunkSize / 2;
-      const changedX = x + chunkSize / 2;
+      const changedY = y + half;
+      const changedX = x + half;
 
       matrix[changedY][changedX] = result;
     }
@@ -103,7 +104,7 @@ Field Tiles Definition Algorithm
 function fieldDef(heightMap) {
   const fieldTiles = Array();
   const isField = ({ y, x }) => {
-    if (heightMap[y][x] > 0)
+    if (heightMap[y][x] > WATER_LEVEL)
       fieldTiles.push({ y, x });
   };
 
@@ -145,7 +146,7 @@ function riverGen(heightMap, { y, x }, river) {
     const ways = waysDef(heightMap, { y, x }, river);
     const min = ways.min;
 
-    if (min <= 0) {
+    if (min <= WATER_LEVEL) {
       End = true;
     } else if (min === Infinity) {
       river.length = 0;
@@ -216,8 +217,8 @@ function tileMoisture(moistureMap, tile) {
   for (let radius = 1; radius <= RIVERS_WET_RADIUS; radius++) {
     const startY = tile.y - radius;
     const startX = tile.x - radius;
-    const endY = startY + 2 * radius;
-    const endX = startX + 2 * radius;
+    const endY = tile.y + radius;
+    const endX = tile.x + radius;
 
     matrixBypassing(extraMoisture, moistureMap, startY, startX, endY, endX);
   }
@@ -229,8 +230,8 @@ Temperature Decreasing Algorithm
 
 function coldByHeight(temperatureMap, heightMap) {
   const decrease = ({ y, x }) => {
-    temperatureMap[y][x] -= (heightMap[y][x] > 0) ?
-      (heightMap[y][x] / 2) :
+    temperatureMap[y][x] -= (heightMap[y][x] > WATER_LEVEL) ?
+      (heightMap[y][x] * HEIGHT_IMPACT) :
       0;
   };
 

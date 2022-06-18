@@ -66,7 +66,7 @@ class HeightMap extends Map {
   digRivers() {
     for (const river of this.rivers)
       for (const tile of river)
-        this.matrix[tile.y][tile.x] = 0;
+        this.matrix[tile.y][tile.x] = WATER_LEVEL;
   }
 }
 
@@ -105,7 +105,7 @@ class BiomMap extends Map {
 
     this.cbStd = ({ y, x }, ctx) => {
       const heightLevel = heightMap[y][x];
-      if (heightLevel <= 0)
+      if (heightLevel <= WATER_LEVEL)
         ctx.fillStyle = color(heightLevel, heightFilter);
       else
         ctx.fillStyle = biomColor(

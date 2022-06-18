@@ -19,6 +19,10 @@ const RANDOM_RANGE_CORNERS = 30;
 const RANDOM_RANGE_COMMON = 120;
 const GRIT_COEFFICIENT = 3;
 
+const WATER_LEVEL = 0;
+const HEIGHT_IMPACT = 0.5;
+const DARKNESS_PER_STAGE = 1 / 8;
+
 const MAP = {
   'PHYSICAL': null,
   'MOISTURE': null,
