@@ -1,6 +1,13 @@
 'use strict';
 
 const BIOMS = [
+  { //Snowy Peak
+    identifier: 18,
+    moisture: 1,
+    temperature: -0.5,
+    heightFrom: 0.8,
+    heightTo: 1,
+  },
   { //Icy Wasteland
     identifier: 1,
     moisture: -0.5,
@@ -252,6 +259,12 @@ const FILTERS = {
       hue: 60,
       saturation: 100,
       lightness: 85,
+    },
+    { //Snowy Peak
+      identifier: 18,
+      hue: 0,
+      saturation: 0,
+      lightness: 100,
     },
   ],
 

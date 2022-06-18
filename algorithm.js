@@ -34,20 +34,6 @@ function diamondSquare(matrix, randomRange) {
   return matrix;
 }
 
-function averageRandom(matrix, elements, randomRange) {
-  const values = [];
-  for (const elem of elements) {
-    const x = elem.x;
-    const y = elem.y;
-    elem.value = matrix[y] ?
-      matrix[y][x] :
-      null;
-    values.push(elem.value);
-  }
-
-  return average(...values) + random(-randomRange, randomRange);
-}
-
 function diamond(matrix, chunkSize, randomRange) {
   const length = matrix.length;
 
@@ -164,18 +150,17 @@ function riverGen(heightMap, { y, x }, river) {
     } else if (min === Infinity) {
       river.length = 0;
       End = true;
-    } else {
-      const keys = Object.keys(ways);
-      for (const key of keys) {
-        const way = ways[key];
-        if (way.value === min) {
-          y = way.y;
-          x = way.x;
-          break;
-        }
-      }
-      river.push({ y, x });
     }
+    const keys = Object.keys(ways);
+    for (const key of keys) {
+      const way = ways[key];
+      if (way.value === min) {
+        y = way.y;
+        x = way.x;
+        break;
+      }
+    }
+    river.push({ y, x });
   }
 }
 

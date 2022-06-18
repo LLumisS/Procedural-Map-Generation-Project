@@ -37,6 +37,20 @@ const includes = (array, tile) => {
   return false;
 };
 
+function averageRandom(matrix, elements, randomRange) {
+  const values = [];
+  for (const elem of elements) {
+    const x = elem.x;
+    const y = elem.y;
+    elem.value = matrix[y] ?
+      matrix[y][x] :
+      null;
+    values.push(elem.value);
+  }
+
+  return average(...values) + random(-randomRange, randomRange);
+}
+
 /*
 Color Definition Algorithm
 */
