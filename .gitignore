@@ -2,5 +2,5 @@ node_modules
 .vscode
 no-use.js
 Bioms.png
-images
+images/Screenshot*.png
 ideas.txt
