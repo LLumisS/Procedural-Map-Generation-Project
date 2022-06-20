@@ -256,7 +256,7 @@ function biomsDef(heightMap, moistureMap, temperatureMap) {
           heightMap[y][x] <= biom.heightTo,
       };
       if (enough.moisture && enough.temperature && enough.height) {
-        biomMap[y][x] = biom.identifier;
+        biomMap[y][x] = biom.id;
         break;
       }
     }

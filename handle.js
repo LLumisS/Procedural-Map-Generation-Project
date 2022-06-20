@@ -78,13 +78,13 @@ const getLightness = (
 };
 
 const biomColor = (
-  biomPercentage,
+  biomId,
   heightPercentage,
   biomFilter,
   lightnessTable
 ) => {
   for (const biom of biomFilter)
-    if (biomPercentage <= biom.identifier) {
+    if (biomId === biom.id) {
       const lightness = getLightness(heightPercentage, lightnessTable, biom);
       return `hsl(${biom.hue}, ${biom.saturation}%, ${lightness}%)`;
     }
