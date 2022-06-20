@@ -1,6 +1,6 @@
 'use strict';
 
-const radio = document.getElementsByClassName('class_filter');
+const radioFilter = document.getElementsByClassName('radio_filter');
 const canvas = document.getElementById('map');
 
 const N = 8;
@@ -58,7 +58,7 @@ function start() {
 }
 
 function apply() {
-  const setting = settingDef(radio);
+  const setting = settingDef(radioFilter);
   const map = MAP[setting];
 
   map.draw();
