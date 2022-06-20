@@ -20,8 +20,8 @@ class Map {
   }
 
   draw() {
-    const ctx = canvasMap.getContext('2d');
-    ctx.clearRect(0, 0, canvasMap.height, canvasMap.width);
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.height, canvas.width);
 
     this.callback = this.hasCash ?
       this.cbCash :

@@ -1,7 +1,8 @@
 'use strict';
 
 const radioFilter = document.getElementsByClassName('radio_filter');
-const canvasMap = document.getElementById('map');
+const canvas = document.getElementById('map');
+const table = document.getElementById('table');
 
 const N = 8;
 const MATRIX_LENGTH = Math.pow(2, N) + 1;
@@ -12,8 +13,8 @@ const MIN_RIVERS_LENGTH = 15;
 const EXTRA_MOISTURE = 1 / 1100;
 
 const PIXEL_SIZE = 2;
-canvasMap.height = MATRIX_LENGTH * PIXEL_SIZE;
-canvasMap.width = MATRIX_LENGTH * PIXEL_SIZE;
+canvas.height = MATRIX_LENGTH * PIXEL_SIZE;
+canvas.width = MATRIX_LENGTH * PIXEL_SIZE;
 
 const RANDOM_RANGE_CORNERS = 30;
 const RANDOM_RANGE_COMMON = 120;
@@ -60,6 +61,10 @@ function create() {
 function apply() {
   const setting = settingDef(radioFilter);
   const map = MAP[setting];
+
+  table.style.visibility = setting !== 'DEFAULT' ?
+    'hidden' :
+    'visible';
 
   map.draw();
 }
