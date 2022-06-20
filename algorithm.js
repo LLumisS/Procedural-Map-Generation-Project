@@ -139,8 +139,6 @@ function riversGen(heightMap, riversCount, fieldTiles) {
 }
 
 function riverGen(heightMap, { y, x }, river) {
-  river.push({ y, x });
-
   let End = false;
   while (!End) {
     const ways = waysDef(heightMap, { y, x }, river);
@@ -152,15 +150,12 @@ function riverGen(heightMap, { y, x }, river) {
       river.length = 0;
       End = true;
     }
-    const keys = Object.keys(ways);
-    for (const key of keys) {
-      const way = ways[key];
+    for (const way of ways)
       if (way.value === min) {
         y = way.y;
         x = way.x;
         break;
       }
-    }
     river.push({ y, x });
   }
 }
@@ -171,6 +166,7 @@ function waysDef(matrix, { y, x }, river) {
     { y: y + 1, x },
     { y, x: x - 1 },
     { y, x: x + 1 },
+    { y, x },
   ];
 
   const values = [];

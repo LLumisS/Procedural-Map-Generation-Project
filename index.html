@@ -18,29 +18,32 @@
     <div>
       <canvas id="map"></canvas>
     </div>
+    <div>
+      <img id="table" src="biomsTable.png"></img>
+    </div>
     <div id="ui">
       <a style="font-weight: bold; text-align:center; font-size: larger; margin-top: 5px;">Settings</a>
       <div id="group-filter">
         <span id="filter">Map Filter:</span>
-        <div>
+        <div class="form_radio">
           <label>
             <input class="radio_filter" type="radio" name="filter" value="DEFAULT" checked="checked">
             None
           </label>
         </div>
-        <div>
+        <div class="form_radio">
           <label>
             <input class="radio_filter" type="radio" name="filter" value="PHYSICAL">
             Physical
           </label>
         </div>
-        <div>
+        <div class="form_radio">
           <label>
             <input class="radio_filter" type="radio" name="filter" value="MOISTURE">
             Moisture
           </label>
         </div>
-        <div>
+        <div class="form_radio">
           <label>
             <input class="radio_filter" type="radio" name="filter" value="TEMPERATURE">
             Temperature

@@ -1,7 +1,7 @@
 'use strict';
 
 const radioFilter = document.getElementsByClassName('radio_filter');
-const canvas = document.getElementById('map');
+const canvasMap = document.getElementById('map');
 
 const N = 8;
 const MATRIX_LENGTH = Math.pow(2, N) + 1;
@@ -12,8 +12,8 @@ const MIN_RIVERS_LENGTH = 15;
 const EXTRA_MOISTURE = 1 / 1100;
 
 const PIXEL_SIZE = 2;
-canvas.height = MATRIX_LENGTH * PIXEL_SIZE;
-canvas.width = MATRIX_LENGTH * PIXEL_SIZE;
+canvasMap.height = MATRIX_LENGTH * PIXEL_SIZE;
+canvasMap.width = MATRIX_LENGTH * PIXEL_SIZE;
 
 const RANDOM_RANGE_CORNERS = 30;
 const RANDOM_RANGE_COMMON = 120;
@@ -30,7 +30,7 @@ const MAP = {
   'DEFAULT': null,
 };
 
-function start() {
+function create() {
   const heightMap = new HeightMap(FILTERS.PHYSICAL);
   const moistureMap = new MoistureMap(
     FILTERS.MOISTURE,
@@ -64,7 +64,7 @@ function apply() {
   map.draw();
 }
 
-start();
+create();
 
-document.getElementById('refresh').addEventListener('click', start);
+document.getElementById('refresh').addEventListener('click', create);
 document.getElementById('apply').addEventListener('click', apply);
