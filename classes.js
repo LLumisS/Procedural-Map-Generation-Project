@@ -44,7 +44,6 @@ class Map {
   }
 }
 
-
 class HeightMap extends Map {
   constructor(filter) {
     super(filter);
@@ -70,7 +69,6 @@ class HeightMap extends Map {
   }
 }
 
-
 class MoistureMap extends Map {
   constructor(filter, rivers) {
     super(filter);
@@ -81,7 +79,6 @@ class MoistureMap extends Map {
   }
 }
 
-
 class TemperatureMap extends Map {
   constructor(filter, heightMap) {
     super(filter);
@@ -91,7 +88,6 @@ class TemperatureMap extends Map {
     this.matrix = normalize(this.matrix);
   }
 }
-
 
 class BiomMap extends Map {
   constructor(filter, heightFilter, heightMap, moistureMap, temperatureMap) {
