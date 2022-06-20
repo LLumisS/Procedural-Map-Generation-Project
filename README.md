@@ -14,4 +14,4 @@ Example:
 3. <img src="./images/temperature.png">
 4. <img src="./images/default.png">
 
-Try <a href="https://llumiss.github.io/CourseWork/">it</a> by yourself.
+Try <a href="https://llumiss.github.io/Procedural-Map-Generation-Project/">it</a> by yourself.
