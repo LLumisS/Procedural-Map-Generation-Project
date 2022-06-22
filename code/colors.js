@@ -1,12 +1,5 @@
 'use strict';
 
-const color = (percentage, filter) => {
-  for (const layer of filter) {
-    if (percentage <= layer.level)
-      return `hsl(${layer.hue}, ${layer.saturation}%, ${layer.lightness}%)`;
-  }
-};
-
 const getLightness = (
   heightPercentage,
   lightnessTable,
@@ -20,6 +13,13 @@ const getLightness = (
     }
   const change = (1 - DARKNESS_PER_STAGE * stage);
   return biom.lightness * change;
+};
+
+const color = (percentage, filter) => {
+  for (const layer of filter) {
+    if (percentage <= layer.level)
+      return `hsl(${layer.hue}, ${layer.saturation}%, ${layer.lightness}%)`;
+  }
 };
 
 const biomColor = (

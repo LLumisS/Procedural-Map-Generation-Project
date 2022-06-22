@@ -13,7 +13,7 @@ const average = (...argArray) => {
   return sum / count;
 };
 
-const settingDef = settings => {
+const getSetting = settings => {
   for (const setting of settings)
     if (setting.checked)
       return setting.value;

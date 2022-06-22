@@ -59,7 +59,7 @@ function create() {
 }
 
 function apply() {
-  const setting = settingDef(radioFilter);
+  const setting = getSetting(radioFilter);
   const map = MAP[setting];
 
   table.style.visibility = setting !== 'DEFAULT' ?

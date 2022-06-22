@@ -9,7 +9,6 @@ class Map {
       .map(() => Array(MATRIX_LENGTH).fill(0));
     this.hasCash = false;
 
-    this.callback = () => {};
     this.cbStd = ({ y, x }, ctx) => {
       ctx.fillStyle = color(this.matrix[y][x], this.filter);
       this.cash[y][x] = ctx.fillStyle;
@@ -26,6 +25,7 @@ class Map {
     this.callback = this.hasCash ?
       this.cbCash :
       this.cbStd;
+
     const colorize = ({ y, x }) => {
       this.callback({ y, x }, ctx);
       ctx.fillRect(
