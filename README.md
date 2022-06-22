@@ -9,9 +9,9 @@ Each map has visualization.
 
 Example:
 
-1. <img src="./images/physical.png">
-2. <img src="./images/moisture.png">
-3. <img src="./images/temperature.png">
-4. <img src="./images/default.png">
+1. <img src="images/example/physical.png">
+2. <img src="images/example/moisture.png">
+3. <img src="images/example/temperature.png">
+4. <img src="images/example/default.png">
 
 Try <a href="https://llumiss.github.io/Procedural-Map-Generation-Project/">it</a> by yourself.
