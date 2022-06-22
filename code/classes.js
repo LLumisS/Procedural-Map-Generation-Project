@@ -37,7 +37,7 @@ class Map {
     };
 
     ctx.beginPath();
-    matrixBypassing(colorize, this.matrix);
+    bypassing(colorize, this.matrix);
     ctx.closePath();
 
     this.hasCash = true;
@@ -50,12 +50,12 @@ class HeightMap extends Map {
 
     this.matrix = randomMatrix();
 
-    const fieldTiles = fieldDef(this.matrix);
+    const fieldTiles = field(this.matrix);
     const tiles = Math.pow(this.matrix.length, 2);
     const riversCoef = 1 - Math.abs(0.5 - fieldTiles.length / tiles);
     const riversCount = Math.floor(MAX_RIVERS_COUNT * riversCoef);
 
-    this.rivers = riversGen(
+    this.rivers = getRivers(
       this.matrix,
       riversCount,
       fieldTiles
@@ -84,7 +84,7 @@ class TemperatureMap extends Map {
     super(filter);
 
     this.matrix = randomMatrix(GRIT_COEFFICIENT);
-    coldByHeight(this.matrix, heightMap);
+    cold(this.matrix, heightMap);
     this.matrix = normalize(this.matrix);
   }
 }
@@ -93,7 +93,7 @@ class BiomMap extends Map {
   constructor(filter, heightFilter, heightMap, moistureMap, temperatureMap) {
     super(filter);
 
-    this.matrix = biomsDef(
+    this.matrix = bioms(
       heightMap,
       moistureMap,
       temperatureMap
