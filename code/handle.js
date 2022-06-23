@@ -52,14 +52,24 @@ function averageRandom(matrix, elements, randomRange) {
 }
 
 const bypassing = (
-  callback,
   matrix,
-  startY = 0,
-  startX = 0,
-  endY = matrix.length,
-  endX = matrix.length,
+  callback,
+  init = {}
 ) => {
-  for (let y = startY; y < endY; y++)
-    for (let x = startX; x < endX; x++)
+  const initDefault = {
+    startY: 0,
+    startX: 0,
+    endY: matrix.length,
+    endX: matrix.length,
+    incY: 1,
+    incX: 1,
+  };
+  const keys = Object.keys(initDefault);
+  for (const key of keys)
+    if(!init[key])
+      init[key] = initDefault[key];
+
+  for (let y = init.startY; y < init.endY; y += init.incY)
+    for (let x = init.startX; x < init.endX; x += init.incX)
       callback({ y, x });
 };

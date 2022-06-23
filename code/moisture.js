@@ -23,11 +23,13 @@ function tileMoisture(moistureMap, tile) {
   };
 
   for (let radius = 1; radius <= RIVERS_WET_RADIUS; radius++) {
-    const startY = tile.y - radius;
-    const startX = tile.x - radius;
-    const endY = tile.y + radius;
-    const endX = tile.x + radius;
+    const init = {
+      startY: tile.y - radius,
+      startX: tile.x - radius,
+      endY: tile.y + radius,
+      endX: tile.x + radius,
+    };
 
-    bypassing(extraMoisture, moistureMap, startY, startX, endY, endX);
+    bypassing(moistureMap, extraMoisture, init);
   }
 }

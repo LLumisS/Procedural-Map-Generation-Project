@@ -37,7 +37,7 @@ class Map {
     };
 
     ctx.beginPath();
-    bypassing(colorize, this.matrix);
+    bypassing(this.matrix, colorize);
     ctx.closePath();
 
     this.hasCash = true;

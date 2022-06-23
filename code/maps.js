@@ -7,7 +7,7 @@ function field(heightMap) {
       fieldTiles.push({ y, x });
   };
 
-  bypassing(isField, heightMap);
+  bypassing(heightMap, isField);
 
   return fieldTiles;
 }
@@ -19,7 +19,7 @@ function cold(temperatureMap, heightMap) {
       0;
   };
 
-  bypassing(decrease, temperatureMap);
+  bypassing(temperatureMap, decrease);
 }
 
 function bioms(heightMap, moistureMap, temperatureMap) {
@@ -42,7 +42,7 @@ function bioms(heightMap, moistureMap, temperatureMap) {
     }
   };
 
-  bypassing(getBiom, biomMap);
+  bypassing(biomMap, getBiom);
 
   return biomMap;
 }
