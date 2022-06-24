@@ -33,7 +33,7 @@ function bioms(heightMap, moistureMap, temperatureMap) {
         moisture: moistureMap[y][x] <= biom.moisture,
         temperature: temperatureMap[y][x] <= biom.temperature,
         height: heightMap[y][x] > biom.heightFrom &&
-            heightMap[y][x] <= biom.heightTo,
+          heightMap[y][x] <= biom.heightTo,
       };
       if (enough.moisture && enough.temperature && enough.height) {
         biomMap[y][x] = biom.id;

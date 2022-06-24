@@ -1,36 +1,34 @@
 'use strict';
 
-const getLightness = (
-  heightPercentage,
+const darkening = (
+  height,
   lightnessTable,
-  biom
 ) => {
   let stage;
   for (const level of lightnessTable)
-    if (heightPercentage <= level.height) {
+    if (height <= level.height) {
       stage = level.stage;
       break;
     }
   const change = (1 - DARKNESS_PER_STAGE * stage);
-  return biom.lightness * change;
+  return change;
 };
 
 const color = (percentage, filter) => {
-  for (const layer of filter) {
+  for (const layer of filter)
     if (percentage <= layer.level)
       return `hsl(${layer.hue}, ${layer.saturation}%, ${layer.lightness}%)`;
-  }
 };
 
 const biomColor = (
   biomId,
-  heightPercentage,
+  height,
   biomFilter,
   lightnessTable
 ) => {
   for (const biom of biomFilter)
     if (biomId === biom.id) {
-      const lightness = getLightness(heightPercentage, lightnessTable, biom);
+      const lightness = biom.lightness * darkening(height, lightnessTable);
       return `hsl(${biom.hue}, ${biom.saturation}%, ${lightness}%)`;
     }
 };

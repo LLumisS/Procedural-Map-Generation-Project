@@ -66,7 +66,7 @@ const bypassing = (
   };
   const keys = Object.keys(initDefault);
   for (const key of keys)
-    if(!init[key])
+    if (!init[key])
       init[key] = initDefault[key];
 
   for (let y = init.startY; y < init.endY; y += init.incY)
