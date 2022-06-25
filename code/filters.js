@@ -157,7 +157,7 @@ const LIGHTNESS_TABLE = [
 ];
 
 const FILTERS = {
-  'DEFAULT': [
+  DEFAULT: [
     { name: 'Icy Wasteland',
       id: 1,
       hue: 180,
@@ -268,7 +268,7 @@ const FILTERS = {
     },
   ],
 
-  'PHYSICAL': [
+  PHYSICAL: [
     {
       level: -0.9,
       hue: 220,
@@ -343,7 +343,7 @@ const FILTERS = {
     },
   ],
 
-  'MOISTURE': [
+  MOISTURE: [
     {
       level: -0.75,
       hue: 240,
@@ -394,7 +394,7 @@ const FILTERS = {
     },
   ],
 
-  'TEMPERATURE': [
+  TEMPERATURE: [
     {
       level: -0.75,
       hue: 240,

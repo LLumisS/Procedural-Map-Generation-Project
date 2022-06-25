@@ -25,10 +25,10 @@ const HEIGHT_IMPACT = 0.5;
 const DARKNESS_PER_STAGE = 1 / 8;
 
 const MAP = {
-  'PHYSICAL': null,
-  'MOISTURE': null,
-  'TEMPERATURE': null,
-  'DEFAULT': null,
+  PHYSICAL: null,
+  MOISTURE: null,
+  TEMPERATURE: null,
+  DEFAULT: null,
 };
 
 function create() {
@@ -50,10 +50,10 @@ function create() {
     temperatureMap.matrix
   );
 
-  MAP['PHYSICAL'] = heightMap;
-  MAP['MOISTURE'] = moistureMap;
-  MAP['TEMPERATURE'] = temperatureMap;
-  MAP['DEFAULT'] = defaultMap;
+  MAP.PHYSICAL = heightMap;
+  MAP.MOISTURE = moistureMap;
+  MAP.TEMPERATURE = temperatureMap;
+  MAP.DEFAULT = defaultMap;
 
   apply();
 }
