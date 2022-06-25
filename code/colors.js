@@ -22,8 +22,8 @@ const color = (percentage, filter) => {
 
 const biomColor = (
   biomId,
-  height,
   biomFilter,
+  height,
   lightnessTable
 ) => {
   for (const biom of biomFilter)

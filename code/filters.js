@@ -1,127 +1,127 @@
 'use strict';
 
 const BIOMS = [
-  { //Snowy Peak
-    id: 18,
+  {
+    id: 'snowy_peak',
     moisture: 1,
     temperature: -0.5,
     heightFrom: 0.8,
     heightTo: 1,
   },
-  { //Icy Wasteland
-    id: 1,
+  {
+    id: 'icy_wastelands',
     moisture: -0.5,
     temperature: -0.5,
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Grass Tundra
-    id: 2,
+  {
+    id: 'grass_tundra',
     moisture: 0,
     temperature: -0.5,
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Tree Tundra
-    id: 3,
+  {
+    id: 'tree_tundra',
     moisture: 0.5,
     temperature: -0.5,
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Beach
-    id: 17,
+  {
+    id: 'beach',
     moisture: 1,
     temperature: 1,
     heightFrom: 0,
     heightTo: 0.025,
   },
-  { //Taiga
-    id: 4,
+  {
+    id: 'taiga',
     moisture: 1,
     temperature: -0.5,
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Grass Steppe
-    id: 5,
+  {
+    id: 'grass_steppe',
     moisture: -0.5,
     temperature: 0,
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Tree Steppe
-    id: 6,
+  {
+    id: 'tree_steppe',
     moisture: 0,
     temperature: 0,
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Forest
-    id: 7,
+  {
+    id: 'forest',
     moisture: 0.5,
     temperature: 0,
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Swamp
-    id: 8,
+  {
+    id: 'swamp',
     moisture: 1,
     temperature: 0,
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Semi Desert
-    id: 9,
+  {
+    id: 'semi_desert',
     moisture: -0.5,
     temperature: 0.5,
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Grass Savanna
-    id: 10,
+  {
+    id: 'grass_savanna',
     moisture: 0,
     temperature: 0.5,
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Tree Savanna
-    id: 11,
+  {
+    id: 'tree_savanna',
     moisture: 0.5,
     temperature: 0.5,
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Tropical Moist Forest
-    id: 12,
+  {
+    id: 'tropical_moist_forest',
     moisture: 1,
     temperature: 0.5,
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Desert
-    id: 13,
+  {
+    id: 'desert',
     moisture: -0.5,
     temperature: 1,
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Semi Desert
-    id: 14,
+  {
+    id: 'badlands',
     moisture: 0,
     temperature: 1,
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Tropical Dry Forest
-    id: 15,
+  {
+    id: 'tropical_dry_forest',
     moisture: 0.5,
     temperature: 1,
     heightFrom: 0,
     heightTo: 1,
   },
-  { //Jungle
-    id: 16,
+  {
+    id: 'jungle',
     moisture: 1,
     temperature: 1,
     heightFrom: 0,
@@ -158,110 +158,110 @@ const LIGHTNESS_TABLE = [
 
 const FILTERS = {
   DEFAULT: [
-    { name: 'Icy Wasteland',
-      id: 1,
+    {
+      id: 'icy_wastelands',
       hue: 180,
       saturation: 40,
       lightness: 90,
     },
-    { name: 'Grass Tundra',
-      id: 2,
+    {
+      id: 'grass_tundra',
       hue: 35,
       saturation: 25,
       lightness: 50,
     },
-    { name: 'Tree Tundra',
-      id: 3,
+    {
+      id: 'tree_tundra',
       hue: 70,
       saturation: 15,
       lightness: 50,
     },
-    { name: 'Taiga',
-      id: 4,
+    {
+      id: 'taiga',
       hue: 140,
       saturation: 60,
       lightness: 30,
     },
-    { name: 'Grass Steppe',
-      id: 5,
+    {
+      id: 'grass_steppe',
       hue: 50,
       saturation: 30,
       lightness: 50,
     },
-    { name: 'Tree Steppe',
-      id: 6,
+    {
+      id: 'tree_steppe',
       hue: 80,
       saturation: 30,
       lightness: 50,
     },
-    { name: 'Forest',
-      id: 7,
+    {
+      id: 'forest',
       hue: 120,
       saturation: 60,
       lightness: 40,
     },
-    { name: 'Swamp',
-      id: 8,
+    {
+      id: 'swamp',
       hue: 100,
       saturation: 30,
       lightness: 20,
     },
-    { name: 'Semi Desert',
-      id: 9,
+    {
+      id: 'semi_desert',
       hue: 55,
       saturation: 65,
       lightness: 65,
     },
-    { name: 'Grass Savanna',
-      id: 10,
+    {
+      id: 'grass_savanna',
       hue: 65,
       saturation: 50,
       lightness: 60,
     },
-    { name: 'Tree Savanna',
-      id: 11,
+    {
+      id: 'tree_savanna',
       hue: 75,
       saturation: 50,
       lightness: 60,
     },
-    { name: 'Tropical Moist Forest',
-      id: 12,
+    {
+      id: 'tropical_moist_forest',
       hue: 120,
       saturation: 40,
       lightness: 40,
     },
-    { name: 'Desert',
-      id: 13,
+    {
+      id: 'desert',
       hue: 60,
       saturation: 100,
       lightness: 85,
     },
-    { name: 'Badlands',
-      id: 14,
+    {
+      id: 'badlands',
       hue: 30,
       saturation: 50,
       lightness: 50,
     },
-    { name: 'Tropical Dry Forest',
-      id: 15,
+    {
+      id: 'tropical_dry_forest',
       hue: 100,
       saturation: 15,
       lightness: 40,
     },
-    { name: 'Jungle',
-      id: 16,
+    {
+      id: 'jungle',
       hue: 120,
       saturation: 85,
       lightness: 20,
     },
-    { name: 'Beach',
-      id: 17,
+    {
+      id: 'beach',
       hue: 60,
       saturation: 100,
       lightness: 85,
     },
-    { name: 'Snowy Peak',
-      id: 18,
+    {
+      id: 'snowy_peak',
       hue: 0,
       saturation: 0,
       lightness: 100,
