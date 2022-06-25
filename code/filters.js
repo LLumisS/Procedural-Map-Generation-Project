@@ -159,6 +159,12 @@ const LIGHTNESS_TABLE = [
 const FILTERS = {
   DEFAULT: [
     {
+      id: 'snowy_peak',
+      hue: 0,
+      saturation: 0,
+      lightness: 100,
+    },
+    {
       id: 'icy_wastelands',
       hue: 180,
       saturation: 40,
@@ -175,6 +181,12 @@ const FILTERS = {
       hue: 70,
       saturation: 15,
       lightness: 50,
+    },
+    {
+      id: 'beach',
+      hue: 60,
+      saturation: 100,
+      lightness: 85,
     },
     {
       id: 'taiga',
@@ -253,18 +265,6 @@ const FILTERS = {
       hue: 120,
       saturation: 85,
       lightness: 20,
-    },
-    {
-      id: 'beach',
-      hue: 60,
-      saturation: 100,
-      lightness: 85,
-    },
-    {
-      id: 'snowy_peak',
-      hue: 0,
-      saturation: 0,
-      lightness: 100,
     },
   ],
 
