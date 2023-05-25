@@ -18,9 +18,13 @@ class MapController {
         }
     }
 
-    async get(req, res) {
-        const maps = await Map.findAll();
-        return res.json(maps);
+    async getShared(req, res) {
+        try {
+            const maps = await Map.findAll({where: {shared: true}});
+            return res.json(maps);
+        } catch (e) {
+            next(ApiError.badRequest(e.message));
+        }
     }
 
     async getOne(req, res) {
