@@ -9,7 +9,7 @@ const User = sequelize.define('user', {
 
 const Map = sequelize.define('map', {
     id:     {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    shared: {type: DataTypes.BOOLEAN, defaultValue: false},
+    shared: {type: DataTypes.BOOLEAN, defaultValue: false}
 
 });
 
@@ -23,16 +23,16 @@ const Matrix = sequelize.define('matrix', {
 
 const Mark = sequelize.define('mark', {
     id:    {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    value: {type: DataTypes.INTEGER, allowNull: false},
+    value: {type: DataTypes.INTEGER, allowNull: false}
 });
 
 const Rating = sequelize.define('rating', {
     id:    {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    value: {type: DataTypes.DOUBLE},
+    value: {type: DataTypes.DOUBLE}
 });
 
 const Save = sequelize.define('save', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}
 });
 
 User.hasMany(Map);
@@ -50,11 +50,11 @@ Mark.belongsTo(Map);
 Map.hasMany(Save);
 Save.belongsTo(Map);
 
-Map.hasOne(Matrix);
-Matrix.belongsTo(Map);
+Matrix.hasOne(Map);
+Map.belongsTo(Matrix);
 
-Rating.hasOne(Map);
-Map.belongsTo(Rating);
+Map.hasOne(Rating);
+Rating.belongsTo(Map);
 
 module.exports = {
     User,
