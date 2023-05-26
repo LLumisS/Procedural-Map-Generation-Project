@@ -20,7 +20,12 @@ class MapController {
 
     async getShared(req, res, next) {
         try {
-            const maps = await Map.findAll({where: {shared: true}});
+            let { limit, page } = req.query;
+            page = page || 1;
+            limit = limit || 5;
+            let offset = (page - 1) * limit;
+
+            const maps = await Map.findAndCountAll({where: {shared: true}, limit, offset});
             const rating = await Rating.findAll();
             return res.json({ maps, rating });
         } catch (e) {
@@ -30,14 +35,17 @@ class MapController {
 
     async getSaved(req, res, next) {
         try {
-            const { id } = req.query;
+            let { id, limit, page } = req.query;
             if(!id) {
                 return next(ApiError.badRequest('User ID expected'));
             }
+            page = page || 1;
+            limit = limit || 5;
+            let offset = (page - 1) * limit;
 
-            const saved = await Save.findAll({ where: { userId: id } });
+            const saved = await Save.findAll({ where: { userId: id }, limit, offset });
             const savedId = saved.map(element => element.mapId);
-            const maps = await Map.findAll({ where: { id: savedId } });
+            const maps = await Map.findAndCountAll({ where: { id: savedId }, limit, offset });
 
             return res.json({ maps });
         } catch (e) {
