@@ -52,10 +52,11 @@ class MapController {
     async rate(req, res, next) {
         try {
             const { value, userId, mapId } = req.body;
-            let mark = await Mark.findOne({ where: { userId: userId, mapId: mapId } });
+            const condition = { userId: userId, mapId: mapId };
+            let mark = await Mark.findOne({ where: condition });
             if (mark) {
-                await Mark.update({ value: value }, { where: { userId: userId, mapId: mapId } });
-                mark = await Mark.findOne({ where: { userId: userId, mapId: mapId } });
+                await Mark.update({ value: value }, { where: condition });
+                mark = await Mark.findOne({ where: condition });
             } else {
                 mark = await Mark.create({ value: value, userId: userId, mapId: mapId});
             }
@@ -69,15 +70,16 @@ class MapController {
     async save(req, res, next) {
         try {
             const { userId, mapId } = req.body;
+            const condition = { userId: userId, mapId: mapId };
             if(!mapId || !userId) {
                 return next(ApiError.badRequest('User ID and Map ID expected'));
             }
-            let save = await Save.findOne({ where: { userId: userId, mapId: mapId } });
+            let save = await Save.findOne({ where: condition });
             if(save) {
                 return next(ApiError.badRequest('Already saved'));
             }
     
-            save = await Save.create({userId: userId, mapId: mapId});
+            save = await Save.create(condition);
             return res.json(save);
         } catch (e) {
             next(ApiError.badRequest(e.message));
