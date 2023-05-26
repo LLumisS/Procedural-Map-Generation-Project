@@ -1,4 +1,4 @@
-const { Map, Rating, Save } = require('../models/models');
+const { Map, Rating, Save, Mark } = require('../models/models');
 const ApiError = require('../error/ApiError');
 const uuid = require('uuid');
 const path = require('path');
@@ -49,8 +49,21 @@ class MapController {
         
     }
 
-    async rate(req, res) {
-
+    async rate(req, res, next) {
+        try {
+            const { value, userId, mapId } = req.body;
+            let mark = await Mark.findOne({ where: { userId: userId, mapId: mapId } });
+            if (mark) {
+                await Mark.update({ value: value }, { where: { userId: userId, mapId: mapId } });
+                mark = await Mark.findOne({ where: { userId: userId, mapId: mapId } });
+            } else {
+                mark = await Mark.create({ value: value, userId: userId, mapId: mapId});
+            }
+            
+            return res.json({ mark });
+        } catch (e) {
+            next(ApiError.badRequest(e.message));
+        }
     }
 
     async save(req, res, next) {
