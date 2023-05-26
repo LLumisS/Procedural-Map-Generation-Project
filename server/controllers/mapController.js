@@ -46,17 +46,26 @@ class MapController {
     }
 
     async share(req, res, next) {
-        
+        try {
+            const { id, shared } = req.body;
+            const condition = { where: { id: id } };
+            await Map.update({ shared: shared }, condition);
+            const map = await Map.findOne(condition);
+
+            return res.json({ map });
+        } catch (e) {
+            next(ApiError.badRequest(e.message));
+        }
     }
 
     async rate(req, res, next) {
         try {
             const { value, userId, mapId } = req.body;
-            const condition = { userId: userId, mapId: mapId };
+            const condition = { where: { userId: userId, mapId: mapId } };
             let mark = await Mark.findOne({ where: condition });
             if (mark) {
-                await Mark.update({ value: value }, { where: condition });
-                mark = await Mark.findOne({ where: condition });
+                await Mark.update({ value: value }, condition);
+                mark = await Mark.findOne(condition);
             } else {
                 mark = await Mark.create({ value: value, userId: userId, mapId: mapId});
             }
@@ -70,16 +79,16 @@ class MapController {
     async save(req, res, next) {
         try {
             const { userId, mapId } = req.body;
-            const condition = { userId: userId, mapId: mapId };
+            const condition = {where: { userId: userId, mapId: mapId }};
             if(!mapId || !userId) {
                 return next(ApiError.badRequest('User ID and Map ID expected'));
             }
-            let save = await Save.findOne({ where: condition });
+            let save = await Save.findOne(condition);
             if(save) {
                 return next(ApiError.badRequest('Already saved'));
             }
     
-            save = await Save.create(condition);
+            save = await Save.create({ userId: userId, mapId: mapId });
             return res.json(save);
         } catch (e) {
             next(ApiError.badRequest(e.message));
