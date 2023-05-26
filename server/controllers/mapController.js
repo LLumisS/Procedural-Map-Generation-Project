@@ -83,6 +83,20 @@ class MapController {
             limit = limit || 5;
             let offset = (page - 1) * limit;
 
+            const shared = await SharedMap.findAll();
+            const sharedId = shared.map(element => element.id);
+            for (const id of sharedId) {
+                const marks = await Mark.findAll({ where: { sharedMapId: id }});
+                let sum = 0;
+                let n = 0;
+                for (const mark of marks) {
+                    sum += mark.value;
+                    n++;
+                }
+                const rating = n ? sum/n : 0;
+                await SharedMap.update({ rating: rating }, { where: { id: id}});
+            }
+
             const sharedMap = await SharedMap.findAndCountAll({ limit, offset });
             return res.json(sharedMap);
         } catch (e) {
@@ -112,14 +126,14 @@ class MapController {
 
     async rate(req, res, next) {
         try {
-            const { value, userId, mapId } = req.body;
-            const condition = { where: { userId: userId, mapId: mapId } };
+            const { value, userId, sharedMapId } = req.body;
+            const condition = { where: { userId: userId, sharedMapId: sharedMapId } };
             let mark = await Mark.findOne(condition);
             if (mark) {
                 await Mark.update({ value: value }, condition);
                 mark = await Mark.findOne(condition);
             } else {
-                mark = await Mark.create({ value: value, userId: userId, mapId: mapId});
+                mark = await Mark.create({ value: value, userId: userId, sharedMapId: sharedMapId});
             }
             
             return res.json({ mark });
