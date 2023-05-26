@@ -4,13 +4,22 @@ const {DataTypes} = require('sequelize');
 const User = sequelize.define('user', {
     id:       {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     login:    {type: DataTypes.STRING, unique: true},
-    password: {type: DataTypes.STRING}
+    password: {type: DataTypes.STRING},
+    role:     {type: DataTypes.STRING}
+});
+
+const SavedMap = sequelize.define('saved_map', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}
 });
 
 const Map = sequelize.define('map', {
     id:     {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    matrix: {type: DataTypes.STRING},
-    shared: {type: DataTypes.BOOLEAN}
+    matrix: {type: DataTypes.STRING}
+});
+
+const SharedMap = sequelize.define('shared_map', {
+    id:     {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    rating: {type: DataTypes.DOUBLE}
 });
 
 const Mark = sequelize.define('mark', {
@@ -18,34 +27,25 @@ const Mark = sequelize.define('mark', {
     value: {type: DataTypes.INTEGER, allowNull: false}
 });
 
-const Rating = sequelize.define('rating', {
-    id:    {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    value: {type: DataTypes.DOUBLE}
-});
-
-const Save = sequelize.define('save', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}
-});
+User.hasMany(SavedMap);
+SavedMap.belongsTo(User);
 
 User.hasMany(Mark);
 Mark.belongsTo(User);
 
-User.hasMany(Save);
-Save.belongsTo(User);
+SharedMap.hasMany(Mark);
+Mark.belongsTo(SharedMap);
 
-Map.hasMany(Mark);
-Mark.belongsTo(Map);
+Map.hasMany(SavedMap);
+SavedMap.belongsTo(Map);
 
-Map.hasMany(Save);
-Save.belongsTo(Map);
-
-Map.hasOne(Rating);
-Rating.belongsTo(Map);
+Map.hasMany(SharedMap);
+SharedMap.belongsTo(Map);
 
 module.exports = {
     User,
+    SavedMap,
     Map,
-    Mark,
-    Rating,
-    Save
+    SharedMap,
+    Mark
 }
