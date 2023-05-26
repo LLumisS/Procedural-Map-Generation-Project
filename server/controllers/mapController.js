@@ -1,4 +1,4 @@
-const {Map} = require('../models/models');
+const { Map, Rating, Save } = require('../models/models');
 const ApiError = require('../error/ApiError');
 const uuid = require('uuid');
 const path = require('path');
@@ -21,14 +21,28 @@ class MapController {
     async getShared(req, res) {
         try {
             const maps = await Map.findAll({where: {shared: true}});
-            return res.json(maps);
+            const rating = await Rating.findAll();
+            return res.json({ maps, rating });
         } catch (e) {
             next(ApiError.badRequest(e.message));
         }
     }
 
-    async getOne(req, res) {
+    async getSaved(req, res, next) {
+        try {
+            const { id } = req.query;
+            if(!id) {
+                return next(ApiError.badRequest('User ID expected'));
+            }
 
+            const saved = await Save.findAll({ where: { userId: id } });
+            const savedId = saved.map(element => element.mapId);
+            const maps = await Map.findAll({ where: { id: savedId } });
+
+            return res.json({ maps });
+        } catch (e) {
+            next(ApiError.badRequest(e.message));
+        }
     }
 
     async delete(req, res) {
