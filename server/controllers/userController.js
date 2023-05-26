@@ -13,6 +13,17 @@ class UserController {
     }
 
     async registration(req, res, next) {
+        /* const { login, password } = req.body;
+        if (!login || !password) {
+            return next(ApiError.badRequest('User data expected'));
+        }
+        const candidate = await User.findOne({ where: {login}});
+        if(candidate) {
+            return next(ApiError.badRequest('User already signed up'));
+        }
+        const rounds = 5;
+        const hashPassword = await bcrypt.hash(password, rounds);
+        const user = await User.create({login, password: hashPassword});*/
        try {
         let { login, password, role } = req.body;
         role = role || "user";
