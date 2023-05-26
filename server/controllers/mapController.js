@@ -62,7 +62,7 @@ class MapController {
         try {
             const { value, userId, mapId } = req.body;
             const condition = { where: { userId: userId, mapId: mapId } };
-            let mark = await Mark.findOne({ where: condition });
+            let mark = await Mark.findOne(condition);
             if (mark) {
                 await Mark.update({ value: value }, condition);
                 mark = await Mark.findOne(condition);
