@@ -1,5 +1,6 @@
 const { User } = require('../models/models');
 const ApiError = require('../error/ApiError');
+const bcrypt = require('bcrypt');
 
 class UserController {
     async get (req, res, next) {
@@ -12,13 +13,14 @@ class UserController {
     }
 
     async registration(req, res, next) {
-        try {
-        const { login, password } = req.body;
+       try {
+        let { login, password, role } = req.body;
+        role = role || "user";
         if(!login || !password) {
             return next(ApiError.badRequest('User data expected'));
         }
 
-        const user = await User.create({ login: login, password: password });
+        const user = await User.create({ login: login, password: password, role: role });
         return res.json(user);
         } catch (e) {
             next(ApiError.badRequest(e.message));

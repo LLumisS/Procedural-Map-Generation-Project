@@ -1,18 +1,76 @@
-const { Map, Rating, Save, Mark } = require('../models/models');
+const { Map, SavedMap, SharedMap, Mark } = require('../models/models');
 const ApiError = require('../error/ApiError');
 const uuid = require('uuid');
 const path = require('path');
 
 class MapController {
-    async create(req, res, next) {
+    async saveNew(req, res, next) {
         try {
-            const { shared } = req.body;
+            const { userId } = req.body;
+            if(!userId) {
+                return next(ApiError.badRequest('User ID and Map ID expected'));
+            }
             const { matrix } = req.files;
             let fileName = uuid.v4() + ".jpg";
             matrix.mv(path.resolve(__dirname, '..', 'static', fileName));
+
+            const map = await Map.create({matrix: fileName});
+            const mapId = map.id;
+            const savedMap = await SavedMap.create({mapId: mapId, userId: userId});
+
+            return res.json({ savedMap });
+        } catch (e) {
+            next(ApiError.badRequest(e.message));
+        }
+    }
+
+    async saveOld(req, res, next) {
+        try {
+            const { userId, mapId } = req.body;
+            if(!mapId || !userId) {
+                return next(ApiError.badRequest('User ID and Map ID expected'));
+            }
+            let savedMap = await SavedMap.findOne({where: { userId: userId, mapId: mapId }});
+            if(savedMap) {
+                return next(ApiError.badRequest('Already saved'));
+            }
     
-            const map = await Map.create({matrix: fileName, shared: shared});
-            return res.json(map);
+            savedMap = await SavedMap.create({ userId: userId, mapId: mapId });
+            return res.json(savedMap);
+        } catch (e) {
+            next(ApiError.badRequest(e.message));
+        }
+    }
+
+    async shareNew(req, res, next) {
+        try {
+            const { matrix } = req.files;
+            let fileName = uuid.v4() + ".jpg";
+            matrix.mv(path.resolve(__dirname, '..', 'static', fileName));
+
+            const map = await Map.create({matrix: fileName});
+            const mapId = map.id;
+            const sharedMap = await SharedMap.create({mapId: mapId});
+
+            return res.json({ sharedMap });
+        } catch (e) {
+            next(ApiError.badRequest(e.message));
+        }
+    }
+
+    async shareOld(req, res, next) {
+        try {
+            const { mapId } = req.body;
+            if(!mapId) {
+                return next(ApiError.badRequest('User ID and Map ID expected'));
+            }
+            let sharedMap = await SharedMap.findOne({where: { mapId: mapId }});
+            if(sharedMap) {
+                return next(ApiError.badRequest('Already saved'));
+            }
+    
+            sharedMap = await SharedMap.create({ mapId: mapId });
+            return res.json(sharedMap);
         } catch (e) {
             next(ApiError.badRequest(e.message));
         }
@@ -25,10 +83,8 @@ class MapController {
             limit = limit || 5;
             let offset = (page - 1) * limit;
 
-            const maps = await Map.findAndCountAll({where: {shared: true}, limit, offset});
-            const rating = await Rating.findAll();
-            maps.rating = rating;
-            return res.json(maps);
+            const sharedMap = await SharedMap.findAndCountAll({ limit, offset });
+            return res.json(sharedMap);
         } catch (e) {
             next(ApiError.badRequest(e.message));
         }
@@ -44,24 +100,11 @@ class MapController {
             limit = limit || 5;
             let offset = (page - 1) * limit;
 
-            const saved = await Save.findAll({ where: { userId: id }, limit, offset });
+            const saved = await SavedMap.findAll({ where: { userId: id }, limit, offset });
             const savedId = saved.map(element => element.mapId);
             const maps = await Map.findAndCountAll({ where: { id: savedId }, limit, offset });
 
             return res.json({ maps });
-        } catch (e) {
-            next(ApiError.badRequest(e.message));
-        }
-    }
-
-    async share(req, res, next) {
-        try {
-            const { id, shared } = req.body;
-            const condition = { where: { id: id } };
-            await Map.update({ shared: shared }, condition);
-            const map = await Map.findOne(condition);
-
-            return res.json({ map });
         } catch (e) {
             next(ApiError.badRequest(e.message));
         }
@@ -80,25 +123,6 @@ class MapController {
             }
             
             return res.json({ mark });
-        } catch (e) {
-            next(ApiError.badRequest(e.message));
-        }
-    }
-
-    async save(req, res, next) {
-        try {
-            const { userId, mapId } = req.body;
-            const condition = {where: { userId: userId, mapId: mapId }};
-            if(!mapId || !userId) {
-                return next(ApiError.badRequest('User ID and Map ID expected'));
-            }
-            let save = await Save.findOne(condition);
-            if(save) {
-                return next(ApiError.badRequest('Already saved'));
-            }
-    
-            save = await Save.create({ userId: userId, mapId: mapId });
-            return res.json(save);
         } catch (e) {
             next(ApiError.badRequest(e.message));
         }
