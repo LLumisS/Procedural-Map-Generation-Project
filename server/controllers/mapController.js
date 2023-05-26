@@ -18,7 +18,7 @@ class MapController {
         }
     }
 
-    async getShared(req, res) {
+    async getShared(req, res, next) {
         try {
             const maps = await Map.findAll({where: {shared: true}});
             const rating = await Rating.findAll();
@@ -40,6 +40,32 @@ class MapController {
             const maps = await Map.findAll({ where: { id: savedId } });
 
             return res.json({ maps });
+        } catch (e) {
+            next(ApiError.badRequest(e.message));
+        }
+    }
+
+    async share(req, res, next) {
+        
+    }
+
+    async rate(req, res) {
+
+    }
+
+    async save(req, res, next) {
+        try {
+            const { userId, mapId } = req.body;
+            if(!mapId || !userId) {
+                return next(ApiError.badRequest('User ID and Map ID expected'));
+            }
+            let save = await Save.findOne({ where: { userId: userId, mapId: mapId } });
+            if(save) {
+                return next(ApiError.badRequest('Already saved'));
+            }
+    
+            save = await Save.create({userId: userId, mapId: mapId});
+            return res.json(save);
         } catch (e) {
             next(ApiError.badRequest(e.message));
         }
