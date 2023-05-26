@@ -27,7 +27,8 @@ class MapController {
 
             const maps = await Map.findAndCountAll({where: {shared: true}, limit, offset});
             const rating = await Rating.findAll();
-            return res.json({ maps, rating });
+            maps.rating = rating;
+            return res.json(maps);
         } catch (e) {
             next(ApiError.badRequest(e.message));
         }
