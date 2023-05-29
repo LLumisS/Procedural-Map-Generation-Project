@@ -158,7 +158,7 @@ class MapController {
         next(ApiError.badRequest('Map not found'));
       }
 
-      return res.json({ deletedRows });
+      return res.json({ deletedMap });
     } catch (e) {
       next(ApiError.badRequest(e.message));
     }
