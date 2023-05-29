@@ -1,19 +1,21 @@
+'use strict';
+
 const { User } = require('../models/models');
 const ApiError = require('../error/ApiError');
 const bcrypt = require('bcrypt');
 
 class UserController {
-    async get (req, res, next) {
-        try {
-            const users = await User.findAll();
-            return res.json({ users });
-        } catch (e) {
-            next(ApiError.badRequest(e.message));
-        }
+  async get(req, res, next) {
+    try {
+      const users = await User.findAll();
+      return res.json({ users });
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
     }
+  }
 
-    async registration(req, res, next) {
-        /* const { login, password } = req.body;
+  async registration(req, res, next) {
+    /* const { login, password } = req.body;
         if (!login || !password) {
             return next(ApiError.badRequest('User data expected'));
         }
@@ -24,31 +26,32 @@ class UserController {
         const rounds = 5;
         const hashPassword = await bcrypt.hash(password, rounds);
         const user = await User.create({login, password: hashPassword});*/
-       try {
-        let { login, password, role } = req.body;
-        role = role || "user";
-        if(!login || !password) {
-            return next(ApiError.badRequest('User data expected'));
-        }
+    try {
+      const { login, password } = req.body;
+      let { role } = req.body;
+      role = role || 'user';
+      if (!login || !password) {
+        return next(ApiError.badRequest('User data expected'));
+      }
 
-        const user = await User.create({ login: login, password: password, role: role });
-        return res.json(user);
-        } catch (e) {
-            next(ApiError.badRequest(e.message));
-        }
+      const user = await User.create({ login, password, role });
+      return res.json(user);
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
     }
+  }
 
-    async login(req, res) {
-        
-    }
+  async login(req, res) {
 
-    async check(req, res, next) {
-        const {id} = req.query;
-        if(!id) {
-            return next(ApiError.badRequest('User ID expected'));
-        }
-        res.json(id);
+  }
+
+  async check(req, res, next) {
+    const { id } = req.query;
+    if (!id) {
+      return next(ApiError.badRequest('User ID expected'));
     }
+    res.json(id);
+  }
 }
 
 module.exports = new UserController();

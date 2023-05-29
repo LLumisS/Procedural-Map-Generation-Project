@@ -1,3 +1,5 @@
+'use strict';
+
 const Router = require('express');
 const router = new Router();
 const mapController = require('../controllers/mapController');
@@ -13,6 +15,6 @@ router.post('/shareold', mapController.shareOld);
 
 router.post('/rate', mapController.rate);
 
-router.delete('/', mapController.delete);
+router.delete('/saved', mapController.deleteSaved);
 
 module.exports = router;
