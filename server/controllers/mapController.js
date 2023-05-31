@@ -5,12 +5,28 @@ const ApiError = require('../error/ApiError');
 const uuid = require('uuid');
 const path = require('path');
 
+async function deleteMap(mapToDelete, mapToCheck, next, mapId, userId) {
+  const condition = userId ? { userId, mapId } : { mapId };
+  const deletedMap = await mapToDelete.destroy({ where: condition });
+
+  if (!deletedMap) {
+    next(ApiError.badRequest('Map not found'));
+  }
+
+  const used = await mapToCheck.findOne({ where: { mapId } });
+  if (!used) {
+    await Map.destroy({ where: { id: mapId } });
+  }
+
+  return deletedMap;
+}
+
 class MapController {
   async saveNew(req, res, next) {
     try {
       const { userId } = req.body;
       if (!userId) {
-        return next(ApiError.badRequest('User ID and Map ID expected'));
+        return next(ApiError.badRequest('User ID expected'));
       }
       const { matrix } = req.files;
       const fileName = uuid.v4() + '.jpg';
@@ -64,7 +80,7 @@ class MapController {
     try {
       const { mapId } = req.body;
       if (!mapId) {
-        return next(ApiError.badRequest('User ID and Map ID expected'));
+        return next(ApiError.badRequest('Map ID expected'));
       }
       let sharedMap = await SharedMap.findOne({ where: { mapId } });
       if (sharedMap) {
@@ -152,16 +168,10 @@ class MapController {
   async deleteSaved(req, res, next) {
     try {
       const { userId, mapId } = req.body;
-      const deletedMap = await SavedMap.destroy({ where: { userId, mapId } });
 
-      if (!deletedMap) {
-        next(ApiError.badRequest('Map not found'));
-      }
-
-      const used = await SharedMap.findOne({ where: { mapId } });
-      if (!used) {
-        await Map.destroy({ where: { id: mapId } });
-      }
+      const deletedMap = await deleteMap(
+        SavedMap, SharedMap, next, mapId, userId
+      );
 
       return res.json({ deletedMap });
     } catch (e) {
@@ -172,16 +182,10 @@ class MapController {
   async deleteShared(req, res, next) {
     try {
       const { mapId } = req.body;
-      const deletedMap = await SharedMap.destroy({ where: { mapId } });
 
-      if (!deletedMap) {
-        next(ApiError.badRequest('Map not found'));
-      }
+      const deletedMap = await deleteMap(SharedMap, SavedMap, next, mapId, 0);
 
-      const used = await SavedMap.findOne({ where: { mapId } });
-      if (!used) {
-        await Map.destroy({ where: { id: mapId } });
-      }
+      await Mark.destroy({ where: { mapId } });
 
       return res.json({ deletedMap });
     } catch (e) {
