@@ -163,6 +163,8 @@ class MapController {
       next(ApiError.badRequest(e.message));
     }
   }
+
+  async deleteShared(req, res, next) { return res.json({ message: 'OK!' }); }
 }
 
 module.exports = new MapController();
