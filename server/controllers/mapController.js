@@ -86,8 +86,8 @@ class MapController {
       const offset = (page - 1) * limit;
 
       const shared = await SharedMap.findAll();
-      const sharedId = shared.map(element => element.id);
-      for (const id of sharedId) {
+      const sharedIds = shared.map(element => element.id);
+      for (const id of sharedIds) {
         const marks = await Mark.findAll({ where: { sharedMapId: id } });
         let sum = 0;
         let n = 0;
