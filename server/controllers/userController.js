@@ -41,8 +41,24 @@ class UserController {
     return res.json({ token });
   }
 
-  async login(req, res) {
+  async login(req, res, next) {
+    const { login, password } = req.body;
+    if (!login || !password) {
+      return next(ApiError.badRequest('User data expected'));
+    }
 
+    const user = await User.findOne({ where: { login } });
+    if (!user) {
+      return next(ApiError.badRequest('User not found'));
+    }
+
+    const compare = bcrypt.compareSync(password, user.password);
+    if (!compare) {
+      return next(ApiError.badRequest('Incorrect password'));
+    }
+
+    const token = generateJwt(user.id, user.role);
+    return res.json({ token });
   }
 
   async check(req, res, next) {
