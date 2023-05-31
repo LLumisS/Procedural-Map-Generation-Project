@@ -6,7 +6,7 @@ module.exports = function(req, res, next) {
   if (req.method === 'OPTIONS') {
     next();
   }
-
+  //Solve duplicated code problem (checkRole)
   try {
     const token = req.headers.authorization.split(' ')[1];
     if (!token) {
