@@ -62,11 +62,9 @@ class UserController {
   }
 
   async check(req, res, next) {
-    const { id } = req.query;
-    if (!id) {
-      return next(ApiError.badRequest('User ID expected'));
-    }
-    res.json(id);
+    const user = req.user;
+    const token = generateJwt(user.id, user.role);
+    return res.json({ token });
   }
 }
 
