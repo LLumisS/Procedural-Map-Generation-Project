@@ -183,9 +183,8 @@ class MapController {
     try {
       const { mapId } = req.body;
 
+      await Mark.destroy({ where: { sharedMapId: mapId } });
       const deletedMap = await deleteMap(SharedMap, SavedMap, next, mapId, 0);
-
-      await Mark.destroy({ where: { mapId } });
 
       return res.json({ deletedMap });
     } catch (e) {
