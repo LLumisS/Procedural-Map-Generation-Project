@@ -153,9 +153,14 @@ class MapController {
     try {
       const { userId, mapId } = req.body;
       const deletedMap = await SavedMap.destroy({ where: { userId, mapId } });
-      //Check using of the map (to delete it or not)
+
       if (!deletedMap) {
         next(ApiError.badRequest('Map not found'));
+      }
+
+      const used = await SharedMap.findOne({ where: { mapId } });
+      if (!used) {
+        await Map.destroy({ where: { id: mapId } });
       }
 
       return res.json({ deletedMap });
@@ -168,9 +173,14 @@ class MapController {
     try {
       const { mapId } = req.body;
       const deletedMap = await SharedMap.destroy({ where: { mapId } });
-      //Check using of the map (to delete it or not)
+
       if (!deletedMap) {
         next(ApiError.badRequest('Map not found'));
+      }
+
+      const used = await SavedMap.findOne({ where: { mapId } });
+      if (!used) {
+        await Map.destroy({ where: { id: mapId } });
       }
 
       return res.json({ deletedMap });
