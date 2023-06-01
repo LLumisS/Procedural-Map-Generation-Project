@@ -3,7 +3,14 @@ import Auth from './pages/Auth';
 import Generator from './pages/Generator';
 import Homepage from './pages/Homepage';
 import Saves from './pages/Saves';
-import { ADMIN_ROUTE } from './utils/consts';
+import {
+  ADMIN_ROUTE,
+  SAVES_ROUTE,
+  GENERATOR_ROUTE,
+  HOMEPAGE_ROUTE,
+  REGISTRATION_ROUTE,
+  LOGIN_ROUTE,
+} from './utils/consts';
 
 export const authRoutes = [
   {
