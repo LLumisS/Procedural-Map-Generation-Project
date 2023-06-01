@@ -1,9 +1,6 @@
 import React, { useContext } from 'react';
 import { Context } from '../index';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import { Button } from 'react-bootstrap';
-import Container from 'react-bootstrap/Container';
+import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import {
   GENERATOR_ROUTE,
   HOMEPAGE_ROUTE,
@@ -18,15 +15,27 @@ const NavBar = () => {
     <Navbar bg="dark" variant="dark">
       <Container>
         <Navbar.Brand href={GENERATOR_ROUTE}>GENERATOR</Navbar.Brand>
-        <Nav className="mr-auto">
-          <Nav.Link href={HOMEPAGE_ROUTE}>Homepage</Nav.Link>
-          <Nav.Link href="/profile">Profile</Nav.Link>
-          <Nav.Link href={SAVES_ROUTE}>Saves</Nav.Link>
-        </Nav>
-        <Nav className="ml-auto">
-          <Button href={LOGIN_ROUTE}>Log In</Button>
-          <Nav.Link href={REGISTRATION_ROUTE}>Sign Up</Nav.Link>
-        </Nav>
+
+        {user.isAuth ?
+          <>
+            <Nav className="mr-auto">
+              <Nav.Link href={HOMEPAGE_ROUTE}>Homepage</Nav.Link>
+              <Nav.Link href={SAVES_ROUTE}>Saves</Nav.Link>
+            </Nav>
+            <Nav className="ml-auto">
+              <Button>Log Out</Button>
+            </Nav>
+          </> :
+          <>
+            <Nav className="mr-auto">
+              <Nav.Link href={HOMEPAGE_ROUTE}>Homepage</Nav.Link>
+            </Nav>
+            <Nav className="ml-auto">
+              <Button href={LOGIN_ROUTE}>Log In</Button>
+              <Nav.Link href={REGISTRATION_ROUTE}>Sign Up</Nav.Link>
+            </Nav>
+          </>
+        }
       </Container>
     </Navbar>
   );
