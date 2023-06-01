@@ -14,7 +14,7 @@ const CanvasComponent = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
 
-    context.fillStyle = 'red';
+    context.fillStyle = 'green';
     context.fillRect(0, 0, canvas.width, canvas.height);
   }, []);
 
