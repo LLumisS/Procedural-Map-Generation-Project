@@ -86,17 +86,3 @@ const Generator = () => (
 );
 
 export default Generator;
-/*
-<div style={{ flex: '1' }}>
-          <img
-            src={tableImage}
-            alt="Table"
-            style={{
-              marginTop: '10px',
-              marginLeft: '10px',
-              backgroundColor: 'floralwhite',
-              width: '395px',
-              height: '360px'
-            }}
-          />
-        </div> */
