@@ -23,7 +23,7 @@ const CanvasComponent = () => {
 
 const Generator = () => (
   <Container
-    className="d-flex justify-content-center align-items-center"
+    //className="d-flex justify-content-center align-items-center"
     style={{ height: window.innerHeight - 54 }}>
     <div>
       <h3 style={{ marginTop: '20px' }}
@@ -67,7 +67,9 @@ const Generator = () => (
         </Card>
       </div>
     </div>
-    {/*     <div style={{ flex: '1' }}>
+    <div style={{ flex: '1' }}
+      //className="d-flex justify-content-center align-items-center"
+    >
       <img
         src={tableImage}
         alt="Table"
@@ -79,7 +81,7 @@ const Generator = () => (
           height: '360px'
         }}
       />
-    </div> */}
+    </div>
   </Container>
 );
 
