@@ -58,11 +58,15 @@ const Generator = () => (
               )}
             </Form>
             <div className="d-flex justify-content-center">
-              <Button className="mt-2" style={{ width: '150px' }}>Apply</Button>
+              <Button className="mt-2"
+                style={{ width: '135px',
+                  backgroundColor: '#dbdbdb',
+                  color: 'black',
+                  borderColor: 'black' }}>Apply</Button>
             </div>
             <div className="d-flex justify-content-center">
               <Button className="mt-5"
-                style={{ width: '150px' }}>Create</Button>
+                style={{ width: '180px', height: '47px' }}>Create</Button>
             </div>
           </Card>
         </div>
