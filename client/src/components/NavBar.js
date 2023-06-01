@@ -9,14 +9,14 @@ import {
   LOGIN_ROUTE,
   REGISTRATION_ROUTE,
 } from '../utils/consts';
+import { observer } from 'mobx-react-lite';
 
-const NavBar = () => {
+const NavBar = observer(() => {
   const { user } = useContext(Context);
   return (
     <Navbar bg="dark" variant="dark">
       <Container>
         <Navbar.Brand href={GENERATOR_ROUTE}>GENERATOR</Navbar.Brand>
-
         {user.isAuth ?
           <>
             <Nav className="mr-auto">
@@ -41,6 +41,6 @@ const NavBar = () => {
       </Container>
     </Navbar>
   );
-};
+});
 
 export default NavBar;
