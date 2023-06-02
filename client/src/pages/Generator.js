@@ -1,11 +1,18 @@
 import React from 'react';
 import { useRef, useEffect } from 'react';
 import tableImage from '../table.png';
-import { Button, Form, Container, Card } from 'react-bootstrap';
+import { Button, ButtonGroup, Form, Container, Card } from 'react-bootstrap';
 import { observer } from 'mobx-react-lite';
 
 const WIDTH = 400;
 const HEIGHT = 400;
+
+const buttonStyle = {
+  width: '100px',
+  backgroundColor: '#dbdbdb',
+  color: 'black',
+  borderColor: 'black'
+};
 
 const CanvasComponent = () => {
   const canvasRef = useRef(null);
@@ -70,8 +77,16 @@ const Generator = () => (
             </div>
           </Card>
         </div>
+        <div className="d-flex justify-content-center">
+          <ButtonGroup
+            style={{ marginTop: '15px', width: `${WIDTH + 30 + 270}px` }}>
+            <Button style={buttonStyle}>Download</Button>
+            <Button style={buttonStyle}>Save</Button>
+            <Button style={buttonStyle}>Share</Button>
+          </ButtonGroup>
+        </div>
       </div></Card>
-    <div style={{ flex: '1' }}>
+    <div style={{ flex: '1' }} className="d-flex justify-content-center">
       <img
         src={tableImage}
         alt="Table"
