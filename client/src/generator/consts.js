@@ -1,6 +1,22 @@
-'use strict';
+export const N = 8;
+export const MATRIX_LENGTH = Math.pow(2, N) + 1;
 
-const BIOMS = [
+export const MAX_RIVERS_COUNT = 6;
+export const RIVERS_WET_RADIUS = 14;
+export const MIN_RIVERS_LENGTH = 15;
+export const EXTRA_MOISTURE = 1 / 1100;
+
+export const PIXEL_SIZE = 2;
+
+export const RANDOM_RANGE_CORNERS = 40;
+export const RANDOM_RANGE_COMMON = 160;
+export const GRIT_COEFFICIENT = 4;
+
+export const WATER_LEVEL = 0;
+export const HEIGHT_IMPACT = 0.5;
+export const DARKNESS_PER_STAGE = 1 / 8;
+
+export const BIOMS = [
   {
     id: 'snowy_peak',
     moisture: 1,
@@ -129,7 +145,7 @@ const BIOMS = [
   },
 ];
 
-const LIGHTNESS_TABLE = [
+export const LIGHTNESS_TABLE = [
   {
     height: 0.2,
     stage: 0,
@@ -156,7 +172,7 @@ const LIGHTNESS_TABLE = [
   },
 ];
 
-const FILTERS = {
+export const FILTERS = {
   DEFAULT: [
     {
       id: 'snowy_peak',

@@ -1,4 +1,4 @@
-'use strict';
+import { DARKNESS_PER_STAGE } from './consts';
 
 const darkening = (
   height,
@@ -14,13 +14,13 @@ const darkening = (
   return change;
 };
 
-const color = (percentage, filter) => {
+export const color = (percentage, filter) => {
   for (const layer of filter)
     if (percentage <= layer.level)
       return `hsl(${layer.hue}, ${layer.saturation}%, ${layer.lightness}%)`;
 };
 
-const biomColor = (
+export const biomColor = (
   biomId,
   biomFilter,
   height,

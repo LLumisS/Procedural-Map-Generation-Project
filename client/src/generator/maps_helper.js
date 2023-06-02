@@ -1,7 +1,8 @@
-'use strict';
+import { HEIGHT_IMPACT, WATER_LEVEL, MATRIX_LENGTH, BIOMS } from './consts';
+import { bypassing } from './helper';
 
-function field(heightMap) {
-  const fieldTiles = Array();
+export function field(heightMap) {
+  const fieldTiles = [];
   const isField = ({ y, x }) => {
     if (heightMap[y][x] > WATER_LEVEL)
       fieldTiles.push({ y, x });
@@ -12,7 +13,7 @@ function field(heightMap) {
   return fieldTiles;
 }
 
-function cold(temperatureMap, heightMap) {
+export function cold(temperatureMap, heightMap) {
   const decrease = ({ y, x }) => {
     temperatureMap[y][x] -= (heightMap[y][x] > WATER_LEVEL) ?
       (heightMap[y][x] * HEIGHT_IMPACT) :
@@ -22,7 +23,7 @@ function cold(temperatureMap, heightMap) {
   bypassing(temperatureMap, decrease);
 }
 
-function bioms(heightMap, moistureMap, temperatureMap) {
+export function bioms(heightMap, moistureMap, temperatureMap) {
   const biomMap = Array(MATRIX_LENGTH)
     .fill(null)
     .map(() => Array(MATRIX_LENGTH).fill(0));

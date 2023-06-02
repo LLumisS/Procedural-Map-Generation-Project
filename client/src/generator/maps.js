@@ -1,4 +1,17 @@
-'use strict';
+import {
+  MATRIX_LENGTH,
+  PIXEL_SIZE,
+  MAX_RIVERS_COUNT,
+  WATER_LEVEL,
+  GRIT_COEFFICIENT,
+  LIGHTNESS_TABLE,
+} from './consts';
+import { color, biomColor } from './colors';
+import { bypassing } from './helper';
+import { randomMatrix, normalize } from './matrix';
+import { getRivers } from './rivers';
+import { field, cold, bioms } from './maps_helper';
+import { riversMoisture } from './moisture';
 
 class Map {
   constructor(filter) {
@@ -18,7 +31,7 @@ class Map {
     };
   }
 
-  draw() {
+  draw(canvas) {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.height, canvas.width);
 
@@ -44,7 +57,7 @@ class Map {
   }
 }
 
-class HeightMap extends Map {
+export class HeightMap extends Map {
   constructor(filter) {
     super(filter);
 
@@ -69,7 +82,7 @@ class HeightMap extends Map {
   }
 }
 
-class MoistureMap extends Map {
+export class MoistureMap extends Map {
   constructor(filter, rivers) {
     super(filter);
 
@@ -79,7 +92,7 @@ class MoistureMap extends Map {
   }
 }
 
-class TemperatureMap extends Map {
+export class TemperatureMap extends Map {
   constructor(filter, heightMap) {
     super(filter);
 
@@ -89,7 +102,7 @@ class TemperatureMap extends Map {
   }
 }
 
-class BiomMap extends Map {
+export class BiomMap extends Map {
   constructor(filter, heightFilter, heightMap, moistureMap, temperatureMap) {
     super(filter);
 

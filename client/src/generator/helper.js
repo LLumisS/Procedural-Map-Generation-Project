@@ -1,6 +1,5 @@
-'use strict';
-
-const random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
+export const random = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1) + min);
 
 const average = (...argArray) => {
   let sum = 0;
@@ -13,13 +12,13 @@ const average = (...argArray) => {
   return sum / count;
 };
 
-const getSetting = settings => {
+export const getSetting = settings => {
   for (const setting of settings)
     if (setting.checked)
       return setting.value;
 };
 
-const min = (...argArray) => {
+export const min = (...argArray) => {
   let min = Infinity;
   for (const arg of argArray)
     if (!isNaN(arg) && arg !== null)
@@ -30,14 +29,14 @@ const min = (...argArray) => {
   return min;
 };
 
-const includes = (array, tile) => {
+export const includes = (array, tile) => {
   for (const pixel of array)
     if (pixel.y === tile.y && pixel.x === tile.x)
       return true;
   return false;
 };
 
-function averageRandom(matrix, elements, randomRange) {
+export function averageRandom(matrix, elements, randomRange) {
   const values = [];
   for (const elem of elements) {
     const x = elem.x;
@@ -51,7 +50,7 @@ function averageRandom(matrix, elements, randomRange) {
   return average(...values) + random(-randomRange, randomRange);
 }
 
-const bypassing = (
+export const bypassing = (
   matrix,
   callback,
   init = {}

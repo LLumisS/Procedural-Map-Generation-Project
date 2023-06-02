@@ -1,6 +1,7 @@
-'use strict';
+import { EXTRA_MOISTURE, RIVERS_WET_RADIUS } from './consts';
+import { bypassing } from './helper';
 
-function riversMoisture(moistureMap, rivers) {
+export function riversMoisture(moistureMap, rivers) {
   const riversCount = rivers.length;
   for (let n = 0; n < riversCount; n++) {
     const river = rivers[n];

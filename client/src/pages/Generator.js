@@ -2,30 +2,29 @@ import React from 'react';
 import { useRef, useEffect } from 'react';
 import tableImage from '../table.png';
 import { Button, ButtonGroup, Form, Container, Card } from 'react-bootstrap';
-import { observer } from 'mobx-react-lite';
+import { create, /* apply, */ MAP } from '../generator/start';
+import { MATRIX_LENGTH, PIXEL_SIZE } from '../generator/consts';
 
-const WIDTH = 400;
-const HEIGHT = 400;
+const WIDTH = MATRIX_LENGTH * PIXEL_SIZE;
+const HEIGHT = MATRIX_LENGTH * PIXEL_SIZE;
+
+const CanvasComponent = (table, filter) => {
+  const canvasRef = useRef(null);
+  create();
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    MAP['DEFAULT'].draw(canvas);
+  }, []);
+
+  return <canvas ref={canvasRef} width={WIDTH} height={HEIGHT} />;
+};
 
 const buttonStyle = {
   width: '100px',
   backgroundColor: '#dbdbdb',
   color: 'black',
   borderColor: 'black'
-};
-
-const CanvasComponent = () => {
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-
-    context.fillStyle = 'green';
-    context.fillRect(0, 0, canvas.width, canvas.height);
-  }, []);
-
-  return <canvas ref={canvasRef} width={WIDTH} height={HEIGHT} />;
 };
 
 const Generator = () => (
