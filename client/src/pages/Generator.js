@@ -2,13 +2,13 @@ import React from 'react';
 import { useRef, useEffect } from 'react';
 import tableImage from '../table.png';
 import { Button, ButtonGroup, Form, Container, Card } from 'react-bootstrap';
-import { create, /* apply, */ MAP } from '../generator/start';
+import { create, MAP } from '../generator/start';
 import { MATRIX_LENGTH, PIXEL_SIZE } from '../generator/consts';
 
 const WIDTH = MATRIX_LENGTH * PIXEL_SIZE;
 const HEIGHT = MATRIX_LENGTH * PIXEL_SIZE;
 
-const CanvasComponent = (table, filter) => {
+const CanvasComponent = () => {
   const canvasRef = useRef(null);
   create();
 
@@ -17,7 +17,8 @@ const CanvasComponent = (table, filter) => {
     MAP['DEFAULT'].draw(canvas);
   }, []);
 
-  return <canvas ref={canvasRef} width={WIDTH} height={HEIGHT} />;
+  return <canvas ref={canvasRef} width={WIDTH} height={HEIGHT}
+    style={{ display: 'block', boxSizing: 'border-box' }} />;
 };
 
 const buttonStyle = {
@@ -37,12 +38,12 @@ const Generator = () => (
         <div style={{ display: 'flex',  flexDirection: 'row'  }}
           className="d-flex justify-content-center">
           <div style={{ flex: '0 0 400px',
-            marginTop: '5px' }}>
+            marginTop: '5px', border: '2px solid black' }}>
             <CanvasComponent />
           </div>
           <Card style={{
             width: 270,
-            height: HEIGHT,
+            height: `${HEIGHT + 3}px`,
             marginLeft: '30px',
             marginTop: '5px',
             backgroundColor: '#f7f7f7', }} className="p-4">
@@ -92,7 +93,6 @@ const Generator = () => (
         style={{
           marginTop: '10px',
           marginLeft: '10px',
-          backgroundColor: 'floralwhite',
           width: '395px',
           height: '360px'
         }}
