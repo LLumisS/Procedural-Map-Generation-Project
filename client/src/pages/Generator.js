@@ -61,7 +61,8 @@ const MapActions = () => (
 );
 
 const CreateButton = () => (
-  <div className="d-flex justify-content-center">
+  <div className="d-flex justify-content-center align-items-end"
+    style={{ height: '100%' }}>
     <Button className="mt-5" style={{ width: '180px', height: '47px' }}>
       Create
     </Button>
