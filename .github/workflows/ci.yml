@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - fullstack
+  pull_request:
+    branches:
+      - main
+      - fullstack
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up environment variables
+        run: echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
