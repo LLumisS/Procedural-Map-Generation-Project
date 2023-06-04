@@ -96,9 +96,7 @@ class MapController {
 
   async getShared(req, res, next) {
     try {
-      let { limit, page } = req.query;
-      page = page || 1;
-      limit = limit || 5;
+      const { userId, limit = 5, page = 1 } = req.query;
       const offset = (page - 1) * limit;
 
       const shared = await SharedMap.findAll();
@@ -121,6 +119,10 @@ class MapController {
 
       const result = [];
       for (let i = 0; i < maps.length; i++) {
+        const sharedMapId = mapsId[i];
+        const condition = { where: { userId, sharedMapId } };
+        const mark = await Mark.findOne(condition) ?
+          await Mark.findOne(condition) : 0;
         result.push({
           id: sharedMap.rows[i].id,
           rating: sharedMap.rows[i].rating,
@@ -128,6 +130,7 @@ class MapController {
           updatedAt: sharedMap.rows[i].updatedAt,
           mapId: sharedMap.rows[i].mapId,
           matrix: maps[i].matrix,
+          mark: mark.value,
         });
       }
 
