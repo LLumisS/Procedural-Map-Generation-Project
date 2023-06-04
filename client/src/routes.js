@@ -1,7 +1,6 @@
 import Auth from './pages/Auth';
 import Generator from './pages/Generator';
-import Homepage from './pages/Homepage';
-import Saves from './pages/Saves';
+import Showing from './pages/Showing';
 import {
   SAVES_ROUTE,
   GENERATOR_ROUTE,
@@ -13,7 +12,7 @@ import {
 export const authRoutes = [
   {
     path: SAVES_ROUTE,
-    Component: Saves
+    Component: Showing
   },
 ];
 
@@ -24,7 +23,7 @@ export const publicRoutes = [
   },
   {
     path: HOMEPAGE_ROUTE,
-    Component: Homepage
+    Component: Showing
   },
   {
     path: REGISTRATION_ROUTE,

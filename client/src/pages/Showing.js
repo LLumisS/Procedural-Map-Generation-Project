@@ -3,6 +3,8 @@ import RatingStars from 'react-rating-stars-component';
 import { Container, Button, Card, Image } from 'react-bootstrap';
 import { MATRIX_LENGTH, PIXEL_SIZE } from '../generator/consts';
 import { Context } from '..';
+import { useLocation } from 'react-router-dom';
+import { HOMEPAGE_ROUTE } from '../utils/consts';
 
 const WIDTH = MATRIX_LENGTH * PIXEL_SIZE;
 const HEIGHT = MATRIX_LENGTH * PIXEL_SIZE;
@@ -14,17 +16,22 @@ const filterStyle = {
   borderColor: 'black'
 };
 
-const Homepage = () => {
+const Showing = () => {
   const { user, maps } = useContext(Context);
+
+  const location = useLocation();
+  const isSharedPage = location.pathname === HOMEPAGE_ROUTE;
+
+  const data = isSharedPage ? maps.shares : maps.saves;
 
   return (
     <Container>
       <div className="mb-2" style={{ marginTop: '15px',
         display: 'flex', justifyContent: 'flex-end' }}>
-        <Button style={filterStyle}>Rating</Button>
+        { isSharedPage ? <Button style={filterStyle}>Rating</Button> : <></>}
         <Button style={filterStyle} className="ml-2">Time</Button>
       </div>
-      {maps.shares.map(item => (
+      {data.map(item => (
         <Card
           style={{
             marginTop: '10px',
@@ -37,19 +44,22 @@ const Homepage = () => {
                 height={HEIGHT} />
             </div>
             <div>
-              <div
-                className="d-flex justify-content-between align-items-center">
-                <div>
-                  <RatingStars
-                    count={5}
-                    size={24}
-                    activeColor="#ffd700"
-                    inactiveColor="#e4e4e4"
-                    edit={user.isAuth}
-                  />
-                </div>
-                <h6 style={{ marginTop: '8px' }}>{item.rating}</h6>
-              </div>
+              { isSharedPage ?
+                <div
+                  className="d-flex justify-content-between align-items-center">
+                  <div>
+                    <RatingStars
+                      count={5}
+                      size={24}
+                      activeColor="#ffd700"
+                      inactiveColor="#e4e4e4"
+                      edit={user.isAuth}
+                    />
+                  </div>
+                  <h6 style={{ marginTop: '8px' }}>{item.rating}</h6>
+                </div> :
+                <></>
+              }
               <div className="mt-2"
                 style={{
                   display: 'flex',
@@ -71,7 +81,7 @@ const Homepage = () => {
                   <Button
                     style={{
                       width: '150px',
-                      marginTop: 348
+                      marginTop: isSharedPage ? 352 : 388
                     }}>Destroy</Button>
                 </div> :
                 <></>
@@ -84,4 +94,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default Showing;
