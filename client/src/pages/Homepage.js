@@ -15,7 +15,7 @@ const filterStyle = {
 };
 
 const Homepage = () => {
-  const { maps } = useContext(Context);
+  const { user, maps } = useContext(Context);
 
   return (
     <Container>
@@ -45,7 +45,7 @@ const Homepage = () => {
                     size={24}
                     activeColor="#ffd700"
                     inactiveColor="#e4e4e4"
-                    edit={true}
+                    edit={user.isAuth}
                   />
                 </div>
                 <h6 style={{ marginTop: '8px' }}>{item.rating}</h6>
@@ -65,13 +65,17 @@ const Homepage = () => {
                     borderColor: 'black'
                   }}>Download</Button>
               </div>
-              <div className="d-flex justify-content-center align-items-end"
-                style={{ flexDirection: 'column' }}>
-                <Button
-                  style={{
-                    width: '150px',
-                    marginTop: 348
-                  }}>Destroy</Button></div>
+              { user.isAuth ?
+                <div className="d-flex justify-content-center align-items-end"
+                  style={{ flexDirection: 'column' }}>
+                  <Button
+                    style={{
+                      width: '150px',
+                      marginTop: 348
+                    }}>Destroy</Button>
+                </div> :
+                <></>
+              }
             </div>
           </div>
         </Card>
