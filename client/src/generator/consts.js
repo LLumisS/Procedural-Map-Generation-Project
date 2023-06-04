@@ -10,7 +10,7 @@ export const PIXEL_SIZE = 2;
 
 export const RANDOM_RANGE_CORNERS = 40;
 export const RANDOM_RANGE_COMMON = 160;
-export const GRIT_COEFFICIENT = 4;
+export const GRIT_COEFFICIENT = 10;
 
 export const WATER_LEVEL = 0;
 export const HEIGHT_IMPACT = 0.5;
