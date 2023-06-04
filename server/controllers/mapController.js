@@ -116,7 +116,22 @@ class MapController {
       }
 
       const sharedMap = await SharedMap.findAndCountAll({ limit, offset });
-      return res.json(sharedMap);
+      const mapsId = sharedMap.rows.map(element => element.mapId);
+      const maps = await Map.findAll({ where: { id: mapsId } });
+
+      const result = [];
+      for (let i = 0; i < maps.length; i++) {
+        result.push({
+          id: sharedMap.rows[i].id,
+          rating: sharedMap.rows[i].rating,
+          createdAt: sharedMap.rows[i].createdAt,
+          updatedAt: sharedMap.rows[i].updatedAt,
+          mapId: sharedMap.rows[i].mapId,
+          matrix: maps[i].matrix,
+        });
+      }
+
+      return res.json({ count: sharedMap.count, rows: result });
     } catch (e) {
       next(ApiError.badRequest(e.message));
     }
