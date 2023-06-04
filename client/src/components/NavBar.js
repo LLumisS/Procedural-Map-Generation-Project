@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { Context } from '../index';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import {
-  ADMIN_ROUTE,
   GENERATOR_ROUTE,
   HOMEPAGE_ROUTE,
   SAVES_ROUTE,
@@ -24,7 +23,6 @@ const NavBar = observer(() => {
               <Nav.Link href={SAVES_ROUTE}>Saves</Nav.Link>
             </Nav>
             <Nav className="ml-auto">
-              <Button href={ADMIN_ROUTE}>Admin</Button>
               <Nav.Link>Log Out</Nav.Link>
             </Nav>
           </> :
