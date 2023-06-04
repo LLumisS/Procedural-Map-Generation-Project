@@ -9,13 +9,13 @@ const HEIGHT = MATRIX_LENGTH * PIXEL_SIZE;
 
 create();
 
-const CanvasComponent = ({ selectedFilter }) => {
+const CanvasComponent = ({ selectedFilter, trigger }) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     MAP[selectedFilter].draw(canvas);
-  }, [selectedFilter]);
+  }, [selectedFilter, trigger]);
 
   return (
     <canvas
@@ -67,11 +67,11 @@ const FiltersForm = ({ onApplyFilter }) => {
   );
 };
 
-const CreateButton = () => (
+const CreateButton = ({ onCreate }) => (
   <div className="d-flex justify-content-center align-items-end"
     style={{ height: '100%' }}>
     <Button className="mt-5" style={{ width: '180px', height: '47px' }}
-      onClick={create}>
+      onClick={onCreate}>
       Create
     </Button>
   </div>
@@ -79,9 +79,15 @@ const CreateButton = () => (
 
 const Generator = () => {
   const [selectedFilter, setSelectedFilter] = useState('Default');
+  const [trigger, setTrigger] = useState(false);
 
   const handleApplyFilter = selectedFilter => {
     setSelectedFilter(selectedFilter);
+  };
+
+  const handleCreateMap = () => {
+    create();
+    setTrigger(prevTrigger => !prevTrigger);
   };
 
   return (
@@ -105,7 +111,8 @@ const Generator = () => {
                 border: '2px solid black'
               }}
             >
-              <CanvasComponent selectedFilter={selectedFilter} />
+              <CanvasComponent
+                selectedFilter={selectedFilter} trigger={trigger} />
             </div>
             <Card
               style={{
@@ -121,7 +128,7 @@ const Generator = () => {
               </h4>
               <h5 className="mb-2">Filters:</h5>
               <FiltersForm onApplyFilter={handleApplyFilter} />
-              <CreateButton />
+              <CreateButton onCreate={handleCreateMap}/>
             </Card>
           </div>
           <div className="d-flex justify-content-center">
