@@ -23,9 +23,9 @@ export default class MapStore {
       //{ id: 2, rating: 4.5, mapId: 2 },
       //{ id: 3, rating: 3, mapId: 5 },
       { id: 1, rating: 3.5, mapId: 1,
-        matrix: '5fd2a4fe-eaa8-458e-a60d-56279d0c1014.jpg' },
+        matrix: '5fd2a4fe-eaa8-458e-a60d-56279d0c1014.jpg', mark: 5 },
       { id: 2, rating: 4.5, mapId: 2,
-        matrix: '9a271a52-0b67-4ea4-b0af-85e0619aefdf.jpg' },
+        matrix: '9a271a52-0b67-4ea4-b0af-85e0619aefdf.jpg', mark: 4 },
       { id: 5, rating: 3, mapId: 5,
         matrix: '10191255-13f8-4e2e-b6d4-a2e45c223885.jpg' },
     ];

@@ -54,6 +54,7 @@ const Showing = () => {
                       activeColor="#ffd700"
                       inactiveColor="#e4e4e4"
                       edit={user.isAuth}
+                      value={item.mark}
                     />
                   </div>
                   <h6 style={{ marginTop: '8px' }}>{item.rating}</h6>
