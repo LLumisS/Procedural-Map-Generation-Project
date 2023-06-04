@@ -20,12 +20,5 @@ jobs:
       - name: Set up environment variables
         run: echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
 
-      - name: Change to server directory
-        run: cd server
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run tests
-        run: npm run test
-        
+      - name: Install dependencies and run tests
+        run: cd server && npm install && npm run test
