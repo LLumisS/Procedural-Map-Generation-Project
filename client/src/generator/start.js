@@ -3,10 +3,10 @@ import { HeightMap, MoistureMap, TemperatureMap, BiomMap } from './maps';
 import { getSetting } from './helper';
 
 export const MAP = {
-  PHYSICAL: null,
-  MOISTURE: null,
-  TEMPERATURE: null,
-  DEFAULT: null,
+  Physical: null,
+  Moisture: null,
+  Temperature: null,
+  Default: null,
 };
 
 export function create() {
@@ -28,10 +28,10 @@ export function create() {
     temperatureMap.matrix
   );
 
-  MAP.PHYSICAL = heightMap;
-  MAP.MOISTURE = moistureMap;
-  MAP.TEMPERATURE = temperatureMap;
-  MAP.DEFAULT = defaultMap;
+  MAP.Physical = heightMap;
+  MAP.Moisture = moistureMap;
+  MAP.Temperature = temperatureMap;
+  MAP.Default = defaultMap;
 }
 
 export function apply(canvas, table, radioFilter) {

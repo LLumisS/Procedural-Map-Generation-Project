@@ -14,7 +14,7 @@ const CanvasComponent = () => {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    MAP['DEFAULT'].draw(canvas);
+    MAP['Default'].draw(canvas);
   }, []);
 
   return <canvas ref={canvasRef} width={WIDTH} height={HEIGHT}
