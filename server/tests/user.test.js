@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 
 const { User } = require('../models/models');
 const userController = require('../controllers/userController');
-const authMiddleware = require('../middleware/auth');
+const auth = require('../middleware/auth');
 
 const registration = userController.registration;
 const login = userController.login;
@@ -243,7 +243,7 @@ describe('Check Test', () => {
     };
     const next = check;
 
-    await authMiddleware(req, res, next);
+    await auth()(req, res, next);
 
     expect(res.status).toHaveBeenCalledWith(401);
     expect(res.json).toHaveBeenCalledWith({ message: 'Not authorized' });
