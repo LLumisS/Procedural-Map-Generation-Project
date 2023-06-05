@@ -1,17 +1,13 @@
 import { DARKNESS_PER_STAGE } from './consts';
 
-const darkening = (
-  height,
-  lightnessTable,
-) => {
-  let stage;
+const darkening = (height, lightnessTable) => {
+  let stage = 0;
   for (const level of lightnessTable)
     if (height <= level.height) {
       stage = level.stage;
-      break;
+      const change = (1 - DARKNESS_PER_STAGE * stage);
+      return change;
     }
-  const change = (1 - DARKNESS_PER_STAGE * stage);
-  return change;
 };
 
 export const color = (percentage, filter) => {
@@ -20,12 +16,7 @@ export const color = (percentage, filter) => {
       return `hsl(${layer.hue}, ${layer.saturation}%, ${layer.lightness}%)`;
 };
 
-export const biomColor = (
-  biomId,
-  biomFilter,
-  height,
-  lightnessTable
-) => {
+export const biomColor = (biomId, biomFilter, height, lightnessTable) => {
   for (const biom of biomFilter)
     if (biomId === biom.id) {
       const lightness = biom.lightness * darkening(height, lightnessTable);
