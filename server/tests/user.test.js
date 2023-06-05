@@ -3,16 +3,32 @@
 require('dotenv').config();
 const request = require('supertest');
 const express = require('express');
+const jwt = require('jsonwebtoken');
+const { Sequelize } = require('sequelize');
+
 const { User } = require('../models/models');
 const userRouter = require('../routes/userRouter');
 const errorHandler = require('../middleware/errorHandler');
-const jwt = require('jsonwebtoken');
 
 const app = express();
 app.use(express.json());
 app.use('/user', userRouter);
 
 app.use(errorHandler);
+
+const sequelize = new Sequelize({
+  dialect: 'postgres',
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+});
+
+beforeAll(async () => {
+  await sequelize.authenticate();
+  await sequelize.sync();
+});
 
 describe('Registration Test', () => {
   const user = {
