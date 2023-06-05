@@ -1,6 +1,5 @@
 import { FILTERS } from './consts';
 import { HeightMap, MoistureMap, TemperatureMap, BiomMap } from './maps';
-import { getSetting } from './helper';
 
 export const MAP = {
   Physical: null,
@@ -32,15 +31,4 @@ export function create() {
   MAP.Moisture = moistureMap;
   MAP.Temperature = temperatureMap;
   MAP.Default = defaultMap;
-}
-
-export function apply(canvas, table, radioFilter) {
-  const setting = getSetting(radioFilter);
-  const map = MAP[setting];
-
-  table.style.visibility = setting !== 'DEFAULT' ?
-    'hidden' :
-    'visible';
-
-  map.draw(canvas);
 }

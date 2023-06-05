@@ -3,32 +3,30 @@ import { bypassing } from './helper';
 
 export function field(heightMap) {
   const fieldTiles = [];
-  const isField = ({ y, x }) => {
-    if (heightMap[y][x] > WATER_LEVEL)
-      fieldTiles.push({ y, x });
-  };
 
-  bypassing(heightMap, isField);
+  bypassing(heightMap, ({ y, x }) => {
+    if (heightMap[y][x] > WATER_LEVEL) {
+      fieldTiles.push({ y, x });
+    }
+  });
 
   return fieldTiles;
 }
 
 export function cold(temperatureMap, heightMap) {
-  const decrease = ({ y, x }) => {
-    temperatureMap[y][x] -= (heightMap[y][x] > WATER_LEVEL) ?
-      (heightMap[y][x] * HEIGHT_IMPACT) :
+  bypassing(temperatureMap, ({ y, x }) => {
+    temperatureMap[y][x] -= heightMap[y][x] > WATER_LEVEL ?
+      heightMap[y][x] * HEIGHT_IMPACT :
       0;
-  };
-
-  bypassing(temperatureMap, decrease);
+  });
 }
 
 export function bioms(heightMap, moistureMap, temperatureMap) {
-  const biomMap = Array(MATRIX_LENGTH)
-    .fill(null)
-    .map(() => Array(MATRIX_LENGTH).fill(0));
+  const biomMap = Array.from({ length: MATRIX_LENGTH }, () =>
+    Array(MATRIX_LENGTH).fill(0)
+  );
 
-  const getBiom = ({ y, x }) => {
+  bypassing(biomMap, ({ y, x }) => {
     for (const biom of BIOMS) {
       const enough = {
         moisture: moistureMap[y][x] <= biom.moisture,
@@ -41,9 +39,7 @@ export function bioms(heightMap, moistureMap, temperatureMap) {
         break;
       }
     }
-  };
-
-  bypassing(biomMap, getBiom);
+  });
 
   return biomMap;
 }
