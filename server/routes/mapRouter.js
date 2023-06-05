@@ -3,7 +3,7 @@
 const Router = require('express');
 const router = new Router();
 const mapController = require('../controllers/mapController');
-const checkRole = require('../middleware/checkRole');
+const auth = require('../middleware/auth');
 
 router.get('/shared', mapController.getShared);
 router.get('/saved', mapController.getSaved);
@@ -17,6 +17,6 @@ router.post('/shareold', mapController.shareOld);
 router.post('/rate', mapController.rate);
 
 router.delete('/saved', mapController.deleteSaved);
-router.delete('/shared', checkRole('admin'), mapController.deleteShared);
+router.delete('/shared', auth('admin'), mapController.deleteShared);
 
 module.exports = router;
