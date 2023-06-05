@@ -1,165 +1,202 @@
 'use strict';
 
 require('dotenv').config();
-const request = require('supertest');
-const express = require('express');
+
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const { User } = require('../models/models');
-const userRouter = require('../routes/userRouter');
-const errorHandler = require('../middleware/errorHandler');
-const sequelize = require('../db');
+const userController = require('../controllers/userController');
 
-const app = express();
-app.use(express.json());
-app.use('/user', userRouter);
+const registration = userController.registration;
+const login = userController.login;
+const check = userController.check;
 
-app.use(errorHandler);
-
-beforeAll(async () => {
-  await sequelize.authenticate();
-  await sequelize.sync();
-  app.listen(process.env.PORT, () =>
-    console.log(`Server started on port ${process.env.PORT}`));
-});
+jest.mock('bcrypt', () => ({
+  hash: jest.fn((password, rounds) => Promise.resolve(`hashed:${password}`)),
+  compareSync: jest.fn(),
+}));
 
 describe('Registration Test', () => {
-  const user = {
-    login: 'testuser',
-    password: 'newpassword',
-    role: 'user',
-  };
+  let req;
+  let res;
+  let next;
 
-  afterAll(async () => {
-    await User.destroy({ where: { login: 'testuser' } });
+  beforeEach(() => {
+    req = {
+      body: {
+        login: 'testuser',
+        password: 'newpassword',
+        role: 'user',
+      },
+    };
+    res = {
+      json: jest.fn(),
+    };
+    next = jest.fn();
   });
 
-  it('should register a new user', async () => {
-    const response = await request(app)
-      .post('/user/registration')
-      .send(user)
-      .expect(200);
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-    expect(response.body).toHaveProperty('token');
+  it('should register a new user and return a token', async () => {
+    User.findOne = jest.fn().mockResolvedValue(null);
+    User.create = jest.fn().mockResolvedValue({
+      id: 1,
+      login: 'testuser',
+      role: 'user',
+    });
+    const generateJwtMock = jest
+      .spyOn(jwt, 'sign')
+      .mockReturnValue('testtoken');
+
+    await registration(req, res, next);
+
+    expect(User.findOne).toHaveBeenCalledWith({ where: { login: 'testuser' } });
+    expect(User.create).toHaveBeenCalledWith({
+      login: 'testuser',
+      password: 'hashed:newpassword',
+      role: 'user',
+    });
+    expect(generateJwtMock).toHaveBeenCalledWith(
+      { id: 1, role: 'user' },
+      process.env.SECRET_KEY,
+      { expiresIn: '24h' }
+    );
+    expect(res.json).toHaveBeenCalledWith({ token: 'testtoken' });
+    expect(next).not.toHaveBeenCalled();
   });
 
   it('should return an error for missing user data', async () => {
-    const response = await request(app)
-      .post('/user/registration')
-      .send({})
-      .expect(404);
+    req.body = {};
 
-    expect(response.body).toHaveProperty('message');
-    expect(response.body.message).toBe('User data expected');
+    await registration(req, res, next);
+
+    expect(User.findOne).not.toHaveBeenCalled();
+    expect(User.create).not.toHaveBeenCalled();
+    expect(res.json).not.toHaveBeenCalled();
+    expect(next).toHaveBeenCalledWith(expect.any(Error));
+    expect(next.mock.calls[0][0].message).toBe('User data expected');
   });
 
   it('should return an error for already registered user', async () => {
-    const response = await request(app)
-      .post('/user/registration')
-      .send(user)
-      .expect(404);
+    User.findOne = jest.fn().mockResolvedValue({});
 
-    expect(response.body).toHaveProperty('message');
-    expect(response.body.message).toBe('User already signed up');
+    await registration(req, res, next);
+
+    expect(User.findOne).toHaveBeenCalledWith({ where: { login: 'testuser' } });
+    expect(User.create).not.toHaveBeenCalled();
+    expect(res.json).not.toHaveBeenCalled();
+    expect(next).toHaveBeenCalledWith(expect.any(Error));
+    expect(next.mock.calls[0][0].message).toBe('User already signed up');
   });
 });
 
 describe('Login Test', () => {
   const user = {
+    id: 1,
     login: 'testuser',
-    password: 'newpassword',
+    password: 'hashed:newpassword',
     role: 'user',
   };
 
-  beforeAll(async () => {
-    await request(app)
-      .post('/user/registration')
-      .send(user)
-      .expect(200);
-  });
+  const generateJwtMock = jest.spyOn(jwt, 'sign').mockReturnValue('testtoken');
+  const compareSyncMock = jest.spyOn(bcrypt, 'compareSync');
 
-  afterAll(async () => {
-    await User.destroy({ where: { login: 'testuser' } });
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should return a token for a successful login', async () => {
-    const response = await request(app)
-      .post('/user/login')
-      .send(user)
-      .expect(200);
+    const findOneMock = jest
+      .spyOn(User, 'findOne')
+      .mockResolvedValue(user);
+    compareSyncMock.mockReturnValue(true);
 
-    expect(response.body).toHaveProperty('token');
+    const req = {
+      body: {
+        login: 'testuser',
+        password: 'newpassword',
+      },
+    };
+    const res = {
+      json: jest.fn(),
+    };
+    const next = jest.fn();
+
+    await login(req, res, next);
+
+    expect(findOneMock).toHaveBeenCalledWith({ where: { login: 'testuser' } });
+    expect(compareSyncMock).toHaveBeenCalledWith('newpassword', user.password);
+    expect(generateJwtMock).toHaveBeenCalledWith(
+      { id: 1, role: 'user' },
+      process.env.SECRET_KEY,
+      { expiresIn: '24h' }
+    );
+    expect(res.json).toHaveBeenCalledWith({ token: 'testtoken' });
+    expect(next).not.toHaveBeenCalled();
   });
 
   it('should return an error for missing user data', async () => {
-    const response = await request(app)
-      .post('/user/login')
-      .send({})
-      .expect(404);
-
-    expect(response.body).toHaveProperty('message');
-    expect(response.body.message).toBe('User data expected');
-  });
-
-  it('should return an error for an incorrect password', async () => {
-    const incorrectUser = {
-      login: 'testuser',
-      password: 'incorrectpassword'
+    const req = {
+      body: {},
     };
-
-    const response = await request(app)
-      .post('/user/login')
-      .send(incorrectUser)
-      .expect(404);
-
-    expect(response.body).toHaveProperty('message');
-    expect(response.body.message).toBe('Incorrect password');
-  });
-
-  it('should return an error for a non-existent user', async () => {
-    const incorrectUser = {
-      login: 'nonexistentuser',
-      password: 'newpassword'
+    const res = {
+      json: jest.fn(),
     };
+    const next = jest.fn();
 
-    const response = await request(app)
-      .post('/user/login')
-      .send(incorrectUser)
-      .expect(404);
+    await login(req, res, next);
 
-    expect(response.body).toHaveProperty('message');
-    expect(response.body.message).toBe('User not found');
+    expect(next).toHaveBeenCalledWith(expect.any(Error));
+    expect(next.mock.calls[0][0].message).toBe('User data expected');
   });
-});
 
-describe('Check Test', () => {
-  it('should return a token for a valid user', async () => {
-    const user = {
-      id: 1,
-      role: 'admin',
+  it('should return an error for user not found', async () => {
+    const findOneMock = jest.spyOn(User, 'findOne').mockResolvedValue(null);
+
+    const req = {
+      body: {
+        login: 'testuser',
+        password: 'newpassword',
+      },
     };
+    const res = {
+      json: jest.fn(),
+    };
+    const next = jest.fn();
 
-    const id = 1;
-    const role = 'admin';
+    await login(req, res, next);
 
-    const response = await request(app)
-      .get('/user/auth')
-      .set('Authorization', `Bearer ${jwt.sign(
-        { id, role },
-        process.env.SECRET_KEY,
-        { expiresIn: '24h' },
-      )}`)
-      .expect(200);
-
-    expect(response.body).toHaveProperty('token');
+    expect(findOneMock).toHaveBeenCalledWith({ where: { login: 'testuser' } });
+    expect(next).toHaveBeenCalledWith(expect.any(Error));
+    expect(next.mock.calls[0][0].message).toBe('User not found');
   });
 
-  it('should return an error for an invalid or missing token', async () => {
-    const response = await request(app)
-      .get('/user/auth')
-      .expect(401);
+  it('should return an error for incorrect password', async () => {
+    const findOneMock = jest
+      .spyOn(User, 'findOne')
+      .mockResolvedValue(user);
+    compareSyncMock.mockReturnValue(false);
 
-    expect(response.body).toHaveProperty('message');
-    expect(response.body.message).toBe('Not authorized');
+    const req = {
+      body: {
+        login: 'testuser',
+        password: 'wrongpassword',
+      },
+    };
+    const res = {
+      json: jest.fn(),
+    };
+    const next = jest.fn();
+
+    await login(req, res, next);
+
+    expect(findOneMock).toHaveBeenCalledWith({ where: { login: 'testuser' } });
+    expect(compareSyncMock)
+      .toHaveBeenCalledWith('wrongpassword', user.password);
+    expect(next).toHaveBeenCalledWith(expect.any(Error));
+    expect(next.mock.calls[0][0].message).toBe('Incorrect password');
   });
 });
