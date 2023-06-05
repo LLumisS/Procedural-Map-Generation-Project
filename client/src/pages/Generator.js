@@ -1,31 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import tableImage from '../table.png';
-import { Button, ButtonGroup, Form, Container, Card } from 'react-bootstrap';
-import { create, MAP } from '../generator/start';
-import { MATRIX_LENGTH, PIXEL_SIZE } from '../generator/consts';
-
-const WIDTH = MATRIX_LENGTH * PIXEL_SIZE;
-const HEIGHT = MATRIX_LENGTH * PIXEL_SIZE;
+import { Button, ButtonGroup, Container, Card } from 'react-bootstrap';
+import { create } from '../generator/start';
+import { WIDTH, HEIGHT } from '../generator/consts';
+import CanvasComponent from '../components/CanvasComponent';
+import FiltersForm from '../components/FiltersForm';
+import CreateButton from '../components/CreateButton';
 
 create();
-
-const CanvasComponent = ({ selectedFilter, trigger }) => {
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    MAP[selectedFilter].draw(canvas);
-  }, [selectedFilter, trigger]);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      width={WIDTH}
-      height={HEIGHT}
-      style={{ display: 'block', boxSizing: 'border-box' }}
-    />
-  );
-};
 
 const buttonStyle = {
   width: '100px',
@@ -33,49 +15,6 @@ const buttonStyle = {
   color: 'black',
   borderColor: 'black'
 };
-
-const FiltersForm = ({ onApplyFilter }) => {
-  const filters = ['Default', 'Physical', 'Moisture', 'Temperature'];
-  const [selectedFilter, setSelectedFilter] = useState('Default');
-
-  const handleFilterChange = event => {
-    setSelectedFilter(event.target.value);
-  };
-
-  useEffect(() => {
-    onApplyFilter(selectedFilter);
-  }, [selectedFilter, onApplyFilter]);
-
-  return (
-    <div>
-      <Form style={{ marginLeft: '10px' }}>
-        {filters.map(name => (
-          <div key={`${name}-radio`} className="mb-2">
-            <Form.Check
-              type="radio"
-              name="group1"
-              id={`${name}-radio`}
-              label={name}
-              value={name}
-              checked={selectedFilter === name}
-              onChange={handleFilterChange}
-            />
-          </div>
-        ))}
-      </Form>
-    </div>
-  );
-};
-
-const CreateButton = ({ onCreate }) => (
-  <div className="d-flex justify-content-center align-items-end"
-    style={{ height: '100%' }}>
-    <Button className="mt-5" style={{ width: '180px', height: '47px' }}
-      onClick={onCreate}>
-      Create
-    </Button>
-  </div>
-);
 
 const Generator = () => {
   const [selectedFilter, setSelectedFilter] = useState('Default');
