@@ -20,8 +20,7 @@ Example:
 See <a href="https://docs.google.com/document/d/14sIw_HDXlERoJSS8U2QSeTyfK2Qkw05zmvKWTqmkhqI/edit?usp=sharing">design document</a>. 
 
 ## How to try
-\*Implementing\*  
-Try <a href="https://llumiss.github.io/Procedural-Map-Generation-Project/">it</a> by yourself.
+\*Implementing\*
 
 ## Tests
 To run the tests you should:
