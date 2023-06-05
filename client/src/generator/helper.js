@@ -1,51 +1,26 @@
 export const random = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min);
 
-const average = (...argArray) => {
-  let sum = 0;
-  let count = 0;
-  for (const arg of argArray)
-    if (!isNaN(arg) && arg !== null) {
-      sum += arg;
-      count++;
-    }
-  return sum / count;
-};
-
-export const getSetting = settings => {
-  for (const setting of settings)
-    if (setting.checked)
-      return setting.value;
+export const average = (...argArray) => {
+  const validArgs = argArray.filter(arg => !isNaN(arg) && arg !== null);
+  const sum = validArgs.reduce((acc, curr) => acc + curr, 0);
+  return validArgs.length > 0 ? sum / validArgs.length : 0;
 };
 
 export const min = (...argArray) => {
-  let min = Infinity;
-  for (const arg of argArray)
-    if (!isNaN(arg) && arg !== null)
-      min = min > arg ?
-        arg :
-        min;
-
-  return min;
+  const validArgs = argArray.filter(arg => !isNaN(arg) && arg !== null);
+  return Math.min(...validArgs);
 };
 
-export const includes = (array, tile) => {
-  for (const pixel of array)
-    if (pixel.y === tile.y && pixel.x === tile.x)
-      return true;
-  return false;
-};
+export const includes = (array, tile) =>
+  array.some(pixel => pixel.y === tile.y && pixel.x === tile.x);
 
 export function averageRandom(matrix, elements, randomRange) {
-  const values = [];
-  for (const elem of elements) {
-    const x = elem.x;
-    const y = elem.y;
-    elem.value = matrix[y] ?
-      matrix[y][x] :
-      null;
-    values.push(elem.value);
-  }
+  const values = elements.map(elem => {
+    const { x, y } = elem;
+    elem.value = matrix[y]?.[x] || null;
+    return elem.value;
+  });
 
   return average(...values) + random(-randomRange, randomRange);
 }
@@ -63,12 +38,11 @@ export const bypassing = (
     incY: 1,
     incX: 1,
   };
-  const keys = Object.keys(initDefault);
-  for (const key of keys)
-    if (!init[key])
-      init[key] = initDefault[key];
+  const mergedInit = { ...initDefault, ...init };
 
-  for (let y = init.startY; y < init.endY; y += init.incY)
-    for (let x = init.startX; x < init.endX; x += init.incX)
+  for (let y = mergedInit.startY; y < mergedInit.endY; y += mergedInit.incY) {
+    for (let x = mergedInit.startX; x < mergedInit.endX; x += mergedInit.incX) {
       callback({ y, x });
+    }
+  }
 };
