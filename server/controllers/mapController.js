@@ -103,12 +103,8 @@ class MapController {
       const sharedIds = shared.map(element => element.id);
       for (const id of sharedIds) {
         const marks = await Mark.findAll({ where: { sharedMapId: id } });
-        let sum = 0;
-        let n = 0;
-        for (const mark of marks) {
-          sum += mark.value;
-          n++;
-        }
+        const sum = marks.reduce((acc, mark) => acc + mark.value, 0);
+        const n = marks.length;
         const rating = n ? sum / n : 0;
         await SharedMap.update({ rating }, { where: { id } });
       }
@@ -121,8 +117,7 @@ class MapController {
       for (let i = 0; i < maps.length; i++) {
         const sharedMapId = mapsId[i];
         const condition = { where: { userId, sharedMapId } };
-        const mark = await Mark.findOne(condition) ?
-          await Mark.findOne(condition) : 0;
+        const mark = await Mark.findOne(condition) || 0;
         result.push({
           id: sharedMap.rows[i].id,
           rating: sharedMap.rows[i].rating,
