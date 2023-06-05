@@ -17,9 +17,9 @@ class Map {
   constructor(filter) {
     this.filter = filter;
 
-    this.cash = Array(MATRIX_LENGTH)
-      .fill(null)
-      .map(() => Array(MATRIX_LENGTH).fill(0));
+    this.cash = Array.from({ length: MATRIX_LENGTH }, () =>
+      Array(MATRIX_LENGTH).fill(0)
+    );
     this.hasCash = false;
 
     this.cbStd = ({ y, x }, ctx) => {
@@ -33,11 +33,9 @@ class Map {
 
   draw(canvas) {
     const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.height, canvas.width);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    this.callback = this.hasCash ?
-      this.cbCash :
-      this.cbStd;
+    this.callback = this.hasCash ? this.cbCash : this.cbStd;
 
     const colorize = ({ y, x }) => {
       this.callback({ y, x }, ctx);
@@ -114,15 +112,9 @@ export class BiomMap extends Map {
 
     this.cbStd = ({ y, x }, ctx) => {
       const heightLevel = heightMap[y][x];
-      if (heightLevel <= WATER_LEVEL)
-        ctx.fillStyle = color(heightLevel, heightFilter);
-      else
-        ctx.fillStyle = biomColor(
-          this.matrix[y][x],
-          this.filter,
-          heightLevel,
-          LIGHTNESS_TABLE
-        );
+      ctx.fillStyle = heightLevel <= WATER_LEVEL ?
+        color(heightLevel, heightFilter) :
+        biomColor(this.matrix[y][x], this.filter, heightLevel, LIGHTNESS_TABLE);
       this.cash[y][x] = ctx.fillStyle;
     };
   }
