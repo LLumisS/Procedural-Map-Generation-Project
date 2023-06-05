@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 
 const { User } = require('../models/models');
 const userController = require('../controllers/userController');
+const authMiddleware = require('../middleware/auth');
 
 const registration = userController.registration;
 const login = userController.login;
@@ -198,5 +199,53 @@ describe('Login Test', () => {
       .toHaveBeenCalledWith('wrongpassword', user.password);
     expect(next).toHaveBeenCalledWith(expect.any(Error));
     expect(next.mock.calls[0][0].message).toBe('Incorrect password');
+  });
+});
+
+describe('Check Test', () => {
+  const user = {
+    id: 1,
+    login: 'testuser',
+    role: 'user',
+  };
+
+  const generateJwtMock = jest.spyOn(jwt, 'sign').mockReturnValue('testtoken');
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should return a token for a valid user', async () => {
+    const req = {
+      user,
+    };
+    const res = {
+      json: jest.fn(),
+    };
+    const next = jest.fn();
+
+    await check(req, res, next);
+
+    expect(generateJwtMock).toHaveBeenCalledWith(
+      { id: 1, role: 'user' },
+      process.env.SECRET_KEY,
+      { expiresIn: '24h' }
+    );
+    expect(res.json).toHaveBeenCalledWith({ token: 'testtoken' });
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  it('should return an error for an invalid or missing token', async () => {
+    const req = {};
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+    const next = check;
+
+    await authMiddleware(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Not authorized' });
   });
 });
