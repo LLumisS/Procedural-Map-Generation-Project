@@ -1,12 +1,14 @@
 export const N = 8;
 export const MATRIX_LENGTH = Math.pow(2, N) + 1;
+export const PIXEL_SIZE = 2;
+
+export const WIDTH = MATRIX_LENGTH * PIXEL_SIZE;
+export const HEIGHT = MATRIX_LENGTH * PIXEL_SIZE;
 
 export const MAX_RIVERS_COUNT = 6;
 export const RIVERS_WET_RADIUS = 14;
 export const MIN_RIVERS_LENGTH = 15;
 export const EXTRA_MOISTURE = 1 / 1100;
-
-export const PIXEL_SIZE = 2;
 
 export const RANDOM_RANGE_CORNERS = 40;
 export const RANDOM_RANGE_COMMON = 160;
