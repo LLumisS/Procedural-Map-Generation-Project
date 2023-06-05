@@ -2,24 +2,14 @@ import { EXTRA_MOISTURE, RIVERS_WET_RADIUS } from './consts';
 import { bypassing } from './helper';
 
 export function riversMoisture(moistureMap, rivers) {
-  const riversCount = rivers.length;
-  for (let n = 0; n < riversCount; n++) {
-    const river = rivers[n];
-    riverMoisture(moistureMap, river);
-  }
-}
-
-function riverMoisture(moistureMap, river) {
-  const riverLength = river.length;
-  for (let i = 0; i < riverLength; i++) {
-    const tile = river[i];
-    tileMoisture(moistureMap, tile);
-  }
+  for (const river of rivers)
+    for (const tile of river)
+      tileMoisture(moistureMap, tile);
 }
 
 function tileMoisture(moistureMap, tile) {
   const extraMoisture = ({ y, x }) => {
-    if (moistureMap[y] && !isNaN(moistureMap[y][x]))
+    if (moistureMap[y]?.[x] !== undefined)
       moistureMap[y][x] += EXTRA_MOISTURE;
   };
 
