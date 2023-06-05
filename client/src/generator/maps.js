@@ -1,12 +1,25 @@
-'use strict';
+import {
+  MATRIX_LENGTH,
+  PIXEL_SIZE,
+  MAX_RIVERS_COUNT,
+  WATER_LEVEL,
+  GRIT_COEFFICIENT,
+  LIGHTNESS_TABLE,
+} from './consts';
+import { color, biomColor } from './colors';
+import { bypassing } from './helper';
+import { randomMatrix, normalize } from './matrix';
+import { getRivers } from './rivers';
+import { field, cold, bioms } from './maps_helper';
+import { riversMoisture } from './moisture';
 
 class Map {
   constructor(filter) {
     this.filter = filter;
 
-    this.cash = Array(MATRIX_LENGTH)
-      .fill(null)
-      .map(() => Array(MATRIX_LENGTH).fill(0));
+    this.cash = Array.from({ length: MATRIX_LENGTH }, () =>
+      Array(MATRIX_LENGTH).fill(0)
+    );
     this.hasCash = false;
 
     this.cbStd = ({ y, x }, ctx) => {
@@ -18,13 +31,11 @@ class Map {
     };
   }
 
-  draw() {
+  draw(canvas) {
     const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.height, canvas.width);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    this.callback = this.hasCash ?
-      this.cbCash :
-      this.cbStd;
+    this.callback = this.hasCash ? this.cbCash : this.cbStd;
 
     const colorize = ({ y, x }) => {
       this.callback({ y, x }, ctx);
@@ -44,7 +55,7 @@ class Map {
   }
 }
 
-class HeightMap extends Map {
+export class HeightMap extends Map {
   constructor(filter) {
     super(filter);
 
@@ -69,7 +80,7 @@ class HeightMap extends Map {
   }
 }
 
-class MoistureMap extends Map {
+export class MoistureMap extends Map {
   constructor(filter, rivers) {
     super(filter);
 
@@ -79,7 +90,7 @@ class MoistureMap extends Map {
   }
 }
 
-class TemperatureMap extends Map {
+export class TemperatureMap extends Map {
   constructor(filter, heightMap) {
     super(filter);
 
@@ -89,7 +100,7 @@ class TemperatureMap extends Map {
   }
 }
 
-class BiomMap extends Map {
+export class BiomMap extends Map {
   constructor(filter, heightFilter, heightMap, moistureMap, temperatureMap) {
     super(filter);
 
@@ -101,15 +112,9 @@ class BiomMap extends Map {
 
     this.cbStd = ({ y, x }, ctx) => {
       const heightLevel = heightMap[y][x];
-      if (heightLevel <= WATER_LEVEL)
-        ctx.fillStyle = color(heightLevel, heightFilter);
-      else
-        ctx.fillStyle = biomColor(
-          this.matrix[y][x],
-          this.filter,
-          heightLevel,
-          LIGHTNESS_TABLE
-        );
+      ctx.fillStyle = heightLevel <= WATER_LEVEL ?
+        color(heightLevel, heightFilter) :
+        biomColor(this.matrix[y][x], this.filter, heightLevel, LIGHTNESS_TABLE);
       this.cash[y][x] = ctx.fillStyle;
     };
   }

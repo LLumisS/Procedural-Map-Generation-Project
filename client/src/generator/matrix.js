@@ -1,4 +1,9 @@
-'use strict';
+import {
+  MATRIX_LENGTH,
+  RANDOM_RANGE_CORNERS,
+  RANDOM_RANGE_COMMON,
+} from './consts';
+import { random, averageRandom } from './helper';
 
 function matrix(length, randomRange) {
   const matrix = Array(length).fill(null).map(() => Array(length).fill(0));
@@ -76,7 +81,7 @@ function square(matrix, chunkSize, randomRange) {
   }
 }
 
-const normalize = matrix => {
+export const normalize = matrix => {
   let max = -Infinity;
   for (const row of matrix)
     for (const value of row)
@@ -85,7 +90,7 @@ const normalize = matrix => {
   return matrix.map(row => row.map(value => value / max));
 };
 
-const randomMatrix = (grit = 1) =>
+export const randomMatrix = (grit = 1) =>
   normalize(
     diamondSquare(
       matrix(MATRIX_LENGTH, RANDOM_RANGE_CORNERS / grit),

@@ -1,3 +1,6 @@
 node_modules
 .vscode
 no-use.js
+static
+client/src/reserve
+server/.env

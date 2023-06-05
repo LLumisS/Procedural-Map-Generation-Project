@@ -1,7 +1,8 @@
-'use strict';
+import { MIN_RIVERS_LENGTH, WATER_LEVEL } from './consts';
+import { random, includes, min } from './helper';
 
-function getRivers(heightMap, riversCount, fieldTiles) {
-  const riversArray = Array(riversCount).fill(null).map(() => Array());
+export function getRivers(heightMap, riversCount, fieldTiles) {
+  const riversArray = Array(riversCount).fill(null).map(() => []);
 
   if (fieldTiles.length > 0)
     for (let i = 0; i < riversCount; i++) {
