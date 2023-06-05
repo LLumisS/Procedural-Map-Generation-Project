@@ -3,4 +3,4 @@ node_modules
 no-use.js
 static
 client/src/reserve
-.env
+server/.env
