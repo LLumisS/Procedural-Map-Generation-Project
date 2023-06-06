@@ -58,7 +58,7 @@ describe('POST New Share Test', () => {
         .mockResolvedValue({ id: 1, matrix: 'filename.jpg' });
       const createSharedMapMock = jest
         .spyOn(SharedMap, 'create')
-        .mockResolvedValue({ id: 1, mapId: 1, userId: 1, rating: null });
+        .mockResolvedValue({ id: 1, mapId: 1, rating: null });
 
       await shareNew(req, res, next);
 
@@ -68,7 +68,7 @@ describe('POST New Share Test', () => {
       expect(req.files.matrix.mv).toHaveBeenCalled();
 
       expect(res.json).toHaveBeenCalledWith(
-        { sharedMap: { id: 1, mapId: 1, userId: 1, rating: null } }
+        { sharedMap: { id: 1, mapId: 1, rating: null } }
       );
     });
 
@@ -97,7 +97,99 @@ describe('POST New Share Test', () => {
 });
 
 describe('POST Old Share Test', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
+  it('should share an old map and return sharedMap in the response',
+    async () => {
+      const req = {
+        body: {
+          mapId: 2,
+        },
+      };
+
+      const res = {
+        json: jest.fn(),
+      };
+
+      const next = jest.fn();
+
+      const findOneSharedMapMock = jest
+        .spyOn(SharedMap, 'findOne').mockResolvedValue(null);
+      const createSharedMapMock = jest
+        .spyOn(SharedMap, 'create').mockResolvedValue(
+          { id: 1, mapId: 2, rating: null }
+        );
+
+      await shareOld(req, res, next);
+
+      expect(next).not.toHaveBeenCalled();
+      expect(findOneSharedMapMock).toHaveBeenCalledTimes(1);
+      expect(createSharedMapMock).toHaveBeenCalledTimes(1);
+
+      expect(res.json).toHaveBeenCalledWith({ id: 1, mapId: 2, rating: null });
+    });
+
+  it('should return a bad request error if mapId is not provided', async () => {
+    const req = {
+      body: {},
+    };
+
+    const res = {
+      json: jest.fn(),
+    };
+
+    const next = jest.fn();
+
+    await shareOld(req, res, next);
+
+    expect(next).toHaveBeenCalledWith(ApiError.badRequest('Map ID expected'));
+    expect(res.json).not.toHaveBeenCalled();
+  });
+
+  it('should return a bad request error if the map is already shared',
+    async () => {
+      const req = {
+        body: {
+          mapId: 2,
+        },
+      };
+
+      const res = {
+        json: jest.fn(),
+      };
+
+      const next = jest.fn();
+
+      jest.spyOn(SharedMap, 'findOne').mockResolvedValue({ mapId: 2 });
+
+      await shareOld(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(ApiError.badRequest('Already saved'));
+      expect(res.json).not.toHaveBeenCalled();
+    });
+
+  it('should return a bad request error if an exception occurs', async () => {
+    const req = {
+      body: {
+        mapId: 1,
+      },
+    };
+
+    const res = {
+      json: jest.fn(),
+    };
+
+    const next = jest.fn();
+
+    jest.spyOn(SharedMap, 'findOne').mockRejectedValue(new Error('Some error'));
+
+    await shareOld(req, res, next);
+
+    expect(next).toHaveBeenCalledWith(ApiError.badRequest('Some error'));
+    expect(res.json).not.toHaveBeenCalled();
+  });
 });
 
 describe('POST New Save Test', () => {
