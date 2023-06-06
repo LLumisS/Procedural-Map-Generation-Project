@@ -366,3 +366,102 @@ describe('POST Old Save Test', () => {
     expect(res.json).not.toHaveBeenCalled();
   });
 });
+
+describe('POST Mark Test', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should create a new mark if it does not exist', async () => {
+    const req = {
+      body: {
+        value: 4,
+        userId: 1,
+        sharedMapId: 2,
+      },
+    };
+
+    const res = {
+      json: jest.fn(),
+    };
+
+    const next = jest.fn();
+
+    const findOneMarkMock = jest
+      .spyOn(Mark, 'findOne').mockResolvedValueOnce(null);
+    const createMarkMock = jest
+      .spyOn(Mark, 'create').mockResolvedValueOnce(
+        { value: 4, sharedMapId: 2, userId: 1 }
+      );
+
+    await rate(req, res, next);
+
+    expect(next).not.toHaveBeenCalled();
+    expect(findOneMarkMock).toHaveBeenCalledTimes(1);
+    expect(createMarkMock).toHaveBeenCalledTimes(1);
+
+    expect(res.json).toHaveBeenCalledWith(
+      { mark: { value: 4, sharedMapId: 2, userId: 1 } }
+    );
+  });
+
+  it('should update an existing mark if it exists', async () => {
+    const req = {
+      body: {
+        value: 5,
+        userId: 1,
+        sharedMapId: 2,
+      },
+    };
+
+    const res = {
+      json: jest.fn(),
+    };
+
+    const next = jest.fn();
+
+    let findOneMarkMock = jest
+      .spyOn(Mark, 'findOne').mockResolvedValueOnce(
+        { value: 4, sharedMapId: 2, userId: 1 }
+      );
+    const updateMarkMock = jest
+      .spyOn(Mark, 'update').mockResolvedValueOnce(true);
+    findOneMarkMock = jest
+      .spyOn(Mark, 'findOne').mockResolvedValueOnce(
+        { value: 5, sharedMapId: 2, userId: 1 }
+      );
+
+    await rate(req, res, next);
+
+    expect(next).not.toHaveBeenCalled();
+    expect(findOneMarkMock).toHaveBeenCalledTimes(2);
+    expect(updateMarkMock).toHaveBeenCalledTimes(1);
+
+    expect(res.json).toHaveBeenCalledWith(
+      { mark: { value: 5, sharedMapId: 2, userId: 1 } }
+    );
+  });
+
+  it('should return a bad request error if an exception occurs', async () => {
+    const req = {
+      body: {
+        value: 5,
+        userId: 1,
+        sharedMapId: 2,
+      },
+    };
+
+    const res = {
+      json: jest.fn(),
+    };
+
+    const next = jest.fn();
+
+    jest.spyOn(Mark, 'findOne').mockRejectedValue(new Error('Some error'));
+
+    await rate(req, res, next);
+
+    expect(next).toHaveBeenCalledWith(ApiError.badRequest('Some error'));
+    expect(res.json).not.toHaveBeenCalled();
+  });
+});
