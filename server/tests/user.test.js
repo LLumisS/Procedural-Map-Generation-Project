@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const { User } = require('../models/models');
+const ApiError = require('../error/ApiError');
 const userController = require('../controllers/userController');
 const auth = require('../middleware/auth');
 
@@ -77,8 +78,9 @@ describe('Registration Test', () => {
     expect(User.findOne).not.toHaveBeenCalled();
     expect(User.create).not.toHaveBeenCalled();
     expect(res.json).not.toHaveBeenCalled();
-    expect(next).toHaveBeenCalledWith(expect.any(Error));
-    expect(next.mock.calls[0][0].message).toBe('User data expected');
+    expect(next).toHaveBeenCalledWith(
+      ApiError.badRequest('User data expected')
+    );
   });
 
   it('should return an error for already registered user', async () => {
@@ -89,8 +91,9 @@ describe('Registration Test', () => {
     expect(User.findOne).toHaveBeenCalledWith({ where: { login: 'testuser' } });
     expect(User.create).not.toHaveBeenCalled();
     expect(res.json).not.toHaveBeenCalled();
-    expect(next).toHaveBeenCalledWith(expect.any(Error));
-    expect(next.mock.calls[0][0].message).toBe('User already signed up');
+    expect(next).toHaveBeenCalledWith(
+      ApiError.badRequest('User already signed up')
+    );
   });
 });
 
@@ -150,8 +153,8 @@ describe('Login Test', () => {
 
     await login(req, res, next);
 
-    expect(next).toHaveBeenCalledWith(expect.any(Error));
-    expect(next.mock.calls[0][0].message).toBe('User data expected');
+    expect(next).toHaveBeenCalledWith(
+      ApiError.badRequest('User data expected'));
   });
 
   it('should return an error for user not found', async () => {
@@ -171,8 +174,7 @@ describe('Login Test', () => {
     await login(req, res, next);
 
     expect(findOneMock).toHaveBeenCalledWith({ where: { login: 'testuser' } });
-    expect(next).toHaveBeenCalledWith(expect.any(Error));
-    expect(next.mock.calls[0][0].message).toBe('User not found');
+    expect(next).toHaveBeenCalledWith(ApiError.badRequest('User not found'));
   });
 
   it('should return an error for incorrect password', async () => {
@@ -197,8 +199,8 @@ describe('Login Test', () => {
     expect(findOneMock).toHaveBeenCalledWith({ where: { login: 'testuser' } });
     expect(compareSyncMock)
       .toHaveBeenCalledWith('wrongpassword', user.password);
-    expect(next).toHaveBeenCalledWith(expect.any(Error));
-    expect(next.mock.calls[0][0].message).toBe('Incorrect password');
+    expect(next).toHaveBeenCalledWith(
+      ApiError.badRequest('Incorrect password'));
   });
 });
 
