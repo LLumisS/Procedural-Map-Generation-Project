@@ -23,7 +23,7 @@ See <a href="https://docs.google.com/document/d/14sIw_HDXlERoJSS8U2QSeTyfK2Qkw05
 \*Implementing\*
 
 ## Tests
-To run the tests you should:
+To run the rest api tests you should:
 1. Clone the repository: `git clone`.
 2. Move to it.
 3. Move to 'server' folder: `cd server`.
