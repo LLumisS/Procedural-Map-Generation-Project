@@ -11,7 +11,7 @@ const getShared = mapController.getShared;
 const getSaved = mapController.getSaved;
 
 const deleteShared = mapController.deleteShared;
-const deletedSaved = mapController.deleteSaved;
+const deleteSaved = mapController.deleteSaved;
 
 describe('GET Shares Test', () => {
   afterEach(() => {
@@ -194,14 +194,154 @@ describe('GET Saves Test', () => {
   });
 });
 
-describe('POST Mark Test', () => {
-
-});
-
 describe('DELETE Share Test', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
+  it('should delete shared map and associated marks', async () => {
+    const req = {
+      body: {
+        mapId: 1,
+      },
+    };
+
+    const res = {
+      json: jest.fn(),
+    };
+
+    const next = jest.fn();
+
+    const destroyMarkMock = jest
+      .spyOn(Mark, 'destroy').mockResolvedValueOnce(2);
+
+    const destroyMapMock = jest
+      .spyOn(SharedMap, 'destroy').mockResolvedValueOnce('Deleted');
+    const findOneMapMock = jest
+      .spyOn(SavedMap, 'findOne').mockResolvedValueOnce({ id: 1 });
+    const destroySourceMock = jest
+      .spyOn(Map, 'destroy').mockResolvedValueOnce(true);
+
+    await deleteShared(req, res, next);
+
+    expect(next).not.toHaveBeenCalled();
+    expect(destroyMapMock).toHaveBeenCalledTimes(1);
+    expect(findOneMapMock).toHaveBeenCalledTimes(1);
+    expect(destroySourceMock).toHaveBeenCalledTimes(0);
+    expect(destroyMarkMock)
+      .toHaveBeenCalledWith({ where: { sharedMapId: 1 } });
+
+    expect(res.json).toHaveBeenCalledWith({ deletedMap: 'Deleted' });
+  });
+
+  it('should delete shared map, associated marks and source map', async () => {
+    const req = {
+      body: {
+        mapId: 1,
+      },
+    };
+
+    const res = {
+      json: jest.fn(),
+    };
+
+    const next = jest.fn();
+
+    const destroyMarkMock = jest
+      .spyOn(Mark, 'destroy').mockResolvedValueOnce(2);
+
+    const destroyMapMock = jest
+      .spyOn(SharedMap, 'destroy').mockResolvedValueOnce('Deleted');
+    const findOneMapMock = jest
+      .spyOn(SavedMap, 'findOne').mockResolvedValueOnce(undefined);
+    const destroySourceMock = jest
+      .spyOn(Map, 'destroy').mockResolvedValueOnce(true);
+
+    await deleteShared(req, res, next);
+
+    expect(next).not.toHaveBeenCalled();
+    expect(destroyMapMock).toHaveBeenCalledTimes(1);
+    expect(destroyMapMock)
+      .toHaveBeenCalledWith({ where: { mapId: 1 } });
+    expect(findOneMapMock).toHaveBeenCalledTimes(1);
+    expect(destroySourceMock).toHaveBeenCalledTimes(1);
+    expect(destroyMarkMock)
+      .toHaveBeenCalledWith({ where: { sharedMapId: 1 } });
+
+    expect(res.json).toHaveBeenCalledWith({ deletedMap: 'Deleted' });
+  });
+
+  it('should return a bad request error if an exception occurs', async () => {
+    const req = {
+      body: {
+        mapId: 1,
+      },
+    };
+
+    const res = {
+      json: jest.fn(),
+    };
+
+    const next = jest.fn();
+
+    jest.spyOn(Mark, 'destroy').mockRejectedValue(new Error('Some error'));
+
+    await deleteShared(req, res, next);
+
+    expect(next).toHaveBeenCalledWith(ApiError.badRequest('Some error'));
+    expect(res.json).not.toHaveBeenCalled();
+  });
 });
 
 describe('DELETE Save Test', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
+  it('should return an error that map not found', async () => {
+    const req = {
+      body: {
+        mapId: 1,
+        userId: 1,
+      },
+    };
+
+    const res = {
+      json: jest.fn(),
+    };
+
+    const next = jest.fn();
+
+    const destroyMapMock = jest
+      .spyOn(SavedMap, 'destroy').mockResolvedValueOnce(0);
+
+    await deleteSaved(req, res, next);
+
+    expect(destroyMapMock)
+      .toHaveBeenCalledWith({ where: { userId: 1, mapId: 1 } });
+
+    expect(next).toHaveBeenCalledWith(ApiError.badRequest('Map not found'));
+    expect(res.json).not.toHaveBeenCalled();
+  });
+
+  it('should return a bad request error if an exception occurs', async () => {
+    const req = {
+      body: {
+        mapId: 'map123',
+      },
+    };
+
+    const res = {
+      json: jest.fn(),
+    };
+
+    const next = jest.fn();
+
+    jest.spyOn(Mark, 'destroy').mockRejectedValue(new Error('Some error'));
+
+    await deleteShared(req, res, next);
+
+    expect(next).toHaveBeenCalledWith(ApiError.badRequest('Some error'));
+    expect(res.json).not.toHaveBeenCalled();
+  });
 });
