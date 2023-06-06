@@ -33,7 +33,67 @@ describe('GET Saves Test', () => {
 });
 
 describe('POST New Share Test', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
+  it('should share a new map and return sharedMap in the response',
+    async () => {
+      const req = {
+        files: {
+          matrix: {
+            mv: jest.fn(),
+          },
+        },
+      };
+
+      const res = {
+        json: jest.fn(),
+      };
+
+      const next = jest.fn();
+
+      const createMapMock = jest
+        .spyOn(Map, 'create')
+        .mockResolvedValue({ id: 1, matrix: 'filename.jpg' });
+      const createSharedMapMock = jest
+        .spyOn(SharedMap, 'create')
+        .mockResolvedValue({ id: 1, mapId: 1, userId: 1, rating: null });
+
+      await shareNew(req, res, next);
+
+      expect(next).not.toHaveBeenCalled();
+      expect(createMapMock).toHaveBeenCalledTimes(1);
+      expect(createSharedMapMock).toHaveBeenCalledTimes(1);
+      expect(req.files.matrix.mv).toHaveBeenCalled();
+
+      expect(res.json).toHaveBeenCalledWith(
+        { sharedMap: { id: 1, mapId: 1, userId: 1, rating: null } }
+      );
+    });
+
+  it('should return a bad request error if an exception occurs', async () => {
+    const req = {
+      files: {
+        matrix: {
+          mv: jest.fn(),
+        },
+      },
+    };
+
+    const res = {
+      json: jest.fn(),
+    };
+
+    const next = jest.fn();
+
+    jest.spyOn(Map, 'create').mockRejectedValue(new Error('Some error'));
+
+    await shareNew(req, res, next);
+
+    expect(next).toHaveBeenCalledWith(ApiError.badRequest('Some error'));
+    expect(res.json).not.toHaveBeenCalled();
+  });
 });
 
 describe('POST Old Share Test', () => {
@@ -48,7 +108,7 @@ describe('POST New Save Test', () => {
   it('should save a new map and return savedMap in the response', async () => {
     const req = {
       body: {
-        userId: '1',
+        userId: 1,
       },
       files: {
         matrix: {
@@ -65,10 +125,10 @@ describe('POST New Save Test', () => {
 
     const createMapMock = jest
       .spyOn(Map, 'create')
-      .mockResolvedValue({ id: '1', matrix: 'filename.jpg' });
+      .mockResolvedValue({ id: 2, matrix: 'filename.jpg' });
     const createSavedMapMock = jest
       .spyOn(SavedMap, 'create')
-      .mockResolvedValue({ id: '1', mapId: '1', userId: '1' });
+      .mockResolvedValue({ id: 1, mapId: 2, userId: 1 });
 
     await saveNew(req, res, next);
 
@@ -79,7 +139,7 @@ describe('POST New Save Test', () => {
 
     expect(res.json)
       .toHaveBeenCalledWith({
-        savedMap: { id: '1', mapId: '1', userId: '1' }
+        savedMap: { id: 1, mapId: 2, userId: 1 }
       });
   });
 
@@ -103,7 +163,7 @@ describe('POST New Save Test', () => {
   it('should return a bad request error if an exception occurs', async () => {
     const req = {
       body: {
-        userId: '1',
+        userId: 1,
       },
       files: {
         matrix: {
@@ -128,12 +188,16 @@ describe('POST New Save Test', () => {
 });
 
 describe('POST Old Save Test', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should save an old map and return the savedMap in the response',
     async () => {
       const req = {
         body: {
-          userId: '1',
-          mapId: '1',
+          userId: 1,
+          mapId: 1,
         },
       };
 
@@ -148,7 +212,7 @@ describe('POST Old Save Test', () => {
         .mockResolvedValue(null);
       const createSavedMapMock = jest
         .spyOn(SavedMap, 'create')
-        .mockResolvedValue({ id: '1', mapId: '1', userId: '1' });
+        .mockResolvedValue({ id: 1, mapId: 1, userId: 1 });
 
       await saveOld(req, res, next);
 
@@ -157,7 +221,7 @@ describe('POST Old Save Test', () => {
       expect(createSavedMapMock).toHaveBeenCalledTimes(1);
 
       expect(res.json).toHaveBeenCalledWith(
-        { id: '1', mapId: '1', userId: '1' }
+        { id: 1, mapId: 1, userId: 1 }
       );
     });
 
@@ -184,8 +248,8 @@ describe('POST Old Save Test', () => {
     async () => {
       const req = {
         body: {
-          userId: '1',
-          mapId: '1',
+          userId: 1,
+          mapId: 1,
         },
       };
 
@@ -196,7 +260,7 @@ describe('POST Old Save Test', () => {
       const next = jest.fn();
 
       jest.spyOn(SavedMap, 'findOne')
-        .mockResolvedValue({ id: '1', mapId: '1', userId: '1' });
+        .mockResolvedValue({ id: 1, mapId: 1, userId: 1 });
 
       await saveOld(req, res, next);
 
@@ -207,8 +271,8 @@ describe('POST Old Save Test', () => {
   it('should return a bad request error if an exception occurs', async () => {
     const req = {
       body: {
-        userId: '1',
-        mapId: '1',
+        userId: 1,
+        mapId: 1,
       },
     };
 
