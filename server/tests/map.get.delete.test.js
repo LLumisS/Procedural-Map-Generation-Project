@@ -1,6 +1,7 @@
 'use strict';
 
 require('dotenv').config();
+const jwt = require('jsonwebtoken');
 
 const { Map, SharedMap, SavedMap, Mark } = require('../models/models');
 const ApiError = require('../error/ApiError');
@@ -18,19 +19,20 @@ describe('GET Shares Test', () => {
     jest.clearAllMocks();
   });
 
+  const req = {
+    query: {
+      userId: 1,
+    },
+  };
+
+  const res = {
+    json: jest.fn(),
+  };
+
+  const next = jest.fn();
+
+
   it('should return a list of shared maps with ratings and marks', async () => {
-    const req = {
-      query: {
-        userId: 1,
-      },
-    };
-
-    const res = {
-      json: jest.fn(),
-    };
-
-    const next = jest.fn();
-
     const findAllSharedMapMock = jest
       .spyOn(SharedMap, 'findAll').mockResolvedValue([
         { id: 1, mapId: 1, rating: null },
@@ -101,18 +103,6 @@ describe('GET Shares Test', () => {
   });
 
   it('should return a bad request error if an exception occurs', async () => {
-    const req = {
-      query: {
-        userId: 1,
-      },
-    };
-
-    const res = {
-      json: jest.fn(),
-    };
-
-    const next = jest.fn();
-
     jest.spyOn(SharedMap, 'findAll').mockRejectedValue(new Error('Some error'));
 
     await getShared(req, res, next);
@@ -127,19 +117,19 @@ describe('GET Saves Test', () => {
     jest.clearAllMocks();
   });
 
+  const req = {
+    query: {
+      id: 1,
+    },
+  };
+
+  const res = {
+    json: jest.fn(),
+  };
+
+  const next = jest.fn();
+
   it('should return a list of saved maps', async () => {
-    const req = {
-      query: {
-        id: 1,
-      },
-    };
-
-    const res = {
-      json: jest.fn(),
-    };
-
-    const next = jest.fn();
-
     const findAllSavedMapMock = jest
       .spyOn(SavedMap, 'findAll').mockResolvedValue([
         { id: 1, mapId: 2, userId: 1 },
@@ -173,18 +163,6 @@ describe('GET Saves Test', () => {
   });
 
   it('should return a bad request error if an exception occurs', async () => {
-    const req = {
-      query: {
-        id: 1,
-      },
-    };
-
-    const res = {
-      json: jest.fn(),
-    };
-
-    const next = jest.fn();
-
     jest.spyOn(SavedMap, 'findAll').mockRejectedValue(new Error('Some error'));
 
     await getSaved(req, res, next);
@@ -199,19 +177,23 @@ describe('DELETE Share Test', () => {
     jest.clearAllMocks();
   });
 
+  const req = {
+    body: {
+      mapId: 1,
+    },
+    headers: {
+      authorization: 'Bearer sometoken',
+    }
+  };
+
+  const res = {
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn(),
+  };
+
+  const next = jest.fn();
+
   it('should delete shared map and associated marks', async () => {
-    const req = {
-      body: {
-        mapId: 1,
-      },
-    };
-
-    const res = {
-      json: jest.fn(),
-    };
-
-    const next = jest.fn();
-
     const destroyMarkMock = jest
       .spyOn(Mark, 'destroy').mockResolvedValueOnce(2);
 
@@ -234,19 +216,19 @@ describe('DELETE Share Test', () => {
     expect(res.json).toHaveBeenCalledWith({ deletedMap: 'Deleted' });
   });
 
+  it('should return a forbidden error if incorrect role', async () => {
+    const next = deleteShared;
+    jest.spyOn(Mark, 'destroy').mockRejectedValue(new Error('Some error'));
+
+    jest.spyOn(jwt, 'verify').mockResolvedValue({ role: 'user' });
+
+    await auth('admin')(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(403);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Forbidden' });
+  });
+
   it('should delete shared map, associated marks and source map', async () => {
-    const req = {
-      body: {
-        mapId: 1,
-      },
-    };
-
-    const res = {
-      json: jest.fn(),
-    };
-
-    const next = jest.fn();
-
     const destroyMarkMock = jest
       .spyOn(Mark, 'destroy').mockResolvedValueOnce(2);
 
@@ -256,6 +238,8 @@ describe('DELETE Share Test', () => {
       .spyOn(SavedMap, 'findOne').mockResolvedValueOnce(undefined);
     const destroySourceMock = jest
       .spyOn(Map, 'destroy').mockResolvedValueOnce(true);
+
+    jest.spyOn(jwt, 'verify').mockResolvedValue({ role: 'admin' });
 
     await deleteShared(req, res, next);
 
@@ -272,18 +256,6 @@ describe('DELETE Share Test', () => {
   });
 
   it('should return a bad request error if an exception occurs', async () => {
-    const req = {
-      body: {
-        mapId: 1,
-      },
-    };
-
-    const res = {
-      json: jest.fn(),
-    };
-
-    const next = jest.fn();
-
     jest.spyOn(Mark, 'destroy').mockRejectedValue(new Error('Some error'));
 
     await deleteShared(req, res, next);
@@ -298,20 +270,20 @@ describe('DELETE Save Test', () => {
     jest.clearAllMocks();
   });
 
+  const req = {
+    body: {
+      mapId: 1,
+      userId: 1,
+    },
+  };
+
+  const res = {
+    json: jest.fn(),
+  };
+
+  const next = jest.fn();
+
   it('should return an error that map not found', async () => {
-    const req = {
-      body: {
-        mapId: 1,
-        userId: 1,
-      },
-    };
-
-    const res = {
-      json: jest.fn(),
-    };
-
-    const next = jest.fn();
-
     const destroyMapMock = jest
       .spyOn(SavedMap, 'destroy').mockResolvedValueOnce(0);
 
@@ -325,18 +297,6 @@ describe('DELETE Save Test', () => {
   });
 
   it('should return a bad request error if an exception occurs', async () => {
-    const req = {
-      body: {
-        mapId: 'map123',
-      },
-    };
-
-    const res = {
-      json: jest.fn(),
-    };
-
-    const next = jest.fn();
-
     jest.spyOn(Mark, 'destroy').mockRejectedValue(new Error('Some error'));
 
     await deleteShared(req, res, next);
