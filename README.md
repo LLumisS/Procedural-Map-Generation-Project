@@ -16,7 +16,7 @@ This is my modernized first-year course project. At that time, only a procedural
 
 ### Generator
 
-<img src="images/example/generator.png">  
+<img src="images/generator.png">  
 
 **Always random terrain:**
   1. Height Map with Rivers.
@@ -28,42 +28,47 @@ Each map has visualization. You could choose the filter.
 
 Look at the table of *Moisture/Temperature* and corresponding *Bioms*:
 
-<img src="images/example/table.png">   
+<img src="images/table.png">   
 
 **Example:**
 
 1. Default:  
 <pre>
-      <img src="images/example/default.png">  
+      <img src="images/default.png">  
 </pre>
 
 2. Physical:  
 <pre>
-      <img src="images/example/physical.png">  
+      <img src="images/physical.png">  
 </pre>
 
 3. Moisture:  
 <pre>
-      <img src="images/example/moisture.png">  
+      <img src="images/moisture.png">  
 </pre>
 
 4. Temperature:  
 <pre>
-      <img src="images/example/temperature.png">  
+      <img src="images/temperature.png">  
 </pre>
 ### Homepage
 
-**For authorized user**
-<img src="images/example/homepage1.png">
+**For authorized user** (test data showed)
+<img src="images/homepage1.png">
 
-**For not authorized user**
-<img src="images/example/homepage2.png">
+**For not authorized user** (test data showed)
+<img src="images/homepage2.png">
+
+### Saves
+
+(test data showed)
+<img src="images/saves.png">
 
 ### Registration
-<img src="images/example/registration.png">
+<img src="images/registration.png">
 
 ### Login
-<img src="images/example/login.png">
+<img src="images/login.png">
 
 ## Try Frontend
 You can try it by using my GitHub Environments: <a href="https://procedural-map-generation-project-kpdw1ls8e-llumiss.vercel.app/generator">Vercel</a>. 
