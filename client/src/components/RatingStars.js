@@ -12,7 +12,7 @@ const ratingStars = (item, isSharedPage, isAuth) => {
         activeColor="#ffd700"
         inactiveColor="#e4e4e4"
         edit={isAuth}
-        value={item.mark}
+        value={isAuth ? item.mark : 0}
       />
       <h6 style={{ marginTop: '8px' }}>{item.rating}</h6>
     </div>

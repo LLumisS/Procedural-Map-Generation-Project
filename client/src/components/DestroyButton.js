@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 
 const destroyButton = (isShared, isAuth) => {
-  if (!isAuth) return null;
+  if (!isAuth || !isShared) return null;
 
   return (
     <div className="d-flex justify-content-center align-items-end"

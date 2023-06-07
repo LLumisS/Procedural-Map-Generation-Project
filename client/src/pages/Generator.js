@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import tableImage from '../table.png';
 import { Button, ButtonGroup, Container, Card } from 'react-bootstrap';
 import { create } from '../generator/start';
 import { WIDTH, HEIGHT } from '../generator/consts';
+import { Context } from '..';
 import CanvasComponent from '../components/CanvasComponent';
 import FiltersForm from '../components/FiltersForm';
 import CreateButton from '../components/CreateButton';
@@ -17,6 +18,7 @@ const buttonStyle = {
 };
 
 const Generator = () => {
+  const { user } = useContext(Context);
   const [selectedFilter, setSelectedFilter] = useState('Default');
   const [trigger, setTrigger] = useState(false);
 
@@ -78,8 +80,10 @@ const Generator = () => {
               }}
             >
               <Button style={buttonStyle}>Download</Button>
-              <Button style={buttonStyle}>Save</Button>
-              <Button style={buttonStyle}>Share</Button>
+              {user.isAuth ?
+                <><Button style={buttonStyle}>Save</Button>
+                  <Button style={buttonStyle}>Share</Button></> :
+                <></>}
             </ButtonGroup>
           </div>
         </div>

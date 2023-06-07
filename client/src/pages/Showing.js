@@ -45,7 +45,8 @@ const Showing = () => {
             </div>
             <div>
               {ratingStars(item, isShared, user.isAuth)}
-              {actionButtons(isShared ? item : null)}
+              {actionButtons(
+                user.isAuth, isShared ? item : ({ isSaved: true }))}
               {destroyButton(isShared, user.isAuth)}
             </div>
           </div>
