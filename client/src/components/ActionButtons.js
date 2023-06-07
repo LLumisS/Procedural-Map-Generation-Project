@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 
-const ActionButtons = (item, data) => (
+const ActionButtons = item => (
   <div className="mt-2" style={{
     display: 'flex',
     justifyContent: 'center',
