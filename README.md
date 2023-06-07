@@ -34,10 +34,13 @@ Look at the table of *Moisture/Temperature* and corresponding *Bioms*:
 
 1. Default:  
 <img src="images/example/default.png">  
+
 2. Physical:  
 <img src="images/example/physical.png">  
+
 3. Moisture:  
 <img src="images/example/moisture.png">  
+
 4. Temperature:  
 <img src="images/example/temperature.png">  
 
