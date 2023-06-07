@@ -33,17 +33,24 @@ Look at the table of *Moisture/Temperature* and corresponding *Bioms*:
 **Example:**
 
 1. Default:  
-<img src="images/example/default.png">  
+<pre>
+      <img src="images/example/default.png">  
+</pre>
 
 2. Physical:  
-<img src="images/example/physical.png">  
+<pre>
+      <img src="images/example/physical.png">  
+</pre>
 
 3. Moisture:  
-<img src="images/example/moisture.png">  
+<pre>
+      <img src="images/example/moisture.png">  
+</pre>
 
 4. Temperature:  
-<img src="images/example/temperature.png">  
-
+<pre>
+      <img src="images/example/temperature.png">  
+</pre>
 ### Homepage
 
 **For authorized user**
