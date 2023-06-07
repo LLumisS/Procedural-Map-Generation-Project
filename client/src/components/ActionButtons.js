@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 
-const actionButtons = () => (
+const ActionButtons = (item, data) => (
   <div className="mt-2" style={{
     display: 'flex',
     justifyContent: 'center',
@@ -10,7 +10,9 @@ const actionButtons = () => (
     <Button style={{
       width: '200px',
       marginBottom: '5px'
-    }} className="md-2">Save</Button>
+    }} className="md-2">
+      {item.isSaved ? 'Delete' : 'Save'}
+    </Button>
     <Button style={{
       width: '200px',
       backgroundColor: '#dbdbdb',
@@ -20,4 +22,4 @@ const actionButtons = () => (
   </div>
 );
 
-export default actionButtons;
+export default ActionButtons;

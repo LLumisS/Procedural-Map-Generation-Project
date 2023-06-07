@@ -40,12 +40,12 @@ const Showing = () => {
         }} className="p-3">
           <div style={{ display: 'flex' }}>
             <div style={{ flex: '7' }}>
-              <Image src={`/static/${item.matrix}`}
+              <Image src={`/images/${item.matrix}`}
                 alt="img" width={WIDTH} height={HEIGHT} />
             </div>
             <div>
               {ratingStars(item, isShared, user.isAuth)}
-              {actionButtons()}
+              {actionButtons(isShared ? (item, maps) : null)}
               {destroyButton(isShared, user.isAuth)}
             </div>
           </div>

@@ -67,6 +67,8 @@ describe('GET Shares Test', () => {
       .spyOn(Mark, 'findOne')
       .mockResolvedValue({ value: 5 });
 
+    jest.spyOn(SavedMap, 'findOne').mockResolvedValue(true);
+
     await getShared(req, res, next);
 
     expect(next).not.toHaveBeenCalled();
@@ -88,6 +90,7 @@ describe('GET Shares Test', () => {
           mapId: 1,
           matrix: 'filename.jpg',
           mark: 5,
+          isSaved: true,
         },
         {
           id: 2,
@@ -97,6 +100,7 @@ describe('GET Shares Test', () => {
           mapId: 2,
           matrix: 'filename.jpg',
           mark: 5,
+          isSaved: true,
         },
       ],
     });

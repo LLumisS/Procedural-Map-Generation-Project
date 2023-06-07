@@ -118,6 +118,7 @@ class MapController {
         const sharedMapId = mapsId[i];
         const condition = { where: { userId, sharedMapId } };
         const mark = await Mark.findOne(condition) || 0;
+        const mapId = maps[i].id;
         result.push({
           id: sharedMap.rows[i].id,
           rating: sharedMap.rows[i].rating,
@@ -126,6 +127,7 @@ class MapController {
           mapId: sharedMap.rows[i].mapId,
           matrix: maps[i].matrix,
           mark: mark.value,
+          isSaved: !!SavedMap.findOne({ where: { userId, mapId } }),
         });
       }
 
