@@ -3,11 +3,10 @@ name: CI
 on:
   push:
     branches:
-      - fullstack
+      - master
   pull_request:
     branches:
-      - main
-      - fullstack
+      - master
 
 jobs:
   test:
